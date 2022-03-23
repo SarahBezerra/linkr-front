@@ -7,7 +7,7 @@ function createConfig(token) {
 }
 
 async function getLikes() {
-  return axios.post(`${BASE_URL}/like/1`);
+  return axios.get(`${BASE_URL}/like`);
 }
 
 async function postLikeOrNot(idPost) {

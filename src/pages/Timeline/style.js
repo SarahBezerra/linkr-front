@@ -19,7 +19,14 @@ const Posts = styled.div`
 const ColumnLeft = styled.div`
   display: flex;
   flex-direction: column;
+`;
+
+const ContentLikes = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 54px;
   width: 86px;
 `;
 
-export { PageContent, Posts, ColumnLeft };
+export { PageContent, Posts, ColumnLeft, ContentLikes };
