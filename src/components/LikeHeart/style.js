@@ -7,8 +7,13 @@ const ContentLikes = styled.div`
   flex-direction: column;
   align-items: center;
 
+  .tooltipConfig {
+    padding: 5.5px 6.5px !important;
+    font-size: 11px;
+    border-radius: 3px;
+  }
+
   p {
-    margin-top: 4px;
     color: white;
     font-size: 11px;
 
@@ -21,6 +26,7 @@ const ContentLikes = styled.div`
 const IconHeartRed = styled(HiHeart)`
   color: #ac0000;
   font-size: 18px;
+  margin-bottom: 4px;
 
   :hover {
     cursor: pointer;
@@ -30,6 +36,7 @@ const IconHeartRed = styled(HiHeart)`
 const IconHeartDefault = styled(HiOutlineHeart)`
   color: white;
   font-size: 18px;
+  margin-bottom: 4px;
 
   :hover {
     cursor: pointer;

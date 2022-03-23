@@ -3,6 +3,9 @@ import styled from "styled-components";
 const PageContent = styled.div`
   width: 100%;
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
   background-color: #333333; ;
 `;
@@ -26,7 +29,7 @@ const ContentLikes = styled.div`
   align-items: center;
   justify-content: center;
   height: 54px;
-  width: 86px;
+  width: 87px;
 `;
 
 export { PageContent, Posts, ColumnLeft, ContentLikes };

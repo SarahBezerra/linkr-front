@@ -1,15 +1,22 @@
 import { useState } from "react";
+import ReactTooltip from "react-tooltip";
+import { SpinnerInfinity } from "spinners-react";
+
 import api from "../../services";
 import { ContentLikes, IconHeartRed, IconHeartDefault } from "./style";
 
-export default function LikeHeart({ likesInformations }) {
+export default function LikeHeart({ likesInformations, updateLikes }) {
+  const [wait, setWait] = useState(false);
   const [like, setLike] = useState(likesInformations.liked);
 
   async function likeOrNot() {
+    setWait(true);
     setLike(!like);
 
     try {
-      await api.postLikeOrNot(likesInformations.postId);
+      await api.postLikeOrNot(likesInformations.postId, 1); //trocar userId = 1 pelo usuário mesmo
+      await updateLikes();
+      setWait(false);
     } catch {
       console.log("ocorreu um erro");
     }
@@ -22,7 +29,30 @@ export default function LikeHeart({ likesInformations }) {
       ) : (
         <IconHeartDefault onClick={likeOrNot} />
       )}
-      <p onClick={likeOrNot}>{likesInformations.countLikes} likes</p>
+      {wait ? (
+        <SpinnerInfinity
+          size={15}
+          thickness={100}
+          speed={180}
+          color="#AC0000"
+          secondaryColor="#FFFFFF"
+        />
+      ) : (
+        <a
+          data-tip="João, Maria e outras 11 pessoas"
+          data-class={"tooltipConfig"}
+        >
+          <p>{likesInformations.countLikes} likes</p>
+        </a>
+      )}
+      <ReactTooltip
+        place="bottom"
+        type="info"
+        effect="float"
+        delayHide={1000}
+        backgroundColor={"rgba(255, 255, 255, 0.9)"}
+        textColor={"rgba(80, 80, 80, 1)"}
+      />
     </ContentLikes>
   );
 }

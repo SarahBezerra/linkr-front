@@ -10,8 +10,8 @@ async function getLikes() {
   return axios.get(`${BASE_URL}/like`);
 }
 
-async function postLikeOrNot(idPost) {
-  return axios.post(`${BASE_URL}/like/1`, { userId: 1 }); // lembrar que só o auth é suficiente
+async function postLikeOrNot(idPost, userId) {
+  return axios.post(`${BASE_URL}/like/${idPost}`, { userId }); // lembrar que só o auth é suficiente
 }
 
 const api = { postLikeOrNot, getLikes };
