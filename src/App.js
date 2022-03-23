@@ -19,7 +19,6 @@ function App() {
         <Content>
           <BrowserRouter>
             <Header menuSelect={menuSelect} setMenuSelect={setMenuSelect} />
-
             <Routes>
               <Route path={"/login"} element={<SignIn />} />
               <Route path="/timeline" element={<Timeline />} />
