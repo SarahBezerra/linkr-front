@@ -2,20 +2,21 @@ import HeaderContainer from "./HeaderContainer";
 import HeaderContent from "./HeaderContent";
 import HeaderMenu from "./HeaderMenu";
 import DropDownMenu from "./DropDownMenu/DropDownMenu";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 export default function Header({menuSelect, setMenuSelect}){
 
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+    const location = useLocation();
 
     function handleClick(event){
         console.log(event);
-        navigate('/sign-up');
+        navigate('/login');
         setMenuSelect(false);
     }
 
     return(
-        <HeaderContainer>
+        <HeaderContainer display={location.pathname === '/login' ? 'none': 'initial'}>
             <HeaderContent>
                 <span>linkr</span>
 

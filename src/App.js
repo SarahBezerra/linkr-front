@@ -5,11 +5,12 @@ import Content from "./components/Content";
 import SignIn from "./pages/SignIn";
 
 import {useState} from 'react'
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { useLocation ,BrowserRouter, Routes, Route } from 'react-router-dom';
 
 function App() {
 
   const [menuSelect, setMenuSelect] = useState(false);
+  const [headerDisplay, setHeaderDisplay] = useState(true);
 
   return (
     <>
@@ -19,7 +20,7 @@ function App() {
             <Header menuSelect={menuSelect} setMenuSelect={setMenuSelect}/>
 
             <Routes>
-              <Route path={'/sign-up'} element={<SignIn/>}></Route>
+              <Route path={'/login'} element={<SignIn/>}></Route>
             </Routes>
           </BrowserRouter>
         </Content>
