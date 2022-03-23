@@ -9,12 +9,13 @@ position: absolute;
 width: 100px;
 height: 40px;
 
-display: ${props => props.display};
+display: flex;
 align-items: center;
 justify-content: center;
 
-top:100%;
+top:${props => props.dropDownDisplay === true? '100%':'-200px'};
 right: 0;
+transition: ${props => props.dropDownDisplay === true ?'top 0.5s ease-out' :'top 1s ease-in'};
 
 z-index: 1;
 
@@ -25,7 +26,7 @@ font-family: 'Lato', sans-serif;
 font-weight: 700;
 color: white;
 
-disabled: ${props => props.disabled};
+
 
 
 `

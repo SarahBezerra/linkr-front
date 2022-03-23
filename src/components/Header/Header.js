@@ -15,6 +15,10 @@ export default function Header({menuSelect, setMenuSelect}){
         setMenuSelect(false);
     }
 
+    function handleTransition(){
+
+    }
+
     return(
         <HeaderContainer display={location.pathname === '/login' ? 'none': 'initial'}>
             <HeaderContent>
@@ -24,7 +28,7 @@ export default function Header({menuSelect, setMenuSelect}){
                     <HeaderMenu menuSelect={menuSelect} setMenuSelect={setMenuSelect}/>
                 </div>
             </HeaderContent>
-                {<DropDownMenu top={'100%'} disabled={false} display={menuSelect === false ? 'none': 'flex'} onClick={(e) => {handleClick(e)}}>Logout</DropDownMenu>}
+                {<DropDownMenu dropDownDisplay={menuSelect === false ? false: true} onClick={(e) => {handleClick(e)}}>Logout</DropDownMenu>}
                 
         </HeaderContainer>
     )
