@@ -4,13 +4,31 @@ import Timeline from './pages/Timeline';
 
 
 
+import Header from "./components/Header/Header";
+import Container from "./components/PageLayout/Container";
+import Content from "./components/PageLayout/Content";
+import SignIn from "./pages/SignIn";
+
+import {useState} from 'react'
+import { useLocation ,BrowserRouter, Routes, Route } from 'react-router-dom';
+
 function App() {
+
+  const [menuSelect, setMenuSelect] = useState(false);
+  const [headerDisplay, setHeaderDisplay] = useState(true);
+
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Timeline />} />
-      </Routes>
-    </BrowserRouter>
+      <Container>
+        <Content>
+          <BrowserRouter>
+            <Header menuSelect={menuSelect} setMenuSelect={setMenuSelect}/>
+            <Routes>
+              <Route path='/' element={<Timeline />} />
+              <Route path='/login' element={<SignIn/>}></Route>
+            </Routes>
+          </BrowserRouter>
+        </Content>
+      </Container>
   )
 }
 
