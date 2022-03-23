@@ -1,7 +1,7 @@
 
 import Header from "./components/Header/Header";
-import Container from "./components/Container";
-import Content from "./components/Content";
+import Container from "./components/PageLayout/Container";
+import Content from "./components/PageLayout/Content";
 import SignIn from "./pages/SignIn";
 
 import {useState} from 'react'
