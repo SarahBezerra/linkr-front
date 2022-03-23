@@ -2,8 +2,10 @@
 import Header from "./components/Header/Header";
 import Container from "./components/Container";
 import Content from "./components/Content";
+import SignIn from "./pages/SignIn";
 
 import {useState} from 'react'
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 function App() {
 
@@ -13,7 +15,13 @@ function App() {
     <>
       <Container>
         <Content>
-          <Header menuSelect={menuSelect} setMenuSelect={setMenuSelect}/>
+          <BrowserRouter>
+            <Header menuSelect={menuSelect} setMenuSelect={setMenuSelect}/>
+
+            <Routes>
+              <Route path={'/sign-up'} element={<SignIn/>}></Route>
+            </Routes>
+          </BrowserRouter>
         </Content>
       </Container>
     </>

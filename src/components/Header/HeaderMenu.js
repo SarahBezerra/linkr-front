@@ -13,7 +13,9 @@ let useClickOutside = (handler) => {
         let maybeHandler = (event) => {
             console.log(event.target);
             if(!menuRef.current.contains(event.target)){
-                handler()
+                if(event.target.innerText !== 'Logout'){
+                    handler()
+                }
             }
         }
 
@@ -42,7 +44,10 @@ function HeaderMenu({menuSelect, setMenuSelect}){
                 }
             
                 <HeaderImage height={'50px'} onClick={() => { menuSelect === false ? setMenuSelect(true) : setMenuSelect(false)}}/>
+                
+
             </div>
+            
     )
 }
 
