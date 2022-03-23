@@ -6,6 +6,8 @@ display: flex;
 justify-content: space-between;
 align-items: center;
 
+background-color: #151515;
+
 position: relative;
 
 padding: 0 3% 0 3%;
