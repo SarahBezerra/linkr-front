@@ -4,8 +4,7 @@ import styled from 'styled-components'
 const HeaderContainer = styled.header`
 
 background-color: #151515;
-
-
+display: ${props => props.display};
 position: fixed;
 top: 0;
 
