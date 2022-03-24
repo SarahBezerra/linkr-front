@@ -1,10 +1,11 @@
 import { Container, UserName, UserText, MetaContainer, Left, Main, Title, 
-    Description, Url, Preview, MetaLeft, MetaRigth, UserPhoto, Likes, Hashtag } from "./style";
+    Description, Url, Preview, MetaLeft, MetaRigth, UserPhoto, ContentLikes, Hashtag } from "./style";
 import { DocumentTextOutline } from 'react-ionicons'
 import ReactHashtag from "@mdnm/react-hashtag";
 import { useNavigate } from "react-router-dom";
+import LikeHeart from "../LikeHeart";
 
-function Post({infos}){
+function Post({infos, like, updateLikes}){
     const {
             id,
             userId,
@@ -18,7 +19,9 @@ function Post({infos}){
         <Container>
             <Left>
                 <UserPhoto src={ image_url } alt=''/>
-                <Likes></Likes>
+                <ContentLikes>
+                    <LikeHeart idPost = {id} likesInformations={like || {}} updateLikes={updateLikes} />
+                </ContentLikes>
             </Left>
             <Main>
                 <UserName> { username } </UserName>
