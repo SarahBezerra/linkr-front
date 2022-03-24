@@ -3,7 +3,11 @@
 
 
 
-*, body, html {
+*, body, html, #root {
     font-family: 'Lato', sans-serif;
     box-sizing: border-box;
 }
+body, html, #root {
+    width: 100%;
+}
+
