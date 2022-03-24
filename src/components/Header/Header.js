@@ -16,7 +16,7 @@ export default function Header({menuSelect, setMenuSelect}){
     }
 
     return(
-        <HeaderContainer display={(location.pathname === '/' || location.pathname === 'sign-up') ? 'none' : 'inital'}>
+        <HeaderContainer display={(location.pathname === '/' || location.pathname === '/sign-up') ? 'none' : 'inital'}>
             <HeaderContent>
                 <span>linkr</span>
 
