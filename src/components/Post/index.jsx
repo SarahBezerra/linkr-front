@@ -4,7 +4,8 @@ import { DocumentTextOutline } from 'react-ionicons'
 import ReactHashtag from "@mdnm/react-hashtag";
 import { useNavigate } from "react-router-dom";
 import LikeHeart from "../LikeHeart";
-
+import TrashAndEditIcons  from "../TrashAndEditIcons";
+    
 function Post({infos, like, updateLikes}){
     const {
             id,
@@ -25,8 +26,8 @@ function Post({infos, like, updateLikes}){
             </Left>
             <Main>
                 <UserName> { username } </UserName>
-                <Message>{ text }</Message>
-
+                <Message> { text } </Message>
+              <TrashAndEditIcons/>
                 <a href={metaData.url} target='_blank' rel='noreferrer' >
                     <MetaContainer>
                         <MetaLeft>
@@ -66,7 +67,4 @@ function Message({children}){
         </UserText>
     )
 }
-
-
-
 export default Post;
