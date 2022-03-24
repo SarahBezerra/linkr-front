@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 const Page = styled.div`
     width: 100%;
-    padding-top: 72px;
+    padding-top: 144px;
     display: flex;
     justify-content: center;
 `;
