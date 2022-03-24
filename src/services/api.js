@@ -10,9 +10,14 @@ function postSignUp(signUpData) {
     return axios.post(`${BASE_URL}/sign-up`, signUpData);
 }
 
+function postSignIn(signInData) {
+    return axios.post(`${BASE_URL}/sign-in`, signInData);
+}
+
 const api = {
     getPosts,
-    postSignUp
+    postSignUp,
+    postSignIn
 }
 
 
