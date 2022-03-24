@@ -11,16 +11,12 @@ export default function Header({menuSelect, setMenuSelect}){
 
     function handleClick(event){
         console.log(event);
-        navigate('/login');
+        navigate('/');
         setMenuSelect(false);
     }
 
-    function handleTransition(){
-
-    }
-
     return(
-        <HeaderContainer display={location.pathname === '/login' ? 'none': 'initial'}>
+        <HeaderContainer display={(location.pathname === '/' || location.pathname === 'sign-up') ? 'none' : 'inital'}>
             <HeaderContent>
                 <span>linkr</span>
 
