@@ -22,7 +22,7 @@ function Post({infos}){
             </Left>
             <Main>
                 <UserName> { username } </UserName>
-                <Message>{`${text} #gratidão`}</Message>
+                <Message>{ text }</Message>
 
                 <a href={metaData.url} target='_blank' rel='noreferrer' >
                     <MetaContainer>
