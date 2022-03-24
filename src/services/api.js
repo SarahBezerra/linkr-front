@@ -1,9 +1,11 @@
 import axios from "axios";
 
-const BASE_URL = process.env.REACT_APP_PUBLIC_URL ? process.env.REACT_APP_PUBLIC_URL : 'http://localhost:5000';
+const BASE_URL = process.env.REACT_APP_PUBLIC_URL
+  ? process.env.REACT_APP_PUBLIC_URL
+  : "http://localhost:5000";
 
-function getPosts(config) {
-    return axios.get(`${BASE_URL}/posts`, config);
+function createConfig(token) {
+  return { headers: { Authorization: `Bearer ${token}` } };
 }
 
 function postSignUp(signUpData) {
@@ -14,11 +16,24 @@ function postSignIn(signInData) {
     return axios.post(`${BASE_URL}/sign-in`, signInData);
 }
 
-const api = {
-    getPosts,
-    postSignUp,
-    postSignIn
+function getPosts(config) {
+  return axios.get(`${BASE_URL}/posts`, config);
 }
 
+function getLikes() {
+  return axios.get(`${BASE_URL}/like`);
+}
+
+function postLikeOrNot(idPost, userId) {
+  return axios.post(`${BASE_URL}/like/${idPost}`, { userId }); // lembrar que só o auth é suficiente
+}
+
+const api = {
+  getPosts,
+  getLikes,
+  postLikeOrNot,
+  postSignUp,
+  postSignIn
+};
 
 export default api;

@@ -10,13 +10,13 @@ const Container = styled.div`
     border-radius: 16px;
     color: white;
     padding: 20px;
+
 `;
 
 const Left = styled.div`
     width:12%;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
 `;
 
 const Main = styled.div`
@@ -25,13 +25,17 @@ const Main = styled.div`
     a {
         cursor: pointer
     };
+
+    h2, h3, h4 {
+        overflow-wrap: break-word;
+    }
 `;
 
 const UserName = styled.h2`
     font-size:19px;
     margin-bottom: 10px;
 `;
-const UserText = styled.h2`
+const UserText = styled.h3`
     font-size:17px;
     color: #B7B7B7;
     margin-bottom: 12px;
@@ -54,13 +58,10 @@ const UserPhoto = styled.img`
     width: 55px;
     max-width: 80%;
     height: 55px;
-    margin-bottom: 20px;
 `
 
-const Likes = styled.div`
-    background: repeating-linear-gradient( 135deg, #000000, #000000 14px, #fda607 -10px, #ff9900 25px);
-    height: 50px;
-    width: 80%;
+const ContentLikes = styled.div`
+   width: 80%;
 `;
 
 const MetaRigth = styled.div`
@@ -82,7 +83,7 @@ const Description = styled.h4`
     font-size: 11px;
     color: #9B9595;
     margin-bottom: 13px;
-    overflow-wrap: break-word;
+    line-height: 13px;
 `;
 
 const Url = styled.h4`
@@ -96,6 +97,12 @@ const Preview = styled.img`
     object-fit: fill;
     border-radius: 0px 10px 10px 0px;
 `;
+
+const Hashtag = styled.span`
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+`
 
 
 export {
@@ -112,5 +119,6 @@ export {
     MetaLeft,
     MetaRigth,
     UserPhoto,
-    Likes,
+    ContentLikes,
+    Hashtag
 }
