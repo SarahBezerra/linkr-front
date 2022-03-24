@@ -1,4 +1,4 @@
-import HeaderImage from './HeaderImage';
+import Img from '../Users/Image';
 import { ArrowDown, ArrowUp } from './Arrows/Arrows';
 import { useEffect, useRef } from 'react'
 import DropDownMenu from './DropDownMenu/DropDownMenu'
@@ -43,7 +43,7 @@ function HeaderMenu({menuSelect, setMenuSelect}){
                         <ArrowUp color={'#FFF'} onClick={() => {setMenuSelect(false)}}/>
                 }
             
-                <HeaderImage height={'50px'} onClick={() => { menuSelect === false ? setMenuSelect(true) : setMenuSelect(false)}}/>
+                <Img height={'50px'} onClick={() => { menuSelect === false ? setMenuSelect(true) : setMenuSelect(false)}}/>
                 
 
             </div>

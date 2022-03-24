@@ -1,7 +1,7 @@
 
 import Header from "./components/Header/Header";
 import SignIn from "./pages/SignIn";
-import Posts from "./pages/Posts/index";
+import Home from "./pages/Home/index";
 import Content from "./components/PageLayout/Content";
 
 import {useState} from 'react'
@@ -18,8 +18,7 @@ function App() {
           <BrowserRouter>
             <Header menuSelect={menuSelect} setMenuSelect={setMenuSelect}/>
             <Routes>
-              <Route path={'/sign-up'} element={<SignIn/>}></Route>
-              <Route path={'/posts'} element={<Posts/>}></Route>
+              <Route path={'/home'} element={<Home/>}></Route>
             </Routes>
           </BrowserRouter>
         </Content>
