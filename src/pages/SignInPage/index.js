@@ -1,5 +1,6 @@
 import { RightBox, Container, StyledLink } from "../../components/SignInAndSignUpLayout/style"
 import { SpinnerCircular } from 'spinners-react';
+import toast from 'react-hot-toast' ;   
 
 import React, { useState } from "react"
 import { useNavigate } from "react-router"
@@ -17,6 +18,10 @@ export default function SignIn(){
     function handleInputChange(e){
         setSignInData({...signInData, [e.target.name]: e.target.value})
     }
+
+    function setAndPersistToken(token) {
+		localStorage.setItem("token", token);
+	}
     
     function handleLogin(e){
         e.preventDefault();
@@ -25,12 +30,15 @@ export default function SignIn(){
         api.postSignIn(signInData)
         .then((res) => {
             setIsEnabled(true)
+            setAndPersistToken(res.data)
             console.log(res.data)
+
             navigate("/timeline")
         })
         .catch((err) => {
             setIsEnabled(true)
-            console.log(err.res.data);
+            alert(err)
+            console.log(err)
         });
     }
 

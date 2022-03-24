@@ -32,7 +32,8 @@ export default function SignUp(){
         })
         .catch((err) => {
             setIsEnabled(true)
-            console.log(err.res.data);
+            alert(err)
+            console.log(err)
         });
     }
 
