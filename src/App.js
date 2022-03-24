@@ -4,9 +4,9 @@ import { useLocation ,BrowserRouter, Routes, Route } from 'react-router-dom';
 import Timeline from './pages/Timeline';
 import Header from "./components/Header/Header";
 import Content from "./components/PageLayout/Content";
-import SignIn from "./pages/SignIn";
 import Posts from "./pages/Posts/index";
 import SignUp from "./pages/SignUpPage";
+import SignIn from './pages/SignInPage';
 
 
 function App() {

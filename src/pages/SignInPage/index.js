@@ -5,30 +5,28 @@ import React, { useState } from "react"
 import { useNavigate } from "react-router"
 import api from "../../services/api";
 
-export default function SignUp(){
+export default function SignIn(){
 
     const navigate = useNavigate();
     const [isEnabled, setIsEnabled] = useState(true);
-    const [signUpData, setSignUpData] = useState({
+    const [signInData, setSignInData] = useState({
         email: "",
-        password: "",
-        username: "",
-        picture_url: ""
+        password: ""
     });
     
     function handleInputChange(e){
-        setSignUpData({...signUpData, [e.target.name]: e.target.value})
+        setSignInData({...signInData, [e.target.name]: e.target.value})
     }
     
     function handleLogin(e){
         e.preventDefault();
         setIsEnabled(false);
 
-        api.postSignUp(signUpData)
+        api.postSignIn(signInData)
         .then((res) => {
             setIsEnabled(true)
             console.log(res.data)
-            navigate("/")
+            navigate("/timeline")
         })
         .catch((err) => {
             setIsEnabled(true)
@@ -46,14 +44,12 @@ export default function SignUp(){
             <RightBox>
                 <form onSubmit={handleLogin}>
                     <fieldset disabled={!isEnabled}>
-                        <input type="email" placeholder="e-mail" name="email" value={signUpData.email} onChange={handleInputChange} required></input>
-                        <input type="password" placeholder="password" name="password" value={signUpData.password} onChange={handleInputChange} required></input>
-                        <input type="text" placeholder="username" name="username" value={signUpData.username} onChange={handleInputChange} required></input>
-                        <input type="text" placeholder="picture url" name="picture_url" value={signUpData.picture_url} onChange={handleInputChange} required></input>
+                        <input type="email" placeholder="e-mail" name="email" value={signInData.email} onChange={handleInputChange} required></input>
+                        <input type="password" placeholder="password" name="password" value={signInData.password} onChange={handleInputChange} required></input>
                         <button type="submit">{isEnabled ? "Sign Up" : <SpinnerCircular size={50} thickness={100} speed={100} color="#1877F2" secondaryColor="#fff" />}</button>
                     </fieldset>
                 </form>
-                <StyledLink to="/">Switch back to log in</StyledLink>
+                <StyledLink to="/sign-up">First time? Create an account!</StyledLink>
             </RightBox>
         </Container>
     )
