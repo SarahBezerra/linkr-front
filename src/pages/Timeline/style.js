@@ -2,6 +2,7 @@ import styled from "styled-components";
 
 const PageContent = styled.div`
   width: 100%;
+  padding-top: 100px;
   min-height: 100vh;
   display: flex;
   flex-direction: column;

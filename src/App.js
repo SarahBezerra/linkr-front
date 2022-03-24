@@ -1,13 +1,11 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Timeline from "./pages/Timeline";
+import { useState } from "react";
 
+import Timeline from "./pages/Timeline";
 import Header from "./components/Header/Header";
 import SignIn from "./pages/SignIn";
 import Posts from "./pages/Posts/index";
 import Content from "./components/PageLayout/Content";
-
-import { useState } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 function App() {
   const [menuSelect, setMenuSelect] = useState(false);
@@ -18,6 +16,7 @@ function App() {
         <BrowserRouter>
           <Header menuSelect={menuSelect} setMenuSelect={setMenuSelect} />
           <Routes>
+            <Route path={"/timeline"} element={<Timeline />}></Route>
             <Route path={"/sign-up"} element={<SignIn />}></Route>
             <Route path={"/posts"} element={<Posts />}></Route>
           </Routes>
