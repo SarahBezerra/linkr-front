@@ -5,7 +5,6 @@ import api from "../../services/api";
 import HashTags from "../../components/Hashtags";
 import Post from "../../components/Post";
 import { Feed, Container, Page, Loading, Empty, Error } from "./style";
-import ReactTooltip from "react-tooltip";
 
 export default function Timeline() {
   const [isLoading, setIsLoading] = useState(true);
@@ -24,7 +23,6 @@ export default function Timeline() {
       setPosts(res.data);
       await requestLikes();
       setIsLoading(false);
-      ReactTooltip.rebuild();
     } catch {
       console.log("aconteceu um erro em posts");
       setError(true);

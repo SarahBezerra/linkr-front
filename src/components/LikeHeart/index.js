@@ -1,4 +1,5 @@
 import { useState } from "react";
+import ReactDOMServer from "react-dom/server";
 import ReactTooltip from "react-tooltip";
 import { SpinnerInfinity } from "spinners-react";
 
@@ -17,6 +18,7 @@ export default function LikeHeart({ idPost, likesInformations, updateLikes }) {
       await api.postLikeOrNot(idPost, 1); //trocar userId = 1 pelo usuário mesmo
       await updateLikes();
       setWait(false);
+      ReactTooltip.rebuild();
     } catch {
       console.log("ocorreu um erro");
     }
@@ -39,14 +41,19 @@ export default function LikeHeart({ idPost, likesInformations, updateLikes }) {
         />
       ) : (
         <a
+          data-for="foo"
           data-tip={likesInformations?.arrayUsersNames?.join(", ")}
-          disable={likesInformations ? false : true}
+          data-tip-disable={likesInformations ? false : true}
           data-class={"tooltipConfig"}
         >
-          <p>{likesInformations?.countLikes || 0} likes</p>
+          <p>
+            {likesInformations?.countLikes || 0}
+            {likesInformations?.countLikes === "1" ? " like" : " likes"}
+          </p>
         </a>
       )}
       <ReactTooltip
+        id="foo"
         place="bottom"
         type="info"
         effect="float"
