@@ -13,7 +13,7 @@ export default function SignUp(){
         email: "",
         password: "",
         username: "",
-        picture_url: ""
+        image_url: ""
     });
     
     function handleInputChange(e){
@@ -25,15 +25,15 @@ export default function SignUp(){
         setIsEnabled(false);
 
         api.postSignUp(signUpData)
-        .then((res) => {
+        .then((response) => {
             setIsEnabled(true)
-            console.log(res.data)
+            console.log(response.data)
             navigate("/")
         })
-        .catch((err) => {
+        .catch((error) => {
             setIsEnabled(true)
-            alert(err)
-            console.log(err)
+            if(error.response.status === 422) alert("Confira os dados inseridos")
+            if(error.response.status === 400) alert("E-mail já casdastrado")
         });
     }
 
@@ -50,7 +50,7 @@ export default function SignUp(){
                         <input type="email" placeholder="e-mail" name="email" value={signUpData.email} onChange={handleInputChange} required></input>
                         <input type="password" placeholder="password" name="password" value={signUpData.password} onChange={handleInputChange} required></input>
                         <input type="text" placeholder="username" name="username" value={signUpData.username} onChange={handleInputChange} required></input>
-                        <input type="text" placeholder="picture url" name="picture_url" value={signUpData.picture_url} onChange={handleInputChange} required></input>
+                        <input type="text" placeholder="picture url" name="image_url" value={signUpData.image_url} onChange={handleInputChange} required></input>
                         <button type="submit">{isEnabled ? "Sign Up" : <SpinnerCircular size={50} thickness={100} speed={100} color="#1877F2" secondaryColor="#fff" />}</button>
                     </fieldset>
                 </form>

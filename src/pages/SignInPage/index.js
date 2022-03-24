@@ -1,6 +1,5 @@
 import { RightBox, Container, StyledLink } from "../../components/SignInAndSignUpLayout/style"
 import { SpinnerCircular } from 'spinners-react';
-import toast from 'react-hot-toast' ;   
 
 import React, { useState } from "react"
 import { useNavigate } from "react-router"
@@ -28,17 +27,14 @@ export default function SignIn(){
         setIsEnabled(false);
 
         api.postSignIn(signInData)
-        .then((res) => {
+        .then((response) => {
             setIsEnabled(true)
-            setAndPersistToken(res.data)
-            console.log(res.data)
-
+            setAndPersistToken(response.data)
             navigate("/timeline")
         })
-        .catch((err) => {
+        .catch((error) => {
             setIsEnabled(true)
-            alert(err)
-            console.log(err)
+            if(error.response.status === 400) alert("E-mail ou senha incorretos")
         });
     }
 
