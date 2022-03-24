@@ -1,19 +1,26 @@
 import { PostContainer, PublishContainer, PictureContainer, Header, InputContainer, PageContainer, Button, Title} from "./style"
-import Img from "../../components/Users/Image";
+import Img from "../Users/Image";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import api from "../../services/api";
+import { ToastContainer, toast } from 'react-toastify';
+import '/home/bongui/Documents/Driven/linkr-front/node_modules/react-toastify/dist/ReactToastify.css'
 
-export default function Home(){
+
+
+export default function NewPost(){
 
     const {userId} = useParams();
     const [url, setUrl] = useState('');
     const [text, setText] = useState('');
     const [isSending, setIsSending] = useState(false);
+    
 
     const postsItems = [{ placeholder: 'http:/..', type: 'text', state: setUrl },{ placeholder: 'Awesome article about #javascript', type: 'text', state: setText }];
 
     async function RequestLogin(e) {
+
+
         e.preventDefault();
         setIsSending(true);
         
@@ -21,34 +28,51 @@ export default function Home(){
         const body ={url, text}
         try{
             await api.sendPost(token, body);
+            setIsSending(false);
             
         }
         catch(error){
-            console.log(error)
+            toast("Wow so easy!");
+            setIsSending(false);
         }
        
     }
 
     return(
-        <PageContainer>
 
-            <Title>timeline</Title>
+            <PageContainer>
 
-            <PostContainer>
-                <PictureContainer>
-                    <Img height={'50px'} />
-                </PictureContainer>
+                <Title>timeline</Title>
 
-                <PublishContainer onSubmit={RequestLogin}>
-                    <Header> What are you going to share today? </Header>
+                <PostContainer>
+                    <PictureContainer>
+                        <Img height={'50px'} />
+                    </PictureContainer>
 
-                    <Inputs postsItems={postsItems} isSending={isSending}/>
+                    <PublishContainer onSubmit={RequestLogin}>
+                        <Header> What are you going to share today? </Header>
 
-                    <Button opacity={isSending === true ? 0.7 : 1} disabled={isSending ? true : false}>{isSending ? 'Publishing...' : 'Publish'}</Button>
-                </PublishContainer>
+                        <Inputs postsItems={postsItems} isSending={isSending}/>
 
-            </PostContainer>
-        </PageContainer>
+                        <Button opacity={isSending === true ? 0.7 : 1} disabled={isSending ? true : false}>{isSending ? 'Publishing...' : 'Publish'}</Button>
+                        <ToastContainer
+                            position="top-right"
+                            autoClose={5000}
+                            hideProgressBar={false}
+                            newestOnTop={false}
+                            closeOnClick
+                            rtl={false}
+                            pauseOnFocusLoss
+                            draggable
+                            pauseOnHover
+                            />
+                            {/* Same as */}
+                        <ToastContainer />
+                    </PublishContainer>
+
+                </PostContainer>
+            </PageContainer>
+
     )
 }
 
