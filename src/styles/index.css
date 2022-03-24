@@ -1,4 +1,12 @@
-* {
-    box-sizing: border-box;
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap');
+
+
+*, body, html, #root {
     font-family: 'Lato', sans-serif;
-  }
+    box-sizing: border-box;
+
+}
+
+body, html, #root {
+    width: 100%;
+}

@@ -39,7 +39,7 @@ export const RightBox = styled.div`
     display: flex;
     align-items: center;
     flex-direction: column;
-    padding-top: 16%;
+    padding-top: 20%;
 
     form{
         width: 100%;
