@@ -5,6 +5,7 @@ import api from "../../services/api";
 import HashTags from "../../components/Hashtags";
 import Post from "../../components/Post";
 import { Feed, Container, Page, Loading, Empty, Error } from "./style";
+import ReactTooltip from "react-tooltip";
 
 export default function Timeline() {
   const [isLoading, setIsLoading] = useState(true);
@@ -23,6 +24,7 @@ export default function Timeline() {
       setPosts(res.data);
       await requestLikes();
       setIsLoading(false);
+      ReactTooltip.rebuild();
     } catch {
       console.log("aconteceu um erro em posts");
       setError(true);
@@ -32,14 +34,12 @@ export default function Timeline() {
   async function requestLikes() {
     try {
       const res = await api.getLikes();
-      console.log(res.data);
       setLikes(res.data);
     } catch (err) {
       console.log("aconteceu um erro em likes");
       setError(true);
     }
   }
-  console.log(likes);
 
   return (
     <Page>
@@ -92,7 +92,7 @@ function ChooseFeed({ loading, error, posts, likes, requestLikes }) {
           <Post
             infos={p}
             key={p.id}
-            like={likes[p.id - 1]}
+            like={likes.find(({ postId }) => postId === p.id)}
             updateLikes={requestLikes}
           />
         ))}

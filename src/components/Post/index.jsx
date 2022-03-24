@@ -14,9 +14,6 @@ function Post({infos, like, updateLikes}){
             metaData,
     } = infos;
 
-    console.log(like)
- 
-
     return (
         <Container>
             <Left>

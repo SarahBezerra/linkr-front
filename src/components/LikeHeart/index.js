@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import ReactTooltip from "react-tooltip";
 import { SpinnerInfinity } from "spinners-react";
 
@@ -8,7 +8,6 @@ import { ContentLikes, IconHeartRed, IconHeartDefault } from "./style";
 export default function LikeHeart({ idPost, likesInformations, updateLikes }) {
   const [wait, setWait] = useState(false);
   const [like, setLike] = useState(likesInformations?.liked || false);
-  console.log(likesInformations);
 
   async function likeOrNot() {
     setWait(true);
@@ -40,7 +39,8 @@ export default function LikeHeart({ idPost, likesInformations, updateLikes }) {
         />
       ) : (
         <a
-          data-tip={`${likesInformations?.arrayUsersNames?.join(", ") || "no"}`}
+          data-tip={likesInformations?.arrayUsersNames?.join(", ")}
+          disable={likesInformations ? false : true}
           data-class={"tooltipConfig"}
         >
           <p>{likesInformations?.countLikes || 0} likes</p>

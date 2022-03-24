@@ -17,6 +17,7 @@ function getLikes() {
 }
 
 function postLikeOrNot(idPost, userId) {
+  console.log(idPost);
   return axios.post(`${BASE_URL}/like/${idPost}`, { userId }); // lembrar que só o auth é suficiente
 }
 
