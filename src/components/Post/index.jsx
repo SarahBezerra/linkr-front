@@ -1,8 +1,9 @@
 import { Container, UserName, UserText, MetaContainer, Left, Main, Title, 
-    Description, Url, Preview, MetaLeft, MetaRigth, UserPhoto, ContentLikes } from "./style";
+    Description, Url, Preview, MetaLeft, MetaRigth, UserPhoto, ContentLikes, Hashtag } from "./style";
 import { DocumentTextOutline } from 'react-ionicons'
+import ReactHashtag from "@mdnm/react-hashtag";
+import { useNavigate } from "react-router-dom";
 import LikeHeart from "../LikeHeart";
-
 
 function Post({infos, like, updateLikes}){
     const {
@@ -19,13 +20,13 @@ function Post({infos, like, updateLikes}){
             <Left>
                 <UserPhoto src={ image_url } alt=''/>
                 <ContentLikes>
-
-                <LikeHeart idPost = {id} likesInformations={like || {}} updateLikes={updateLikes} />
+                    <LikeHeart idPost = {id} likesInformations={like || {}} updateLikes={updateLikes} />
                 </ContentLikes>
             </Left>
             <Main>
                 <UserName> { username } </UserName>
-                <UserText> { text } </UserText>
+                <Message>{ text }</Message>
+
                 <a href={metaData.url} target='_blank' rel='noreferrer' >
                     <MetaContainer>
                         <MetaLeft>
@@ -46,6 +47,26 @@ function Post({infos, like, updateLikes}){
         </Container>
     )
 }
+
+function Message({children}){
+
+    const navigate = useNavigate();
+
+    function handleHashtagLink({innerText}){
+            const hashtag = innerText.replace('#','');
+            navigate(`/hashtag/${hashtag}`);
+    };
+
+    return(
+        <UserText>
+            <ReactHashtag 
+                renderHashtag={(hashtagValue) => (<Hashtag onClick={(e) => {handleHashtagLink(e.target)}}>{hashtagValue}</Hashtag>)} >
+                {children}
+            </ReactHashtag>
+        </UserText>
+    )
+}
+
 
 
 export default Post;
