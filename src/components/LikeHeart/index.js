@@ -2,21 +2,20 @@ import { useEffect, useState } from "react";
 import ReactTooltip from "react-tooltip";
 import { SpinnerInfinity } from "spinners-react";
 
-import api from "../../services";
+import api from "../../services/api";
 import { ContentLikes, IconHeartRed, IconHeartDefault } from "./style";
 
-export default function LikeHeart({ likesInformations, updateLikes }) {
+export default function LikeHeart({ idPost, likesInformations, updateLikes }) {
   const [wait, setWait] = useState(false);
-  const [like, setLike] = useState(likesInformations.liked);
-  ReactTooltip.rebuild();
-  console.log(likesInformations.arrayUsersNames.join(", "));
+  const [like, setLike] = useState(likesInformations?.liked || false);
+  console.log(likesInformations);
 
   async function likeOrNot() {
     setWait(true);
     setLike(!like);
 
     try {
-      await api.postLikeOrNot(likesInformations.postId, 1); //trocar userId = 1 pelo usuário mesmo
+      await api.postLikeOrNot(idPost, 1); //trocar userId = 1 pelo usuário mesmo
       await updateLikes();
       setWait(false);
     } catch {
@@ -41,10 +40,10 @@ export default function LikeHeart({ likesInformations, updateLikes }) {
         />
       ) : (
         <a
-          data-tip={`${likesInformations.arrayUsersNames.join(", ")}`}
+          data-tip={`${likesInformations?.arrayUsersNames?.join(", ") || "no"}`}
           data-class={"tooltipConfig"}
         >
-          <p>{likesInformations.countLikes} likes</p>
+          <p>{likesInformations?.countLikes || 0} likes</p>
         </a>
       )}
       <ReactTooltip

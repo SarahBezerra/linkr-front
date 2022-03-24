@@ -1,9 +1,10 @@
 import { Container, UserName, UserText, MetaContainer, Left, Main, Title, 
-    Description, Url, Preview, MetaLeft, MetaRigth, UserPhoto, Likes } from "./style";
+    Description, Url, Preview, MetaLeft, MetaRigth, UserPhoto, ContentLikes } from "./style";
 import { DocumentTextOutline } from 'react-ionicons'
+import LikeHeart from "../LikeHeart";
 
 
-function Post({infos}){
+function Post({infos, like, updateLikes}){
     const {
             id,
             userId,
@@ -13,15 +14,17 @@ function Post({infos}){
             metaData,
     } = infos;
 
-
+    console.log(like)
  
-    console.log(metaData);
 
     return (
         <Container>
             <Left>
                 <UserPhoto src={ image_url } alt=''/>
-                <Likes></Likes>
+                <ContentLikes>
+
+                <LikeHeart idPost = {id} likesInformations={like || {}} updateLikes={updateLikes} />
+                </ContentLikes>
             </Left>
             <Main>
                 <UserName> { username } </UserName>

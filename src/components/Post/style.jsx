@@ -16,7 +16,6 @@ const Left = styled.div`
     width:12%;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
 `;
 
 const Main = styled.div`
@@ -54,13 +53,10 @@ const UserPhoto = styled.img`
     width: 55px;
     max-width: 80%;
     height: 55px;
-    margin-bottom: 20px;
 `
 
-const Likes = styled.div`
-    background: repeating-linear-gradient( 135deg, #000000, #000000 14px, #fda607 -10px, #ff9900 25px);
-    height: 50px;
-    width: 80%;
+const ContentLikes = styled.div`
+   width: 80%;
 `;
 
 const MetaRigth = styled.div`
@@ -112,5 +108,5 @@ export {
     MetaLeft,
     MetaRigth,
     UserPhoto,
-    Likes,
+    ContentLikes,
 }

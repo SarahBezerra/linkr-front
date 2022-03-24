@@ -1,89 +1,70 @@
 import { useEffect, useState } from "react";
-// import { ColumnLeft, PageContent, Posts, ContentLikes } from "./style";
-// import LikeHeart from "../../components/LikeHeart";
-// import api from "../../services";
+import { SpinnerCircularFixed } from "spinners-react";
 
-// export default function Timeline() {
-//   const [likes, setLikes] = useState(null);
-
-//   useEffect(() => {
-//     requestLikes();
-//   }, []);
-
-//   async function requestLikes() {
-//     try {
-//       const request = await api.getLikes();
-//       setLikes(request.data);
-//     } catch (err) {
-//       console.log("aconteceu um erro");
-//     }
-//   }
-//   console.log(likes);
-
-//   return (
-//     <PageContent>
-//       {likes
-//         ? likes.map((heart) => (
-//             <Posts>
-//               <ColumnLeft>
-//                 <div>Picture</div>
-//                 <ContentLikes>
-//                   <LikeHeart
-//                     likesInformations={heart}
-//                     updateLikes={requestLikes}
-//                   />
-//                 </ContentLikes>
-//               </ColumnLeft>
-//             </Posts>
-//           ))
-//         : ""}
-//     </PageContent>
-//   );
-// }
+import api from "../../services/api";
 import HashTags from "../../components/Hashtags";
 import Post from "../../components/Post";
-import api from "../../services/api";
 import { Feed, Container, Page, Loading, Empty, Error } from "./style";
-import { SpinnerCircularFixed } from "spinners-react";
 
 export default function Timeline() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(false);
   const [posts, setPosts] = useState([]);
+  const [likes, setLikes] = useState([]);
   const config = null;
 
   useEffect(() => {
-    api
-      .getPosts(config)
-      .then((res) => {
-        setPosts(res.data);
-        setIsLoading(false);
-      })
-      .catch((err) => {
-        console.log(err);
-        setError(true);
-      });
-  }, [isLoading]);
+    requestPosts();
+  }, []);
+
+  async function requestPosts() {
+    try {
+      const res = await api.getPosts(config);
+      setPosts(res.data);
+      await requestLikes();
+      setIsLoading(false);
+    } catch {
+      console.log("aconteceu um erro em posts");
+      setError(true);
+    }
+  }
+
+  async function requestLikes() {
+    try {
+      const res = await api.getLikes();
+      console.log(res.data);
+      setLikes(res.data);
+    } catch (err) {
+      console.log("aconteceu um erro em likes");
+      setError(true);
+    }
+  }
+  console.log(likes);
 
   return (
     <Page>
       <Container>
-        <ChooseFeed loading={isLoading} posts={posts} error={error} />
+        <ChooseFeed
+          loading={isLoading}
+          posts={posts}
+          error={error}
+          likes={likes}
+          requestLikes={requestLikes}
+        />
         <HashTags></HashTags>
       </Container>
     </Page>
   );
 }
 
-function ChooseFeed({ loading, error, posts }) {
+function ChooseFeed({ loading, error, posts, likes, requestLikes }) {
   if (error)
     return (
       <Error>
-        {" "}
         <p>
           An error occured while trying to fetch the posts, please refresh the
           page
-        </p>{" "}
+        </p>
       </Error>
     );
   else if (loading)
@@ -101,17 +82,20 @@ function ChooseFeed({ loading, error, posts }) {
   else if (posts.length === 0)
     return (
       <Empty>
-        {" "}
-        <p>There are no posts yet</p>{" "}
+        <p>There are no posts yet</p>
       </Empty>
     );
   else
     return (
       <Feed>
-        {" "}
         {posts.map((p) => (
-          <Post infos={p} key={p.id} />
-        ))}{" "}
+          <Post
+            infos={p}
+            key={p.id}
+            like={likes[p.id - 1]}
+            updateLikes={requestLikes}
+          />
+        ))}
       </Feed>
     );
 }
