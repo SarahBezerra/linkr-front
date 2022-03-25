@@ -5,6 +5,7 @@ import api from "../../services/api";
 import HashTags from "../../components/Hashtags";
 import Post from "../../components/Post";
 import { Feed, Container, Page, Loading, Empty, Error } from "./style";
+import NewPost from "../../components/newPost";
 
 export default function Timeline() {
   const [isLoading, setIsLoading] = useState(true);
@@ -15,7 +16,7 @@ export default function Timeline() {
 
   useEffect(() => {
     requestPosts();
-  }, []);
+  }, [posts]);
 
   async function requestPosts() {
     try {
@@ -42,6 +43,7 @@ export default function Timeline() {
   return (
     <Page>
       <Container>
+        <NewPost />
         <ChooseFeed
           loading={isLoading}
           posts={posts}
