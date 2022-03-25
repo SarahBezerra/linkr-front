@@ -31,7 +31,7 @@ export default function SignIn(){
         api.postSignIn(signInData)
         .then((response) => {
             setIsEnabled(true)
-            login({...response.data})
+            login(response.data)
             navigate("/timeline")
         })
         .catch((error) => {

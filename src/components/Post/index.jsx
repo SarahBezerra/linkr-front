@@ -5,7 +5,7 @@ import ReactHashtag from "@mdnm/react-hashtag";
 import { useNavigate } from "react-router-dom";
 import LikeHeart from "../LikeHeart";
 
-function Post({infos, like, updateLikes}){
+function Post({infos, like, updateLikes, reloadPage}){
     const {
             id,
             userId,
@@ -25,7 +25,7 @@ function Post({infos, like, updateLikes}){
             </Left>
             <Main>
                 <UserName> { username } </UserName>
-                <Message>{ text }</Message>
+                <Message reloadPage={reloadPage}>{ text }</Message>
 
                 <a href={metaData.url} target='_blank' rel='noreferrer' >
                     <MetaContainer>
@@ -48,11 +48,12 @@ function Post({infos, like, updateLikes}){
     )
 }
 
-function Message({children}){
+function Message({children, reloadPage}){
 
     const navigate = useNavigate();
 
     function handleHashtagLink({innerText}){
+            reloadPage('');
             const hashtag = innerText.replace('#','');
             navigate(`/hashtag/${hashtag}`);
     };
