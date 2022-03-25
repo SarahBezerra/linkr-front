@@ -1,4 +1,4 @@
-import { PostContainer, PublishContainer, PictureContainer, Header, InputContainer, PageContainer, Button, Title} from "./style"
+import { PostContainer, PublishContainer, PictureContainer, Header, InputContainer, Container, Button, Title} from "./style"
 import Img from "../Users/Image";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
@@ -43,9 +43,7 @@ export default function NewPost(){
 
     return(
 
-            <PageContainer>
-
-                <Title>timeline</Title>
+            <Container>
 
                 <PostContainer>
                     <PictureContainer>
@@ -76,7 +74,7 @@ export default function NewPost(){
                             pauseOnHover
                         />
 
-            </PageContainer>
+            </Container>
 
     )
 }
