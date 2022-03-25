@@ -6,6 +6,7 @@ import Header from "./components/Header/Header";
 import Content from "./components/PageLayout/Content";
 import SignIn from "./pages/SignIn";
 import NewPost from "./components/newPost/index";
+import Hashtag from './pages/Hashtag';
 
 
 function App() {
@@ -21,7 +22,7 @@ function App() {
               <Route path='/timeline' element={<Timeline />} />
               <Route path='/login' element={<SignIn/>}></Route>
               <Route path='/sign-up' element={<SignIn/>}></Route>
-              <Route path='/newPost' element={<NewPost/>}></Route>
+              <Route path='/hashtag/:hashtag' element={<Hashtag/>}/>
             </Routes>
           </BrowserRouter>
         </Content>

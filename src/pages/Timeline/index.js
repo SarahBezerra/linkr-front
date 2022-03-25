@@ -4,6 +4,7 @@ import Post from "../../components/Post";
 import api from "../../services/api";
 import { Feed, Container, Page, Loading, Empty, Error } from "./style";
 import { SpinnerCircularFixed } from 'spinners-react';
+import NewPost from "../../components/newPost";
 
 
 
@@ -24,11 +25,12 @@ export default function Timeline(){
             console.log(err);
             setError(true);
         });
-    }, [isLoading]);
+    }, [isLoading, posts]);
 
     return (
         <Page>
             <Container>
+                <NewPost/>
                 <ChooseFeed loading={isLoading} posts={posts} error={error} />
                 <HashTags></HashTags>
             </Container>
