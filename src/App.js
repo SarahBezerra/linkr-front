@@ -3,9 +3,7 @@ import { useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Timeline from "./pages/Timeline";
 import Header from "./components/Header/Header";
-import Posts from "./pages/Posts/index";
-import SignUp from "./pages/SignUpPage/index";
-import SignIn from './pages/SignInPage/index';
+import SignUp from "./pages/SignUpPage";
 import SignIn from "./pages/SignIn";
 import Content from "./components/PageLayout/Content";
 

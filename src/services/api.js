@@ -7,23 +7,26 @@ function createConfig(token) {
   return { headers: { Authorization: `Bearer ${token}` } };
 }
 
-
 function postSignUp(signUpData) {
     return axios.post(`${BASE_URL}/sign-up`, signUpData);
 }
 
 function postSignIn(signInData) {
     return axios.post(`${BASE_URL}/sign-in`, signInData);
+}
 
-function sendPost(token, body) {
+async function sendPost(token, body) {
   const config = createConfig(token);
-  const promise = await axios.post(`${BASE_URL}/posts`, body, config);
-  return promise;
-
+  return axios.post(`${BASE_URL}/posts`, body, config);
 }
 
 function getPosts(config) {
   return axios.get(`${BASE_URL}/posts`, config);
+}
+
+function getPostsByHashtag(hashtag){
+  const config = null;
+  return axios.get(`${BASE_URL}/hashtag/${hashtag}`, config);
 }
 
 function getLikes() {
@@ -37,6 +40,7 @@ function postLikeOrNot(idPost, userId) {
 const api = {
   createConfig,
   getPosts,
+  getPostsByHashtag,
   sendPost,
   getLikes,
   postLikeOrNot,

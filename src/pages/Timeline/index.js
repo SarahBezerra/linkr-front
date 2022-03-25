@@ -26,13 +26,20 @@ export default function Timeline() {
     console.log(params);
 
     useEffect(() => {
+      //setRequestState(statesList['loading']);
       requestPosts();
       getHeader();
-    }, []);
+    }, [requestState]);
 
     async function requestPosts() {
+
+      let res = null;
+
       try {
-        const res = await api.getPosts(config);
+        if(Object.keys(params).length === 0)
+          res = await api.getPosts(config);
+        else  
+          res = await api.getPostsByHashtag(params['hashtag']);
         setPosts(res.data);
         const state = res.data.length === 0 ? statesList['empty'] : statesList['ok'];
         setRequestState(state);
@@ -68,6 +75,7 @@ export default function Timeline() {
           likes={likes}
           requestLikes={requestLikes}
           state={requestState}
+          setRequestState = {setRequestState}
         />
         <HashTags></HashTags>
       </Container>
@@ -75,7 +83,7 @@ export default function Timeline() {
   );
 }
 
-function ChooseFeed({posts, likes, requestLikes, state}){
+function ChooseFeed({posts, likes, requestLikes, state, setRequestState}){
     if(state === statesList['error'])
         return ( 
             <Error> <p>An error occured while trying to fetch the posts, please refresh the page</p> </Error>  )
@@ -99,6 +107,7 @@ function ChooseFeed({posts, likes, requestLikes, state}){
                 key={p.id}
                 like={likes.find(({ postId }) => postId === p.id)}
                 updateLikes={requestLikes}
+                reloadPage= {setRequestState}
               />
             ))}
           </Feed>            
