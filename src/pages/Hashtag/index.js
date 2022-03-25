@@ -1,10 +1,16 @@
 import { useParams } from 'react-router-dom';
+import Timeline from '../Timeline';
+
+// export default function Hashtag() {
+
+//     const { hashtag } = useParams();
+//     return (
+//         <div> {hashtag} </div>
+//     );
+// }
 
 
-export default function Hashtag() {
+const Hashtag = Timeline;
 
-    const { hashtag } = useParams();
-    return (
-        <div> {hashtag} </div>
-    );
-}
+
+export default Hashtag

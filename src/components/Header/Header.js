@@ -13,31 +13,18 @@ export default function Header({ menuSelect, setMenuSelect }) {
     setMenuSelect(false);
   }
 
-  return (
-    <HeaderContainer
-      display={
-        location.pathname === "/" || location.pathname === "sign-up"
-          ? "none"
-          : "inital"
-      }
-    >
-      <HeaderContent>
-        <span>linkr</span>
+  return(
+      <HeaderContainer display={(location.pathname === '/' || location.pathname === '/sign-up') ? 'none' : 'inital'}>
+          <HeaderContent>
+              <span>linkr</span>
 
-        <div style={{ position: "relative" }}>
-          <HeaderMenu menuSelect={menuSelect} setMenuSelect={setMenuSelect} />
-        </div>
-      </HeaderContent>
-      {
-        <DropDownMenu
-          dropDownDisplay={menuSelect === false ? false : true}
-          onClick={(e) => {
-            handleClick(e);
-          }}
-        >
-          Logout
-        </DropDownMenu>
-      }
-    </HeaderContainer>
-  );
+              <div style={{position: 'relative'}}>
+                  <HeaderMenu menuSelect={menuSelect} setMenuSelect={setMenuSelect}/>
+              </div>
+          </HeaderContent>
+          {<DropDownMenu dropDownDisplay={menuSelect === false ? false: true} onClick={(e) => {handleClick(e)}}>Logout</DropDownMenu>}
+              
+      </HeaderContainer>
+  )
 }
+
