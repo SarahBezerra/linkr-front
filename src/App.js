@@ -7,7 +7,6 @@ import Content from "./components/PageLayout/Content";
 import Posts from "./pages/Posts/index";
 import SignUp from "./pages/SignUpPage/index";
 import SignIn from './pages/SignInPage/index';
-import Posts from "./pages/Posts/index";
 import Hashtag from "./pages/Hashtag";
 
 function App() {
