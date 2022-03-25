@@ -7,10 +7,19 @@ function createConfig(token) {
   return { headers: { Authorization: `Bearer ${token}` } };
 }
 
-async function sendPost(token, body) {
+
+function postSignUp(signUpData) {
+    return axios.post(`${BASE_URL}/sign-up`, signUpData);
+}
+
+function postSignIn(signInData) {
+    return axios.post(`${BASE_URL}/sign-in`, signInData);
+
+function sendPost(token, body) {
   const config = createConfig(token);
   const promise = await axios.post(`${BASE_URL}/posts`, body, config);
   return promise;
+
 }
 
 function getPosts(config) {
@@ -31,6 +40,8 @@ const api = {
   sendPost,
   getLikes,
   postLikeOrNot,
+  postSignUp,
+  postSignIn
 };
 
 export default api;
