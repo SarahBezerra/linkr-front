@@ -1,6 +1,6 @@
-import { PostContainer, PublishContainer, PictureContainer, Header, InputContainer, Container, Button, Title} from "./style"
+import { PostContainer, PublishContainer, PictureContainer, Header, InputContainer, Container, Button} from "./style"
 import Img from "../Users/Image";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useParams } from "react-router-dom";
 import api from "../../services/api";
 import { ToastContainer, toast } from 'react-toastify';
@@ -8,7 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 
 
-export default function NewPost(){
+export default function NewPost({imageUrl}){
 
     const {userId} = useParams();
     const [url, setUrl] = useState('');
@@ -47,7 +47,7 @@ export default function NewPost(){
 
                 <PostContainer>
                     <PictureContainer>
-                        <Img height={'50px'} />
+                        <Img height={'50px'} src={imageUrl}/>
                     </PictureContainer>
 
                     <PublishContainer onSubmit={RequestLogin}>

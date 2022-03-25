@@ -1,7 +1,6 @@
 import Img from "../Users/Image";
 import { ArrowDown, ArrowUp } from "./Arrows/Arrows";
 import { useEffect, useRef } from "react";
-import DropDownMenu from "./DropDownMenu/DropDownMenu";
 
 let useClickOutside = (handler) => {
   let menuRef = useRef();
@@ -25,7 +24,7 @@ let useClickOutside = (handler) => {
   return menuRef;
 };
 
-function HeaderMenu({ menuSelect, setMenuSelect }) {
+function HeaderMenu({ menuSelect, setMenuSelect, imageUrl }) {
   let menuRef = useClickOutside(() => {
     setMenuSelect(false);
   });
@@ -52,6 +51,7 @@ function HeaderMenu({ menuSelect, setMenuSelect }) {
       )}
 
       <Img
+        src={imageUrl}
         height={"50px"}
         onClick={() => {
           menuSelect === false ? setMenuSelect(true) : setMenuSelect(false);

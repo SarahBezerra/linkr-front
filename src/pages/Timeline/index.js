@@ -5,6 +5,7 @@ import HashTags from "../../components/Hashtags";
 import Post from "../../components/Post";
 import { Feed, Container, Page, Loading, Empty, Error, Title } from "./style";
 import NewPost from "../../components/newPost";
+import useAuth from "../../hooks/useAuth";
 
 
 const statesList = {
@@ -18,6 +19,7 @@ export default function Timeline() {
     const [requestState, setRequestState] = useState(statesList['loading']);
     const [posts, setPosts] = useState([]);
     const [likes, setLikes] = useState([]);
+    const {auth} = useAuth();
     const config = null;
 
     useEffect(() => {
@@ -56,6 +58,7 @@ export default function Timeline() {
           likes={likes}
           requestLikes={requestLikes}
           state={requestState}
+          imageUrl={auth.image_url}
         />
         <HashTags></HashTags>
       </Container>
@@ -63,7 +66,7 @@ export default function Timeline() {
   );
 }
 
-function ChooseFeed({posts, likes, requestLikes, state}){
+function ChooseFeed({posts, likes, requestLikes, state, imageUrl}){
     if(state === statesList['error'])
         return ( 
             <Error> <p>An error occured while trying to fetch the posts, please refresh the page</p> </Error>  )
@@ -80,7 +83,7 @@ function ChooseFeed({posts, likes, requestLikes, state}){
     else
         return ( 
           <Feed>
-            <NewPost />
+            <NewPost imageUrl={imageUrl}/>
             {posts.map((p) => (
               <Post
                 infos={p}
