@@ -3,7 +3,7 @@ import { SpinnerCircularFixed } from "spinners-react";
 import api from "../../services/api";
 import HashTags from "../../components/Hashtags";
 import Post from "../../components/Post";
-import { Feed, Container, Page, Loading, Empty, Error } from "./style";
+import { Feed, Container, Page, Loading, Empty, Error, Title } from "./style";
 import NewPost from "../../components/newPost";
 
 
@@ -47,21 +47,21 @@ export default function Timeline() {
       }
     }
 
-    return (
-      <Page>
-        <Container>
-          <NewPost />
-          <ChooseFeed
-            posts={posts}
-            likes={likes}
-            requestLikes={requestLikes}
-            state={requestState}
-          />
-          <HashTags></HashTags>
-        </Container>
-      </Page>
-    );
-  }
+  return (
+    <Page>
+      <Title>timeline</Title>
+      <Container>
+        <ChooseFeed
+          posts={posts}
+          likes={likes}
+          requestLikes={requestLikes}
+          state={requestState}
+        />
+        <HashTags></HashTags>
+      </Container>
+    </Page>
+  );
+}
 
 function ChooseFeed({posts, likes, requestLikes, state}){
     if(state === statesList['error'])
@@ -80,6 +80,7 @@ function ChooseFeed({posts, likes, requestLikes, state}){
     else
         return ( 
           <Feed>
+            <NewPost />
             {posts.map((p) => (
               <Post
                 infos={p}
