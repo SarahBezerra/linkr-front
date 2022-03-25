@@ -14,8 +14,9 @@ function postSignUp(signUpData) {
 
 function postSignIn(signInData) {
     return axios.post(`${BASE_URL}/sign-in`, signInData);
+}
 
-function sendPost(token, body) {
+async function sendPost(token, body) {
   const config = createConfig(token);
   const promise = await axios.post(`${BASE_URL}/posts`, body, config);
   return promise;
