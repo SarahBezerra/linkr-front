@@ -98,5 +98,4 @@ function Inputs({postsItems, isSending}){
             })}
        </>
     )
-
 }
