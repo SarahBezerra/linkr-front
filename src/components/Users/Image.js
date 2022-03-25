@@ -1,16 +1,16 @@
 import styled from 'styled-components'
 
-const HeaderImage = styled.img`
+const Img = styled.img`
+
+all: unset;
 
 height:${props => props.height};
 width: ${props => props.height};
 
 border-radius: 50%;
 
-background-color: white;
-
-align-self: center;
+background-color: lightyellow;
 
 `
 
-export default HeaderImage
+export default Img;
