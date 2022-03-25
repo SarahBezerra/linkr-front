@@ -1,46 +1,28 @@
 import styled from 'styled-components'
 
 
-const PageContainer = styled.div`
+const Container = styled.div`
 
-display: flex;
-flex-direction: column;
-align-items: center;
+    width: 100%;
+    /* max-width: 100%; */
 
-padding-top: 72px;
-
-`
-
-const Title = styled.h1`
-
-width:45vw;
-height: fit-content;
-
-display:flex;
-align-items: center;
-margin-top: 80px;
-
-color: #FFF;
-font-family: 'Oswald', sans-serif;
-font-size: 30px;
-
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 `
 
 const PostContainer = styled.div`
 
-display:flex;
+    display:flex;
+    
+    width: 100%;
+    height: 200px;
 
-width: 45vw;
-height: 200px;
+    padding: 20px 20px 20px 0;
 
-margin-top: 40px;
-padding: 20px 20px 20px 0;
+    border-radius: 5px;
 
-border-radius: 5px;
-
-background-color: #FFF;
-
-
+    background-color: #FFF;
 `
 
 const PictureContainer = styled.div`
@@ -128,4 +110,4 @@ text-align: center;
 
 `
 
-export {PageContainer, Title, PostContainer, PictureContainer, PublishContainer, Header, InputContainer, Button}
+export {Container, PostContainer, PictureContainer, PublishContainer, Header, InputContainer, Button}
