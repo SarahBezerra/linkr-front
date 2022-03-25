@@ -15,10 +15,20 @@ function getPosts(config) {
     return axios.get(`${BASE_URL}/posts`, config);
 }
 
+function getLikes() {
+    return axios.get(`${BASE_URL}/like`);
+  }
+  
+function postLikeOrNot(idPost, userId) {
+    return axios.post(`${BASE_URL}/like/${idPost}`, { userId }); // lembrar que só o auth é suficiente
+  }
+
 const api = {
     createConfig,
     getPosts,
-    sendPost
+    sendPost,
+    getLikes,
+    postLikeOrNot,
 }
 
 export default api;

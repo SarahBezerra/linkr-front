@@ -1,56 +1,101 @@
 import { useEffect, useState } from "react";
+import { SpinnerCircularFixed } from "spinners-react";
+
+import api from "../../services/api";
 import HashTags from "../../components/Hashtags";
 import Post from "../../components/Post";
-import api from "../../services/api";
 import { Feed, Container, Page, Loading, Empty, Error } from "./style";
-import { SpinnerCircularFixed } from 'spinners-react';
 import NewPost from "../../components/newPost";
 
+export default function Timeline() {
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(false);
+  const [posts, setPosts] = useState([]);
+  const [likes, setLikes] = useState([]);
+  const config = null;
 
+  useEffect(() => {
+    requestPosts();
+  }, [posts]);
 
-export default function Timeline(){
+  async function requestPosts() {
+    try {
+      const res = await api.getPosts(config);
+      setPosts(res.data);
+      await requestLikes();
+      setIsLoading(false);
+    } catch {
+      console.log("aconteceu um erro em posts");
+      setError(true);
+    }
+  }
 
-    const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState(false);
-    const [posts, setPosts] = useState([]);
-    const config = null;
+  async function requestLikes() {
+    try {
+      const res = await api.getLikes();
+      setLikes(res.data);
+    } catch (err) {
+      console.log("aconteceu um erro em likes");
+      setError(true);
+    }
+  }
 
-    useEffect(()=>{
-        api.getPosts(config)
-        .then((res) => {
-            setPosts(res.data)
-            setIsLoading(false);
-        })
-        .catch((err) => {
-            console.log(err);
-            setError(true);
-        });
-    }, [isLoading, posts]);
-
-    return (
-        <Page>
-            <Container>
-                <NewPost/>
-                <ChooseFeed loading={isLoading} posts={posts} error={error} />
-                <HashTags></HashTags>
-            </Container>
-        </Page>
-    )
+  return (
+    <Page>
+      <Container>
+        <NewPost/>
+        <ChooseFeed
+          loading={isLoading}
+          posts={posts}
+          error={error}
+          likes={likes}
+          requestLikes={requestLikes}
+        />
+        <HashTags></HashTags>
+      </Container>
+    </Page>
+  );
 }
 
-
-function ChooseFeed({loading, error, posts}){
-    if(error)
-        return  <Error> <p>An error occured while trying to fetch the posts, please refresh the page</p> </Error>
-    else if(loading)
-        return (
-            <Loading>
-                <SpinnerCircularFixed size={200} thickness={100} speed={180} color="rgba(57, 89, 172, 1)" secondaryColor="rgba(83, 57, 172, 0.24)" />
-            </Loading>
-        )
-    else if(posts.length === 0)
-        return  <Empty> <p>There are no posts yet</p> </Empty>
-    else
-        return <Feed> {posts.map(p => <Post infos={p} key={p.id}/>)} </Feed>
-        
+function ChooseFeed({ loading, error, posts, likes, requestLikes }) {
+  if (error)
+    return (
+      <Error>
+        <p>
+          An error occured while trying to fetch the posts, please refresh the
+          page
+        </p>
+      </Error>
+    );
+  else if (loading)
+    return (
+      <Loading>
+        <SpinnerCircularFixed
+          size={200}
+          thickness={100}
+          speed={180}
+          color="rgba(57, 89, 172, 1)"
+          secondaryColor="rgba(83, 57, 172, 0.24)"
+        />
+      </Loading>
+    );
+  else if (posts.length === 0)
+    return (
+      <Empty>
+        <p>There are no posts yet</p>
+      </Empty>
+    );
+  else
+    return (
+      <Feed>
+        {posts.map((p) => (
+          <Post
+            infos={p}
+            key={p.id}
+            like={likes.find(({ postId }) => postId === p.id)}
+            updateLikes={requestLikes}
+          />
+        ))}
+      </Feed>
+    );
 }
