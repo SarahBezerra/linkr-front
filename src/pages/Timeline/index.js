@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { SpinnerCircularFixed } from "spinners-react";
 import api from "../../services/api";
-import HashTags from "../../components/Hashtags";
 import Post from "../../components/Post";
 import { Feed, Container, Page, Loading, Empty, Error, Title } from "./style";
 import NewPost from "../../components/newPost";
+import { useParams } from "react-router-dom";
+import HashTags from "../../components/Hashtags";
 
 
 const statesList = {
@@ -18,21 +19,25 @@ export default function Timeline() {
     const [requestState, setRequestState] = useState(statesList['loading']);
     const [posts, setPosts] = useState([]);
     const [likes, setLikes] = useState([]);
+    const [header, setHeader] = useState('');
+    const params = useParams();
     const config = null;
+
+    console.log(params);
 
     useEffect(() => {
       requestPosts();
-    }, [posts]);
+      getHeader();
+    }, []);
 
     async function requestPosts() {
       try {
         const res = await api.getPosts(config);
         setPosts(res.data);
-        await requestLikes();
         const state = res.data.length === 0 ? statesList['empty'] : statesList['ok'];
         setRequestState(state);
+        await requestLikes();
       } catch {
-        console.log("aconteceu um erro em posts");
         setRequestState(statesList['error']);
       }
     }
@@ -47,9 +52,16 @@ export default function Timeline() {
       }
     }
 
+    function getHeader(){
+      if(Object.keys(params).length === 0)
+        setHeader('timeline')
+      else  
+        setHeader(`#${params['hashtag']}`);
+    }
+
   return (
     <Page>
-      <Title>timeline</Title>
+      <Title> {header} </Title>
       <Container>
         <ChooseFeed
           posts={posts}

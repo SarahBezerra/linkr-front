@@ -21,7 +21,6 @@ const Title = styled.h1`
   height: fit-content;
   display:flex;
   align-items: center;
-  margin-top: 80px;
   color: #FFF;
   font-family: 'Oswald', sans-serif;
   font-weight: 700;
