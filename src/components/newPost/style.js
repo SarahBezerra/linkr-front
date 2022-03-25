@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import { devices } from '../../styles/responsiveness';
 
 
 const Container = styled.div`
@@ -9,6 +10,7 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
+    overflow: hidden;
 `
 
 const PostContainer = styled.div`
@@ -18,35 +20,45 @@ const PostContainer = styled.div`
     width: 100%;
     height: 200px;
 
-    padding: 20px 20px 20px 0;
-
-    border-radius: 5px;
+    padding: 20px 20px 20px 20px;
 
     background-color: #FFF;
+
+    @media ${devices.tablet}{
+        padding: 15px 15px 12px 15px;
+    }
 `
 
 const PictureContainer = styled.div`
 
-width: 20%;
-height:100%;
+    width: 20%;
+    height:100%;
 
-display: flex;
-justify-content: center;
-align-items: flex-start;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+
+    @media ${devices.tablet}{
+        display: none;
+    }
 
 `
 
 const PublishContainer = styled.form`
 
-width:80%;
-height: 100%;
+    width:80%;
+    height: 100%;
 
-display: flex;
-flex-direction: column;
+    display: flex;
+    flex-direction: column;
 
-gap: 7px;
+    gap: 7px;
 
-font-size: 0;
+    font-size: 0;
+
+    @media ${devices.tablet}{
+        width:100%
+    }
 
 
 `
@@ -106,6 +118,10 @@ font-size:14px;
 opacity: ${props => props.opacity};
 
 text-align: center;
+
+@media ${devices.tablet} {
+    margin-top: auto;
+}
 
 
 `
