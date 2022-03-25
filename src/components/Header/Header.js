@@ -28,6 +28,4 @@ export default function Header({menuSelect, setMenuSelect}){
                 
         </HeaderContainer>
     )
-
-
 }
