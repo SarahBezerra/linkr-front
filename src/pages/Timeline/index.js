@@ -4,8 +4,12 @@ import api from "../../services/api";
 import Post from "../../components/Post";
 import { Feed, Container, Page, Loading, Empty, Error, Title } from "./style";
 import NewPost from "../../components/newPost";
+<<<<<<< HEAD
 import { useParams } from "react-router-dom";
 import HashTags from "../../components/Hashtags";
+=======
+import useAuth from "../../hooks/useAuth";
+>>>>>>> 8d7b8ae1f884174287dc69024be8354db9683232
 
 
 const statesList = {
@@ -19,8 +23,12 @@ export default function Timeline() {
     const [requestState, setRequestState] = useState(statesList['loading']);
     const [posts, setPosts] = useState([]);
     const [likes, setLikes] = useState([]);
+<<<<<<< HEAD
     const [header, setHeader] = useState('');
     const params = useParams();
+=======
+    const {auth} = useAuth();
+>>>>>>> 8d7b8ae1f884174287dc69024be8354db9683232
     const config = null;
 
     console.log(params);
@@ -75,7 +83,11 @@ export default function Timeline() {
           likes={likes}
           requestLikes={requestLikes}
           state={requestState}
+<<<<<<< HEAD
           setRequestState = {setRequestState}
+=======
+          imageUrl={auth.image_url}
+>>>>>>> 8d7b8ae1f884174287dc69024be8354db9683232
         />
         <HashTags></HashTags>
       </Container>
@@ -83,7 +95,11 @@ export default function Timeline() {
   );
 }
 
+<<<<<<< HEAD
 function ChooseFeed({posts, likes, requestLikes, state, setRequestState}){
+=======
+function ChooseFeed({posts, likes, requestLikes, state, imageUrl}){
+>>>>>>> 8d7b8ae1f884174287dc69024be8354db9683232
     if(state === statesList['error'])
         return ( 
             <Error> <p>An error occured while trying to fetch the posts, please refresh the page</p> </Error>  )
@@ -100,7 +116,7 @@ function ChooseFeed({posts, likes, requestLikes, state, setRequestState}){
     else
         return ( 
           <Feed>
-            <NewPost />
+            <NewPost imageUrl={imageUrl}/>
             {posts.map((p) => (
               <Post
                 infos={p}
