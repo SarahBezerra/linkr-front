@@ -22,8 +22,9 @@ export default function Header({ menuSelect, setMenuSelect }) {
                   <HeaderMenu menuSelect={menuSelect} setMenuSelect={setMenuSelect}/>
               </div>
           </HeaderContent>
-              {<DropDownMenu dropDownDisplay={menuSelect === false ? false: true} onClick={(e) => {handleClick(e)}}>Logout</DropDownMenu>}
+          {<DropDownMenu dropDownDisplay={menuSelect === false ? false: true} onClick={(e) => {handleClick(e)}}>Logout</DropDownMenu>}
               
       </HeaderContainer>
   )
 }
+

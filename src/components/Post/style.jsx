@@ -3,8 +3,8 @@ import styled from "styled-components";
 const Container = styled.div`
     display:flex;
 
-    width: 600px;
-    max-width:100%;
+    width: 100%;
+    /* max-width:100%; */
     background-color: black;
     /* min-height: 300px; */
     border-radius: 16px;
