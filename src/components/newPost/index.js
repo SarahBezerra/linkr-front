@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import api from "../../services/api";
 import { ToastContainer, toast } from 'react-toastify';
-import '/home/bongui/Documents/Driven/linkr-front/node_modules/react-toastify/dist/ReactToastify.css'
+import 'react-toastify/dist/ReactToastify.css';
 
 
 
@@ -16,7 +16,7 @@ export default function NewPost(){
     const [isSending, setIsSending] = useState(false);
     
 
-    const postsItems = [{ placeholder: 'http:/..', type: 'text', state: setUrl },{ placeholder: 'Awesome article about #javascript', type: 'text', state: setText }];
+    const postsItems = [{ placeholder: 'http:/..', type: 'text', value:url, state: setUrl },{ placeholder: 'Awesome article about #javascript', type: 'text', value:text, state: setText }];
 
     async function RequestLogin(e) {
 
@@ -29,10 +29,13 @@ export default function NewPost(){
         try{
             await api.sendPost(token, body);
             setIsSending(false);
+            setUrl('');
+            setText('');
             
         }
         catch(error){
-            toast("Wow so easy!");
+            toast.error("Houve um erro ao publicar seu link", {theme: "colored"});
+            toast();
             setIsSending(false);
         }
        
@@ -55,22 +58,24 @@ export default function NewPost(){
                         <Inputs postsItems={postsItems} isSending={isSending}/>
 
                         <Button opacity={isSending === true ? 0.7 : 1} disabled={isSending ? true : false}>{isSending ? 'Publishing...' : 'Publish'}</Button>
-                        <ToastContainer
-                            position="top-right"
-                            autoClose={5000}
-                            hideProgressBar={false}
-                            newestOnTop={false}
-                            closeOnClick
-                            rtl={false}
-                            pauseOnFocusLoss
-                            draggable
-                            pauseOnHover
-                            />
-                            {/* Same as */}
-                        <ToastContainer />
+
                     </PublishContainer>
 
                 </PostContainer>
+
+                <ToastContainer
+                            
+                            position="bottom-right"
+                            autoClose={4000}
+                            hideProgressBar={true}
+                            newestOnTop={false}
+                            closeOnClick
+                            rtl={true}
+                            pauseOnFocusLoss
+                            draggable
+                            pauseOnHover
+                        />
+
             </PageContainer>
 
     )
@@ -87,7 +92,8 @@ function Inputs({postsItems, isSending}){
                         disabled={isSending ? true : false}
                         padding={index === 0? '0 15px 0 15px;':'10px 15px 0 15px;'} 
                         height={index === 0 ? '30px': '55px'} placeholder={item.placeholder} 
-                        type={item.type} 
+                        type={item.type}
+                        value={item.value} 
                         onChange={(e) => item.state(e.target.value)}>
                     </InputContainer>
                 )
