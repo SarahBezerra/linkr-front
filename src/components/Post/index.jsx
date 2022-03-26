@@ -4,8 +4,9 @@ import { DocumentTextOutline } from 'react-ionicons'
 import ReactHashtag from "@mdnm/react-hashtag";
 import { useNavigate } from "react-router-dom";
 import LikeHeart from "../LikeHeart";
+import { pagesList } from "../../pages/Timeline/utils";
 
-function Post({infos, like, updateLikes, reloadPage}){
+function Post({infos, like, updateLikes, setPageAndReload}){
     const {
             id,
             userId,
@@ -25,7 +26,7 @@ function Post({infos, like, updateLikes, reloadPage}){
             </Left>
             <Main>
                 <UserName> { username } </UserName>
-                <Message reloadPage={reloadPage}>{ text }</Message>
+                <Message setPageAndReload={setPageAndReload}>{ text }</Message>
 
                 <a href={metaData.url} target='_blank' rel='noreferrer' >
                     <MetaContainer>
@@ -48,20 +49,20 @@ function Post({infos, like, updateLikes, reloadPage}){
     )
 }
 
-function Message({children, reloadPage}){
+function Message({children, setPageAndReload}){
 
     const navigate = useNavigate();
 
     function handleHashtagLink({innerText}){
-            reloadPage('');
             const hashtag = innerText.replace('#','');
+            setPageAndReload(pagesList['hashtag']);
             navigate(`/hashtag/${hashtag}`);
     };
 
     return(
         <UserText>
             <ReactHashtag 
-                renderHashtag={(hashtagValue) => (<Hashtag onClick={(e) => {handleHashtagLink(e.target)}}>{hashtagValue}</Hashtag>)} >
+                renderHashtag={(hashtagValue) => (<Hashtag  key={hashtagValue} onClick={(e) => {handleHashtagLink(e.target)}}>{hashtagValue}</Hashtag>)} >
                 {children}
             </ReactHashtag>
         </UserText>

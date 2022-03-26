@@ -11,8 +11,6 @@ export default function Header({ menuSelect, setMenuSelect }) {
   const navigate = useNavigate();
   const location = useLocation();
 
-  console.log(auth);
-
   function handleClick() {
     
     logout();

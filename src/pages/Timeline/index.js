@@ -4,46 +4,47 @@ import api from "../../services/api";
 import Post from "../../components/Post";
 import { Feed, Container, Page, Loading, Empty, Error, Title } from "./style";
 import NewPost from "../../components/newPost";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import HashTags from "../../components/Hashtags";
 import useAuth from "../../hooks/useAuth";
+import { pagesList, statesList } from "./utils";
 
-
-const statesList = {
-  'loading' : 0,
-  'error' : 1,
-  'empty': 2,
-  'ok': 3,
-}
 
 export default function Timeline() {
     const [requestState, setRequestState] = useState(statesList['loading']);
     const [posts, setPosts] = useState([]);
     const [likes, setLikes] = useState([]);
+    const [reload, setReload] = useState(false);
     const [header, setHeader] = useState('');
-    const params = useParams();
-    const {auth} = useAuth();
+    const filter = useParams();
+    const location = useLocation();
+    const [page, setPage] = useState(getPage());
+    const { auth } = useAuth();
     const config = null;
 
-    console.log(params);
+    console.log(page);
 
     useEffect(() => {
-      //setRequestState(statesList['loading']);
       requestPosts();
+      console.log('entrei no effect');
       getHeader();
-    }, [requestState]);
+    }, [page, reload]);
 
     async function requestPosts() {
 
       let res = null;
+      setRequestState(statesList['loading']);
 
       try {
-        if(Object.keys(params).length === 0)
+        if(page === pagesList['timeline'])
           res = await api.getPosts(config);
-        else  
-          res = await api.getPostsByHashtag(params['hashtag']);
+        else if(page === pagesList['hashtag']) {
+          console.log(filter);
+          res = await api.getPostsByHashtag(currentParam());
+        }
+
         setPosts(res.data);
-        const state = res.data.length === 0 ? statesList['empty'] : statesList['ok'];
+        const state = (res.data.length === 0) ? statesList['empty'] : statesList['ok'];
         setRequestState(state);
         await requestLikes();
       } catch {
@@ -55,6 +56,7 @@ export default function Timeline() {
       try {
         const res = await api.getLikes();
         setLikes(res.data);
+        console.log(res.data);
       } catch (err) {
         console.log("aconteceu um erro em likes");
         setRequestState(statesList['error']);
@@ -62,10 +64,22 @@ export default function Timeline() {
     }
 
     function getHeader(){
-      if(Object.keys(params).length === 0)
+      if(page === pagesList['timeline'])
         setHeader('timeline')
-      else  
-        setHeader(`#${params['hashtag']}`);
+      else if (page === pagesList['hashtag'])  
+        setHeader(`#${currentParam()}`);
+    }
+
+    function getPage(){
+        const name = location.pathname.split('/')[1];
+        return pagesList[name];
+    }
+    function currentParam(){
+      return filter[Object.keys(filter)[0]]
+    }
+    function setPageAndReload(page){
+      setPage(page);
+      setReload(!reload);
     }
 
   return (
@@ -73,12 +87,14 @@ export default function Timeline() {
       <Title> {header} </Title>
       <Container>
         <ChooseFeed
+          currentPage={getPage}
           posts={posts}
           likes={likes}
           requestLikes={requestLikes}
           state={requestState}
-          setRequestState = {setRequestState}
+          setPage = {setPage}
           imageUrl={auth.image_url}
+          setPageAndReload={setPageAndReload}
         />
         <HashTags></HashTags>
       </Container>
@@ -86,7 +102,7 @@ export default function Timeline() {
   );
 }
 
-function ChooseFeed({posts, likes, requestLikes, state, imageUrl, setRequestState}){
+function ChooseFeed({posts, likes, requestLikes, state, imageUrl, setPageAndReload, currentPage}){
     if(state === statesList['error'])
         return ( 
             <Error> <p>An error occured while trying to fetch the posts, please refresh the page</p> </Error>  )
@@ -103,14 +119,14 @@ function ChooseFeed({posts, likes, requestLikes, state, imageUrl, setRequestStat
     else
         return ( 
           <Feed>
-            <NewPost imageUrl={imageUrl}/>
+            <NewPost  currentPage={currentPage} imageUrl={imageUrl}/>
             {posts.map((p) => (
               <Post
                 infos={p}
                 key={p.id}
                 like={likes.find(({ postId }) => postId === p.id)}
                 updateLikes={requestLikes}
-                reloadPage= {setRequestState}
+                setPageAndReload={setPageAndReload}
               />
             ))}
           </Feed>            

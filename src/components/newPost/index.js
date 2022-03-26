@@ -8,7 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 
 
-export default function NewPost({imageUrl}){
+export default function NewPost({imageUrl, currentPage}){
 
     const {userId} = useParams();
     const [url, setUrl] = useState('');
@@ -16,7 +16,10 @@ export default function NewPost({imageUrl}){
     const [isSending, setIsSending] = useState(false);
     
 
-    const postsItems = [{ placeholder: 'http:/..', type: 'text', value:url, state: setUrl },{ placeholder: 'Awesome article about #javascript', type: 'text', value:text, state: setText }];
+    const postsItems = [
+        { placeholder: 'http:/..', type: 'text', value:url, state: setUrl, key:'url'},
+        { placeholder: 'Awesome article about #javascript', type: 'text', value:text, state: setText, key:'message'}
+    ];
 
     async function RequestLogin(e) {
 
@@ -43,11 +46,11 @@ export default function NewPost({imageUrl}){
 
     return(
 
-            <Container>
+            <Container currentPage={currentPage}>
 
                 <PostContainer>
                     <PictureContainer>
-                        <Img height={'50px'} src={imageUrl}/>
+                        <Img height={'55px'} src={imageUrl}/>
                     </PictureContainer>
 
                     <PublishContainer onSubmit={RequestLogin}>
@@ -86,6 +89,7 @@ function Inputs({postsItems, isSending}){
             {postsItems.map((item, index) => {
                 return(
                     <InputContainer 
+                        key={item.key}
                         as={index === 0? '': 'textarea'} 
                         disabled={isSending ? true : false}
                         padding={index === 0? '0 15px 0 15px;':'10px 15px 0 15px;'} 
@@ -99,3 +103,6 @@ function Inputs({postsItems, isSending}){
        </>
     )
 }
+
+
+// {key={item.key}}
