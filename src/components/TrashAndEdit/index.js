@@ -19,13 +19,14 @@ export default function TrashAndEdit({ idPost, reloadPage, updatePage }) {
     try {
       await api.deletePost(idPost, auth.token);
       setModal(false);
-      setWait(false);
       reloadPage(0); // fazer o reload
       // updatePage();
     } catch (err) {
       setModal(false);
       alert("Não foi possível excluir este post!");
       console.log("aconteceu um erro em delete");
+    } finally {
+      setWait(false);
     }
   }
 
