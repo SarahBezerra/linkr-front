@@ -10,80 +10,84 @@ import {
 import Img from "../Users/Image";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
-import api from "../../services/api";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import useAuth from "../../hooks/useAuth";
+import api from "../../services/api";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-export default function NewPost({ imageUrl }) {
-  const { auth } = useAuth();
-  const { userId } = useParams();
-  const [url, setUrl] = useState("");
-  const [text, setText] = useState("");
-  const [isSending, setIsSending] = useState(false);
 
-  const postsItems = [
-    { placeholder: "http:/..", type: "text", value: url, state: setUrl },
-    {
-      placeholder: "Awesome article about #javascript",
-      type: "text",
-      value: text,
-      state: setText,
-    },
-  ];
 
-  async function RequestLogin(e) {
-    e.preventDefault();
-    setIsSending(true);
+export default function NewPost({imageUrl, displayCase}){
 
-    const token = auth.token;
-    const body = { url, text };
-    try {
-      await api.sendPost(token, body);
-      setIsSending(false);
-      setUrl("");
-      setText("");
-    } catch (error) {
-      toast.error("Houve um erro ao publicar seu link", { theme: "colored" });
-      toast();
-      setIsSending(false);
+    const {userId} = useParams();
+    const [url, setUrl] = useState('');
+    const [text, setText] = useState('');
+    const [isSending, setIsSending] = useState(false);
+    const {auth} = useAuth();
+    
+
+    const postsItems = [{ placeholder: 'http:/..', type: 'text', value:url, state: setUrl },{ placeholder: 'Awesome article about #javascript', type: 'text', value:text, state: setText }];
+
+    async function RequestLogin(e) {
+
+
+        e.preventDefault();
+        setIsSending(true);
+        
+        const {token} = auth;
+        const body ={url, text}
+        try{
+            await api.sendPost(token, body);
+            setIsSending(false);
+            setUrl('');
+            setText('');
+            
+        }
+        catch(error){
+            toast.error("Houve um erro ao publicar seu link", {theme: "colored"});
+            toast();
+            setIsSending(false);
+        }
+       
     }
-  }
 
-  return (
-    <Container>
-      <PostContainer>
-        <PictureContainer>
-          <Img height={"50px"} src={imageUrl} />
-        </PictureContainer>
+    return(
 
-        <PublishContainer onSubmit={RequestLogin}>
-          <Header> What are you going to share today? </Header>
+            <Container style={{display:displayCase}}>
 
-          <Inputs postsItems={postsItems} isSending={isSending} />
+                <PostContainer>
+                    <PictureContainer>
+                        <Img height={'50px'} src={imageUrl}/>
+                    </PictureContainer>
 
-          <Button
-            opacity={isSending === true ? 0.7 : 1}
-            disabled={isSending ? true : false}
-          >
-            {isSending ? "Publishing..." : "Publish"}
-          </Button>
-        </PublishContainer>
-      </PostContainer>
+                    <PublishContainer onSubmit={RequestLogin}>
+                        <Header> What are you going to share today? </Header>
 
-      <ToastContainer
-        position="bottom-right"
-        autoClose={4000}
-        hideProgressBar={true}
-        newestOnTop={false}
-        closeOnClick
-        rtl={true}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
-    </Container>
-  );
+                        <Inputs postsItems={postsItems} isSending={isSending}/>
+
+                        <Button opacity={isSending === true ? 0.7 : 1} disabled={isSending ? true : false}>{isSending ? 'Publishing...' : 'Publish'}</Button>
+
+                    </PublishContainer>
+
+                </PostContainer>
+
+                <ToastContainer
+                            
+                            position="bottom-right"
+                            autoClose={4000}
+                            hideProgressBar={true}
+                            newestOnTop={false}
+                            closeOnClick
+                            rtl={true}
+                            pauseOnFocusLoss
+                            draggable
+                            pauseOnHover
+                        />
+
+            </Container>
+
+    )
+
 }
 
 function Inputs({ postsItems, isSending }) {

@@ -2,6 +2,7 @@ import Img from "../Users/Image";
 import { ArrowDown, ArrowUp } from "./Arrows/Arrows";
 import { useEffect, useRef } from "react";
 
+
 let useClickOutside = (handler) => {
   let menuRef = useRef();
 
@@ -24,7 +25,10 @@ let useClickOutside = (handler) => {
   return menuRef;
 };
 
+
+
 function HeaderMenu({ menuSelect, setMenuSelect, imageUrl }) {
+
   let menuRef = useClickOutside(() => {
     setMenuSelect(false);
   });
