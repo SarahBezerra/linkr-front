@@ -8,13 +8,8 @@ import { BoxIcons } from "./style";
 import ModalBlack from "../ModalBlack";
 
 ReactModal.setAppElement("#root");
-// Modal.setAppElement("#root");
 
-const customStyles = {
-  content: {},
-};
-
-export default function TrashAndEdit({ infos }) {
+export default function TrashAndEdit({ idPost, reloadPage, updatePage }) {
   const { auth } = useAuth();
   const [wait, setWait] = useState(false);
   const [modal, setModal] = useState(false);
@@ -22,10 +17,14 @@ export default function TrashAndEdit({ infos }) {
   async function handleClickDelete() {
     setWait(true);
     try {
-      await api.deletePost(infos.id, auth.token);
+      await api.deletePost(idPost, auth.token);
       setModal(false);
       setWait(false);
+      reloadPage(0); // fazer o reload
+      // updatePage();
     } catch (err) {
+      setModal(false);
+      alert("Não foi possível excluir este post!");
       console.log("aconteceu um erro em delete");
     }
   }

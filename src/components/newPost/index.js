@@ -15,7 +15,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import useAuth from "../../hooks/useAuth";
 
-export default function NewPost({ imageUrl }) {
+export default function NewPost({ imageUrl, reloadPage }) {
   const { auth } = useAuth();
   const { userId } = useParams();
   const [url, setUrl] = useState("");
@@ -43,6 +43,7 @@ export default function NewPost({ imageUrl }) {
       setIsSending(false);
       setUrl("");
       setText("");
+      reloadPage(0);
     } catch (error) {
       toast.error("Houve um erro ao publicar seu link", { theme: "colored" });
       toast();

@@ -23,12 +23,13 @@ export default function Timeline() {
   const params = useParams();
   const { auth } = useAuth();
   const config = null;
+  console.log(requestState);
 
   useEffect(() => {
     //setRequestState(statesList['loading']);
     requestPosts();
     getHeader();
-  }, []);
+  }, [requestState]);
 
   async function requestPosts() {
     let res = null;
@@ -83,6 +84,7 @@ function ChooseFeed({
   posts,
   likes,
   requestLikes,
+  updatePage,
   state,
   imageUrl,
   setRequestState,
@@ -119,7 +121,7 @@ function ChooseFeed({
   else
     return (
       <Feed>
-        <NewPost imageUrl={imageUrl} />
+        <NewPost imageUrl={imageUrl} reloadPage={setRequestState} />
         {posts.map((p) => (
           <Post
             infos={p}

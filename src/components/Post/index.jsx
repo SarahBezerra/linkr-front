@@ -7,7 +7,7 @@ import LikeHeart from "../LikeHeart";
 import TrashAndEdit from "../TrashAndEdit";
 import useAuth from "../../hooks/useAuth";
 
-function Post({infos, like, updateLikes, reloadPage}){
+function Post({infos, like, updateLikes, reloadPage, updatePage}){
     const {auth} = useAuth()
     const {
             id,
@@ -29,7 +29,7 @@ function Post({infos, like, updateLikes, reloadPage}){
             <Main>
                 <UserName> { username } </UserName>
                 <Message reloadPage={reloadPage}>{ text }</Message>
-                   {userId === auth.userId ? <TrashAndEdit infos = {infos} /> : ''}
+                   {userId === auth.userId ? <TrashAndEdit idPost = {infos.id} reloadPage={reloadPage} updatePage={updatePage} /> : ''}
                 <a href={metaData.url} target='_blank' rel='noreferrer' >
                     <MetaContainer>
                         <MetaLeft>

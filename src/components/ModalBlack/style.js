@@ -67,6 +67,10 @@ const BoxButtons = styled.div`
       color: white;
       background-color: #1877f2;
     }
+
+    :hover {
+      cursor: pointer;
+    }
   }
 `;
 
