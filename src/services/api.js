@@ -20,12 +20,13 @@ async function sendPost(token, body) {
   return axios.post(`${BASE_URL}/posts`, body, config);
 }
 
-function getPosts(config) {
+function getPosts(token) {
+  const config = createConfig(token);
   return axios.get(`${BASE_URL}/posts`, config);
 }
 
-function getPostsByHashtag(hashtag){
-  const config = null;
+function getPostsByHashtag(hashtag, token){
+  const config = createConfig(token);
   return axios.get(`${BASE_URL}/hashtag/${hashtag}`, config);
 }
 
@@ -37,6 +38,11 @@ function postLikeOrNot(idPost, userId) {
   return axios.post(`${BASE_URL}/like/${idPost}`, { userId }); // lembrar que só o auth é suficiente
 }
 
+function getTopHashtags(token){
+  const config = createConfig(token);
+  return axios.get(`${BASE_URL}/topHashtags`, config);
+}
+
 const api = {
   createConfig,
   getPosts,
@@ -45,7 +51,8 @@ const api = {
   getLikes,
   postLikeOrNot,
   postSignUp,
-  postSignIn
+  postSignIn,
+  getTopHashtags,
 };
 
 export default api;

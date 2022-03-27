@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import api from "../../services/api";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import useAuth from "../../hooks/useAuth";
 
 
 
@@ -14,6 +15,7 @@ export default function NewPost({imageUrl, currentPage}){
     const [url, setUrl] = useState('');
     const [text, setText] = useState('');
     const [isSending, setIsSending] = useState(false);
+    const {auth} = useAuth();
     
 
     const postsItems = [
@@ -27,7 +29,7 @@ export default function NewPost({imageUrl, currentPage}){
         e.preventDefault();
         setIsSending(true);
         
-        const token = '8c9299c3-4ca4-4d0f-ac85-969bd048af7e'
+        const token = auth.token;
         const body ={url, text}
         try{
             await api.sendPost(token, body);

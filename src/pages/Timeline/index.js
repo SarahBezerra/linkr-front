@@ -14,13 +14,13 @@ export default function Timeline() {
     const [requestState, setRequestState] = useState(statesList['loading']);
     const [posts, setPosts] = useState([]);
     const [likes, setLikes] = useState([]);
+    const [topHashtags, setTopHashtags] = useState([]);
     const [reload, setReload] = useState(false);
     const [header, setHeader] = useState('');
     const filter = useParams();
     const location = useLocation();
     const [page, setPage] = useState(getPage());
     const { auth } = useAuth();
-    const config = null;
 
     console.log(page);
 
@@ -32,21 +32,24 @@ export default function Timeline() {
 
     async function requestPosts() {
 
-      let res = null;
       setRequestState(statesList['loading']);
+      let res = null;
 
       try {
         if(page === pagesList['timeline'])
-          res = await api.getPosts(config);
+          res = await api.getPosts(auth.token);
         else if(page === pagesList['hashtag']) {
           console.log(filter);
-          res = await api.getPostsByHashtag(currentParam());
+          res = await api.getPostsByHashtag(currentParam(), auth.token);
         }
 
         setPosts(res.data);
+
         const state = (res.data.length === 0) ? statesList['empty'] : statesList['ok'];
         setRequestState(state);
-        await requestLikes();
+
+        await requestTopHashtags();
+        //await requestLikes();
       } catch {
         setRequestState(statesList['error']);
       }
@@ -59,6 +62,17 @@ export default function Timeline() {
         console.log(res.data);
       } catch (err) {
         console.log("aconteceu um erro em likes");
+        setRequestState(statesList['error']);
+      }
+    }
+
+    async function requestTopHashtags() {
+      try {
+        const {data: topHashtags} = await api.getTopHashtags(auth.token);
+        setTopHashtags(topHashtags);
+        console.log(topHashtags);
+      } catch (err) {
+        console.log("aconteceu um erro ao buscar os TopHashtags");
         setRequestState(statesList['error']);
       }
     }
@@ -96,7 +110,7 @@ export default function Timeline() {
           imageUrl={auth.image_url}
           setPageAndReload={setPageAndReload}
         />
-        <HashTags></HashTags>
+        <HashTags topHashtags={topHashtags} setPageAndReload={setPageAndReload}></HashTags>
       </Container>
     </Page>
   );

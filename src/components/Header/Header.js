@@ -4,6 +4,7 @@ import HeaderMenu from "./HeaderMenu";
 import DropDownMenu from "./DropDownMenu/DropDownMenu";
 import { useNavigate, useLocation } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
+import UserSearch from "../UserSearch";
 
 export default function Header({ menuSelect, setMenuSelect }) {
 
@@ -22,7 +23,9 @@ export default function Header({ menuSelect, setMenuSelect }) {
       <HeaderContainer display={(location.pathname === '/' || location.pathname === '/sign-up') ? 'none' : 'inital'}>
           <HeaderContent>
               <span>linkr</span>
+              <UserSearch>
 
+              </UserSearch>
               <div style={{position: 'relative'}}>
                   <HeaderMenu menuSelect={menuSelect} setMenuSelect={setMenuSelect} imageUrl={auth?.image_url}/>
               </div>
