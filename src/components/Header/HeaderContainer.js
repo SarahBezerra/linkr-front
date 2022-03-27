@@ -5,13 +5,18 @@ const HeaderContainer = styled.header`
 
 background-color: #151515;
 display: ${props => props.display};
+
 position: fixed;
+z-index: 2;
+
 top: 0;
+
+
 
 width: 100%;
 height: 72px;
 
-span{
+h1{
     font-family: 'Passion One', cursive;
     font-weight: 700;
     font-size: 49px;
@@ -21,14 +26,18 @@ span{
 }
 
 div{
-    height: 100%;
 
     display: flex;
     align-items: center;
-
+    
     gap: 10px;
 
     
+}
+
+span{
+    align-self: center;
+    height: 100%;
 }
 `
 

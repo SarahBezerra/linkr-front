@@ -7,8 +7,10 @@ import LikeHeart from "../LikeHeart";
 import TrashAndEdit from "../TrashAndEdit";
 import useAuth from "../../hooks/useAuth";
 
-function Post({infos, like, updateLikes, reloadPage}){
+
+function Post({infos, like, updateLikes, onNavigate, reloadPage}){
     const {auth} = useAuth()
+
     const {
             id,
             userId,
@@ -21,15 +23,18 @@ function Post({infos, like, updateLikes, reloadPage}){
     return (
         <Container>
             <Left>
-                <UserPhoto src={ image_url } alt=''/>
+                <UserPhoto src={ image_url } onClick={onNavigate} alt=''/>
                 <ContentLikes>
                     <LikeHeart idPost = {id} likesInformations={like || {}} updateLikes={updateLikes} />
                 </ContentLikes> 
             </Left>
             <Main>
-                <UserName> { username } </UserName>
+
+                <UserName onClick={onNavigate}> { username } </UserName>
                 <Message reloadPage={reloadPage}>{ text }</Message>
+
                    {userId === auth.userId ? <TrashAndEdit infos = {infos} /> : ''}
+
                 <a href={metaData.url} target='_blank' rel='noreferrer' >
                     <MetaContainer>
                         <MetaLeft>

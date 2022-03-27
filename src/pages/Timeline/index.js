@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate, useLocation, useParams } from "react-router";
 import { SpinnerCircularFixed } from "spinners-react";
 import api from "../../services/api";
 import Post from "../../components/Post";
@@ -7,6 +8,7 @@ import NewPost from "../../components/newPost";
 import { useParams } from "react-router-dom";
 import HashTags from "../../components/Hashtags";
 import useAuth from "../../hooks/useAuth";
+import usePage from "../../hooks/usePage";
 
 const statesList = {
   loading: 0,
@@ -15,34 +17,41 @@ const statesList = {
   ok: 3,
 };
 
-export default function Timeline() {
-  const [requestState, setRequestState] = useState(statesList["loading"]);
-  const [posts, setPosts] = useState([]);
-  const [likes, setLikes] = useState([]);
-  const [header, setHeader] = useState("");
-  const params = useParams();
-  const { auth } = useAuth();
-  const config = null;
 
-  useEffect(() => {
-    //setRequestState(statesList['loading']);
-    requestPosts();
-    getHeader();
-  }, []);
+export default function Timeline({newPostDisplay, userName}) {
+    const [requestState, setRequestState] = useState(statesList['loading']);
+    const [posts, setPosts] = useState([]);
+    const [likes, setLikes] = useState([]);
+    const {auth} = useAuth();
+    const {page, pageUsername} = usePage();
+    const {pathname} = useLocation();
+    const {id} = useParams();
+    const config = null;
 
-  async function requestPosts() {
-    let res = null;
+    useEffect(() => {
+      requestPosts();
+    
+    }, [posts,pathname]);
 
-    try {
-      if (Object.keys(params).length === 0) res = await api.getPosts(config);
-      else res = await api.getPostsByHashtag(params["hashtag"]);
-      setPosts(res.data);
-      const state =
-        res.data.length === 0 ? statesList["empty"] : statesList["ok"];
-      await requestLikes();
-      setRequestState(state);
-    } catch {
-      setRequestState(statesList["error"]);
+    async function requestPosts() {
+      try {
+        if(id){
+          const res = await api.getPostsFromUser(id);
+          setPosts(res.data);
+          const state = res.data.length === 0 ? statesList['empty'] : statesList['ok'];
+          setRequestState(state);
+        }
+        else{
+          const res = await api.getPosts();
+          setPosts(res.data);
+          const state = res.data.length === 0 ? statesList['empty'] : statesList['ok'];
+          setRequestState(state);
+        }
+        await requestLikes();
+      } catch {
+        console.log("aconteceu um erro em posts");
+        setRequestState(statesList['error']);
+      }
     }
   }
 
@@ -63,7 +72,8 @@ export default function Timeline() {
 
   return (
     <Page>
-      <Title> {header} </Title>
+
+      <Title>{ pathname === '/timeline' ? 'timeline' : page?.username.slice(-1) === ('s'||'S') ? `${page.username}' posts `: `${page.username}'s posts`}</Title>
       <Container>
         <ChooseFeed
           posts={posts}
@@ -72,6 +82,8 @@ export default function Timeline() {
           state={requestState}
           setRequestState={setRequestState}
           imageUrl={auth.image_url}
+          newPostDisplay={newPostDisplay}
+          pageUsername={pageUsername}
         />
         <HashTags></HashTags>
       </Container>
@@ -79,56 +91,42 @@ export default function Timeline() {
   );
 }
 
-function ChooseFeed({
-  posts,
-  likes,
-  requestLikes,
-  state,
-  imageUrl,
-  setRequestState,
-}) {
-  if (state === statesList["error"])
-    return (
-      <Error>
-        {" "}
-        <p>
-          An error occured while trying to fetch the posts, please refresh the
-          page
-        </p>{" "}
-      </Error>
-    );
-  else if (state === statesList["loading"])
-    return (
-      <Loading>
-        <SpinnerCircularFixed
-          size={200}
-          thickness={100}
-          speed={180}
-          color="rgba(57, 89, 172, 1)"
-          secondaryColor="rgba(83, 57, 172, 0.24)"
-        />
-      </Loading>
-    );
-  else if (state === statesList["empty"])
-    return (
-      <Empty>
-        {" "}
-        <p>There are no posts yet</p>{" "}
-      </Empty>
-    );
-  else
-    return (
-      <Feed>
-        <NewPost imageUrl={imageUrl} />
-        {posts.map((p) => (
-          <Post
-            infos={p}
-            key={p.id}
-            like={likes.find(({ postId }) => postId === p.id)}
-            updateLikes={requestLikes}
-            reloadPage={setRequestState}
-          />
-        ))}
-      </Feed>
-    );
+
+function ChooseFeed({posts, likes, requestLikes, state, imageUrl, newPostDisplay, pageUsername, setRequestState,}){
+
+    const navigate = useNavigate();
+
+    if(state === statesList['error'])
+        return ( 
+            <Error> <p>An error occured while trying to fetch the posts, please refresh the page</p> </Error>  )
+    else if(state === statesList['loading'])
+        return ( 
+            <Loading>
+                <SpinnerCircularFixed 
+                    size={200} thickness={100} speed={180} 
+                    color="rgba(57, 89, 172, 1)" secondaryColor="rgba(83, 57, 172, 0.24)" />
+            </Loading> )
+    else if(state === statesList['empty'])
+        return ( 
+            <Empty> <p>There are no posts yet</p> </Empty> )
+    else
+        return ( 
+          <Feed>
+            <NewPost imageUrl={imageUrl} displayCase={newPostDisplay}/>
+            {posts.map((p) => (
+              <Post
+                infos={p}
+                key={p.id}
+                like={likes.find(({ postId }) => postId === p.id)}
+                updateLikes={requestLikes}
+                reloadPage={setRequestState}
+                onNavigate={() =>
+                  { const {username} = p;
+                    pageUsername({username});
+                    navigate(`/user/${p.userId}`)}
+                }
+              />
+            ))}
+          </Feed>            
+        )
 }
