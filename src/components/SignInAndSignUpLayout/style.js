@@ -16,7 +16,7 @@ line-height: 64px;
 
 .left-box{
     margin-left: 8%;
-    margin-top: 20%;
+    margin-top: 15%;
 }
 
 h1{
@@ -39,7 +39,7 @@ export const RightBox = styled.div`
     display: flex;
     align-items: center;
     flex-direction: column;
-    padding-top: 20%;
+    padding-top: 15%;
 
     form{
         width: 100%;

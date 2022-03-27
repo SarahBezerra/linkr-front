@@ -76,7 +76,7 @@ export default function SignIn() {
             ></input>
             <button type="submit">
               {isEnabled ? (
-                "Sign Up"
+                "Log In"
               ) : (
                 <SpinnerCircular
                   size={50}
