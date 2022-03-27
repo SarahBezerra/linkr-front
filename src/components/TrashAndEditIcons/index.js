@@ -3,8 +3,12 @@ import { PencilSharp, Trash } from "react-ionicons";
 import BoxIcons from "./style";
 
 export default function TrashAndEditIcons() {
-  const trashEvents = useRef();
-  console.log(trashEvents);
+  async function handleClickDelete() {
+    try {
+    } catch (err) {
+      console.log("aconteceu um erro em delete");
+    }
+  }
 
   return (
     <BoxIcons>
@@ -21,6 +25,7 @@ export default function TrashAndEditIcons() {
         shake={false}
         height="14px"
         width="14px"
+        onClick={() => handleClickDelete()}
       />
     </BoxIcons>
   );

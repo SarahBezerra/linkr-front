@@ -15,7 +15,7 @@ export default function LikeHeart({ idPost, likesInformations, updateLikes }) {
     setLike(!like);
 
     try {
-      await api.postLikeOrNot(idPost, 1); //trocar userId = 1 pelo usuário mesmo
+      await api.postLikeOrNot(idPost, "3435a095-9964-4c03-b26d-2914d2714f46"); //trocar userId = 1 pelo usuário mesmo
       await updateLikes();
       setWait(false);
       ReactTooltip.rebuild();
