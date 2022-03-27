@@ -5,7 +5,6 @@ import api from "../../services/api";
 import Post from "../../components/Post";
 import { Feed, Container, Page, Loading, Empty, Error, Title } from "./style";
 import NewPost from "../../components/newPost";
-import { useParams } from "react-router-dom";
 import HashTags from "../../components/Hashtags";
 import useAuth from "../../hooks/useAuth";
 import usePage from "../../hooks/usePage";
@@ -17,41 +16,42 @@ const statesList = {
   ok: 3,
 };
 
+export default function Timeline({ newPostDisplay }) {
+  const [requestState, setRequestState] = useState(statesList["loading"]);
+  const [posts, setPosts] = useState([]);
+  const [likes, setLikes] = useState([]);
+  const [header, setHeader] = useState("");
+  const { auth } = useAuth();
+  const { page, pageUsername } = usePage();
+  const { pathname } = useLocation();
+  const { id } = useParams();
+  const params = useParams();
+  const config = null;
 
-export default function Timeline({newPostDisplay, userName}) {
-    const [requestState, setRequestState] = useState(statesList['loading']);
-    const [posts, setPosts] = useState([]);
-    const [likes, setLikes] = useState([]);
-    const {auth} = useAuth();
-    const {page, pageUsername} = usePage();
-    const {pathname} = useLocation();
-    const {id} = useParams();
-    const config = null;
+  useEffect(() => {
+    requestPosts();
+    getHeader();
+  }, [requestState, pathname]);
 
-    useEffect(() => {
-      requestPosts();
-    
-    }, [posts,pathname]);
-
-    async function requestPosts() {
-      try {
-        if(id){
-          const res = await api.getPostsFromUser(id);
-          setPosts(res.data);
-          const state = res.data.length === 0 ? statesList['empty'] : statesList['ok'];
-          setRequestState(state);
-        }
-        else{
-          const res = await api.getPosts();
-          setPosts(res.data);
-          const state = res.data.length === 0 ? statesList['empty'] : statesList['ok'];
-          setRequestState(state);
-        }
-        await requestLikes();
-      } catch {
-        console.log("aconteceu um erro em posts");
-        setRequestState(statesList['error']);
+  async function requestPosts() {
+    try {
+      if (id) {
+        const res = await api.getPostsFromUser(id);
+        setPosts(res.data);
+        const state =
+          res.data.length === 0 ? statesList["empty"] : statesList["ok"];
+        setRequestState(state);
+      } else {
+        const res = await api.getPosts();
+        setPosts(res.data);
+        const state =
+          res.data.length === 0 ? statesList["empty"] : statesList["ok"];
+        setRequestState(state);
       }
+      await requestLikes();
+    } catch {
+      console.log("aconteceu um erro em posts");
+      setRequestState(statesList["error"]);
     }
   }
 
@@ -72,8 +72,13 @@ export default function Timeline({newPostDisplay, userName}) {
 
   return (
     <Page>
-
-      <Title>{ pathname === '/timeline' ? 'timeline' : page?.username.slice(-1) === ('s'||'S') ? `${page.username}' posts `: `${page.username}'s posts`}</Title>
+      <Title>
+        {pathname === "/timeline"
+          ? "timeline"
+          : page?.username.slice(-1) === ("s" || "S")
+          ? `${page.username}' posts `
+          : `${page.username}'s posts`}
+      </Title>
       <Container>
         <ChooseFeed
           posts={posts}
@@ -91,42 +96,67 @@ export default function Timeline({newPostDisplay, userName}) {
   );
 }
 
-
-function ChooseFeed({posts, likes, requestLikes, state, imageUrl, newPostDisplay, pageUsername, setRequestState,}){
-
-    const navigate = useNavigate();
-
-    if(state === statesList['error'])
-        return ( 
-            <Error> <p>An error occured while trying to fetch the posts, please refresh the page</p> </Error>  )
-    else if(state === statesList['loading'])
-        return ( 
-            <Loading>
-                <SpinnerCircularFixed 
-                    size={200} thickness={100} speed={180} 
-                    color="rgba(57, 89, 172, 1)" secondaryColor="rgba(83, 57, 172, 0.24)" />
-            </Loading> )
-    else if(state === statesList['empty'])
-        return ( 
-            <Empty> <p>There are no posts yet</p> </Empty> )
-    else
-        return ( 
-          <Feed>
-            <NewPost imageUrl={imageUrl} displayCase={newPostDisplay}/>
-            {posts.map((p) => (
-              <Post
-                infos={p}
-                key={p.id}
-                like={likes.find(({ postId }) => postId === p.id)}
-                updateLikes={requestLikes}
-                reloadPage={setRequestState}
-                onNavigate={() =>
-                  { const {username} = p;
-                    pageUsername({username});
-                    navigate(`/user/${p.userId}`)}
-                }
-              />
-            ))}
-          </Feed>            
-        )
+function ChooseFeed({
+  posts,
+  likes,
+  requestLikes,
+  state,
+  imageUrl,
+  newPostDisplay,
+  pageUsername,
+  setRequestState,
+}) {
+  const navigate = useNavigate();
+  if (state === statesList["error"])
+    return (
+      <Error>
+        {" "}
+        <p>
+          An error occured while trying to fetch the posts, please refresh the
+          page
+        </p>{" "}
+      </Error>
+    );
+  else if (state === statesList["loading"])
+    return (
+      <Loading>
+        <SpinnerCircularFixed
+          size={200}
+          thickness={100}
+          speed={180}
+          color="rgba(57, 89, 172, 1)"
+          secondaryColor="rgba(83, 57, 172, 0.24)"
+        />
+      </Loading>
+    );
+  else if (state === statesList["empty"])
+    return (
+      <>
+        <NewPost imageUrl={imageUrl} reloadPage={setRequestState} />
+        <Empty>
+          {" "}
+          <p>There are no posts yet</p>{" "}
+        </Empty>
+      </>
+    );
+  else
+    return (
+      <Feed>
+        <NewPost imageUrl={imageUrl} displayCase={newPostDisplay} />
+        {posts.map((p) => (
+          <Post
+            infos={p}
+            key={p.id}
+            like={likes.find(({ postId }) => postId === p.id)}
+            updateLikes={requestLikes}
+            reloadPage={setRequestState}
+            onNavigate={() => {
+              const { username } = p;
+              pageUsername({ username });
+              navigate(`/user/${p.userId}`);
+            }}
+          />
+        ))}
+      </Feed>
+    );
 }

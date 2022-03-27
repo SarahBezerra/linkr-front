@@ -18,9 +18,7 @@ export default function LikeHeart({ idPost, likesInformations, updateLikes }) {
 
     try {
       await api.postLikeOrNot(idPost, auth.token);
-      console.log("dei o post em like");
       await updateLikes();
-      console.log("dei o update em likes");
 
       setWait(false);
       ReactTooltip.rebuild();
