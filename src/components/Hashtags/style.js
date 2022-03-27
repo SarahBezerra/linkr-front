@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { devices } from "../../styles/responsiveness";
 
 const Container = styled.div`
   max-width: 301px;
@@ -12,6 +13,10 @@ const Container = styled.div`
     #ff9900 25px
   );
   border-radius: 11px;
+
+  @media ${devices.tablet}{
+        display : none;
+    }
 `;
 
 export { Container };

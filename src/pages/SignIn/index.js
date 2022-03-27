@@ -7,36 +7,40 @@ import { SpinnerCircular } from "spinners-react";
 
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
+import useAuth from "../../hooks/useAuth";
 import api from "../../services/api";
 
-export default function SignUp() {
+export default function SignIn() {
+  const { auth, login } = useAuth();
   const navigate = useNavigate();
   const [isEnabled, setIsEnabled] = useState(true);
-  const [signUpData, setSignUpData] = useState({
+  const [signInData, setSignInData] = useState({
     email: "",
     password: "",
-    username: "",
-    image_url: "",
   });
 
   function handleInputChange(e) {
-    setSignUpData({ ...signUpData, [e.target.name]: e.target.value });
+    setSignInData({ ...signInData, [e.target.name]: e.target.value });
   }
+
+  // function setAndPersistToken(token) {
+  // 	localStorage.setItem("token", token);
+  // }
 
   function handleLogin(e) {
     e.preventDefault();
     setIsEnabled(false);
 
     api
-      .postSignUp(signUpData)
+      .postSignIn(signInData)
       .then((response) => {
         setIsEnabled(true);
-        navigate("/");
+        login(response.data);
+        navigate("/timeline");
       })
       .catch((error) => {
         setIsEnabled(true);
-        if (error.response.status === 422) alert("Confira os dados inseridos");
-        if (error.response.status === 400) alert("E-mail já casdastrado");
+        if (error.response.status === 400) alert("E-mail ou senha incorretos");
       });
   }
 
@@ -58,7 +62,7 @@ export default function SignUp() {
               type="email"
               placeholder="e-mail"
               name="email"
-              value={signUpData.email}
+              value={signInData.email}
               onChange={handleInputChange}
               required
             ></input>
@@ -66,23 +70,7 @@ export default function SignUp() {
               type="password"
               placeholder="password"
               name="password"
-              value={signUpData.password}
-              onChange={handleInputChange}
-              required
-            ></input>
-            <input
-              type="text"
-              placeholder="username"
-              name="username"
-              value={signUpData.username}
-              onChange={handleInputChange}
-              required
-            ></input>
-            <input
-              type="text"
-              placeholder="picture url"
-              name="image_url"
-              value={signUpData.image_url}
+              value={signInData.password}
               onChange={handleInputChange}
               required
             ></input>
@@ -101,7 +89,7 @@ export default function SignUp() {
             </button>
           </fieldset>
         </form>
-        <StyledLink to="/">Switch back to log in</StyledLink>
+        <StyledLink to="/sign-up">First time? Create an account!</StyledLink>
       </RightBox>
     </Container>
   );

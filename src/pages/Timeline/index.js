@@ -2,20 +2,21 @@ import { useEffect, useState } from "react";
 import { useNavigate, useLocation, useParams } from "react-router";
 import { SpinnerCircularFixed } from "spinners-react";
 import api from "../../services/api";
-import HashTags from "../../components/Hashtags";
 import Post from "../../components/Post";
 import { Feed, Container, Page, Loading, Empty, Error, Title } from "./style";
 import NewPost from "../../components/newPost";
+import { useParams } from "react-router-dom";
+import HashTags from "../../components/Hashtags";
 import useAuth from "../../hooks/useAuth";
 import usePage from "../../hooks/usePage";
 
-
 const statesList = {
-  'loading' : 0,
-  'error' : 1,
-  'empty': 2,
-  'ok': 3,
-}
+  loading: 0,
+  error: 1,
+  empty: 2,
+  ok: 3,
+};
+
 
 export default function Timeline({newPostDisplay, userName}) {
     const [requestState, setRequestState] = useState(statesList['loading']);
@@ -52,19 +53,26 @@ export default function Timeline({newPostDisplay, userName}) {
         setRequestState(statesList['error']);
       }
     }
+  }
 
-    async function requestLikes() {
-      try {
-        const res = await api.getLikes();
-        setLikes(res.data);
-      } catch (err) {
-        console.log("aconteceu um erro em likes");
-        setRequestState(statesList['error']);
-      }
+  async function requestLikes() {
+    try {
+      const res = await api.getLikes(auth.token);
+      setLikes(res.data);
+    } catch (err) {
+      console.log("aconteceu um erro em likes");
+      setRequestState(statesList["error"]);
     }
+  }
+
+  function getHeader() {
+    if (Object.keys(params).length === 0) setHeader("timeline");
+    else setHeader(`#${params["hashtag"]}`);
+  }
 
   return (
     <Page>
+
       <Title>{ pathname === '/timeline' ? 'timeline' : page?.username.slice(-1) === ('s'||'S') ? `${page.username}' posts `: `${page.username}'s posts`}</Title>
       <Container>
         <ChooseFeed
@@ -72,6 +80,7 @@ export default function Timeline({newPostDisplay, userName}) {
           likes={likes}
           requestLikes={requestLikes}
           state={requestState}
+          setRequestState={setRequestState}
           imageUrl={auth.image_url}
           newPostDisplay={newPostDisplay}
           pageUsername={pageUsername}
@@ -82,7 +91,8 @@ export default function Timeline({newPostDisplay, userName}) {
   );
 }
 
-function ChooseFeed({posts, likes, requestLikes, state, imageUrl, newPostDisplay, pageUsername}){
+
+function ChooseFeed({posts, likes, requestLikes, state, imageUrl, newPostDisplay, pageUsername, setRequestState,}){
 
     const navigate = useNavigate();
 
@@ -109,6 +119,7 @@ function ChooseFeed({posts, likes, requestLikes, state, imageUrl, newPostDisplay
                 key={p.id}
                 like={likes.find(({ postId }) => postId === p.id)}
                 updateLikes={requestLikes}
+                reloadPage={setRequestState}
                 onNavigate={() =>
                   { const {username} = p;
                     pageUsername({username});

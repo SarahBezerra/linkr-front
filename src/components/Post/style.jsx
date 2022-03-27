@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { devices } from "../../styles/responsiveness";
 
 const Container = styled.div`
     display:flex;
@@ -17,10 +18,16 @@ const Left = styled.div`
     width:12%;
     display: flex;
     flex-direction: column;
+
+    @media ${devices.tablet} {
+        width: 40px;
+        margin-right: 14px;
+    }
 `;
 
 const Main = styled.div`
     width: 88%;
+    position: relative;
 
     a {
         cursor: pointer
@@ -28,6 +35,10 @@ const Main = styled.div`
 
     h2, h3, h4 {
         overflow-wrap: break-word;
+    }
+
+    @media ${devices.tablet}{
+        flex-grow: 1;
     }
 `;
 
@@ -58,6 +69,14 @@ const UserPhoto = styled.img`
     width: 55px;
     max-width: 80%;
     height: 55px;
+
+    @media ${devices.tablet} {
+        width: 40px;
+        height:40px;
+        max-width: initial;
+    }
+
+
 `
 
 const ContentLikes = styled.div`

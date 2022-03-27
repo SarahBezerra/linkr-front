@@ -1,4 +1,12 @@
-import { PostContainer, PublishContainer, PictureContainer, Header, InputContainer, Container, Button} from "./style"
+import {
+  PostContainer,
+  PublishContainer,
+  PictureContainer,
+  Header,
+  InputContainer,
+  Container,
+  Button,
+} from "./style";
 import Img from "../Users/Image";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
@@ -79,25 +87,26 @@ export default function NewPost({imageUrl, displayCase}){
             </Container>
 
     )
+
 }
 
-function Inputs({postsItems, isSending}){
-
-    return(
-       <>
-            {postsItems.map((item, index) => {
-                return(
-                    <InputContainer 
-                        as={index === 0? '': 'textarea'} 
-                        disabled={isSending ? true : false}
-                        padding={index === 0? '0 15px 0 15px;':'10px 15px 0 15px;'} 
-                        height={index === 0 ? '30px': '55px'} placeholder={item.placeholder} 
-                        type={item.type}
-                        value={item.value} 
-                        onChange={(e) => item.state(e.target.value)}>
-                    </InputContainer>
-                )
-            })}
-       </>
-    )
+function Inputs({ postsItems, isSending }) {
+  return (
+    <>
+      {postsItems.map((item, index) => {
+        return (
+          <InputContainer
+            as={index === 0 ? "" : "textarea"}
+            disabled={isSending ? true : false}
+            padding={index === 0 ? "0 15px 0 15px;" : "10px 15px 0 15px;"}
+            height={index === 0 ? "30px" : "55px"}
+            placeholder={item.placeholder}
+            type={item.type}
+            value={item.value}
+            onChange={(e) => item.state(e.target.value)}
+          ></InputContainer>
+        );
+      })}
+    </>
+  );
 }

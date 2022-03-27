@@ -4,8 +4,13 @@ import { DocumentTextOutline } from 'react-ionicons'
 import ReactHashtag from "@mdnm/react-hashtag";
 import { useNavigate } from "react-router-dom";
 import LikeHeart from "../LikeHeart";
+import TrashAndEdit from "../TrashAndEdit";
+import useAuth from "../../hooks/useAuth";
 
-function Post({infos, like, updateLikes, onNavigate}){
+
+function Post({infos, like, updateLikes, onNavigate, reloadPage}){
+    const {auth} = useAuth()
+
     const {
             id,
             userId,
@@ -14,18 +19,21 @@ function Post({infos, like, updateLikes, onNavigate}){
             image_url,
             metaData,
     } = infos;
-
+ 
     return (
         <Container>
             <Left>
                 <UserPhoto src={ image_url } onClick={onNavigate} alt=''/>
                 <ContentLikes>
                     <LikeHeart idPost = {id} likesInformations={like || {}} updateLikes={updateLikes} />
-                </ContentLikes>
+                </ContentLikes> 
             </Left>
             <Main>
+
                 <UserName onClick={onNavigate}> { username } </UserName>
-                <Message>{ text }</Message>
+                <Message reloadPage={reloadPage}>{ text }</Message>
+
+                   {userId === auth.userId ? <TrashAndEdit infos = {infos} /> : ''}
 
                 <a href={metaData.url} target='_blank' rel='noreferrer' >
                     <MetaContainer>
@@ -48,11 +56,12 @@ function Post({infos, like, updateLikes, onNavigate}){
     )
 }
 
-function Message({children}){
+function Message({children, reloadPage}){
 
     const navigate = useNavigate();
 
     function handleHashtagLink({innerText}){
+            reloadPage('');
             const hashtag = innerText.replace('#','');
             navigate(`/hashtag/${hashtag}`);
     };
@@ -66,7 +75,4 @@ function Message({children}){
         </UserText>
     )
 }
-
-
-
 export default Post;

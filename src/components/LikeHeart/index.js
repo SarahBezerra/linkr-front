@@ -2,25 +2,30 @@ import { useState } from "react";
 import ReactDOMServer from "react-dom/server";
 import ReactTooltip from "react-tooltip";
 import { SpinnerInfinity } from "spinners-react";
+import useAuth from "../../hooks/useAuth";
 
 import api from "../../services/api";
 import { ContentLikes, IconHeartRed, IconHeartDefault } from "./style";
 
 export default function LikeHeart({ idPost, likesInformations, updateLikes }) {
+  const { auth } = useAuth();
   const [wait, setWait] = useState(false);
-  const [like, setLike] = useState(likesInformations?.liked || false);
+  const [like, setLike] = useState(likesInformations.liked || false);
 
   async function likeOrNot() {
     setWait(true);
     setLike(!like);
 
     try {
-      await api.postLikeOrNot(idPost, 1); //trocar userId = 1 pelo usuário mesmo
+      await api.postLikeOrNot(idPost, auth.token);
+      console.log("dei o post em like");
       await updateLikes();
+      console.log("dei o update em likes");
+
       setWait(false);
       ReactTooltip.rebuild();
     } catch {
-      console.log("ocorreu um erro");
+      console.log("ocorreu um erro ao dar like");
     }
   }
 

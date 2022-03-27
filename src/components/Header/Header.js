@@ -8,19 +8,16 @@ import { useNavigate, useLocation, Link } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 
 export default function Header({ menuSelect, setMenuSelect }) {
-
-  const {auth, logout} = useAuth();
+  const { auth, logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
-  console.log(auth);
-
   function handleClick() {
-    
     logout();
     setMenuSelect(false);
     navigate("/");
   }
+
 
   return(
       <HeaderContainer display={(location.pathname === '/' || location.pathname === '/sign-up') ? 'none' : 'inital'}>
@@ -39,5 +36,5 @@ export default function Header({ menuSelect, setMenuSelect }) {
               
       </HeaderContainer>
   )
-}
 
+}
