@@ -4,14 +4,9 @@ import { DocumentTextOutline } from 'react-ionicons'
 import ReactHashtag from "@mdnm/react-hashtag";
 import { useNavigate } from "react-router-dom";
 import LikeHeart from "../LikeHeart";
-<<<<<<< HEAD
-import TrashAndEditIcons  from "../TrashAndEditIcons";
-    
-function Post({infos, like, updateLikes}){
-=======
+import TrashAndEdit from "../TrashAndEdit";
 
 function Post({infos, like, updateLikes, reloadPage}){
->>>>>>> main
     const {
             id,
             userId,
@@ -27,17 +22,12 @@ function Post({infos, like, updateLikes, reloadPage}){
                 <UserPhoto src={ image_url } alt=''/>
                 <ContentLikes>
                     <LikeHeart idPost = {id} likesInformations={like || {}} updateLikes={updateLikes} />
-                </ContentLikes>
+                </ContentLikes> 
             </Left>
             <Main>
                 <UserName> { username } </UserName>
-<<<<<<< HEAD
-                <Message> { text } </Message>
-              <TrashAndEditIcons/>
-=======
                 <Message reloadPage={reloadPage}>{ text }</Message>
-
->>>>>>> main
+                   <TrashAndEdit infos = {infos} />
                 <a href={metaData.url} target='_blank' rel='noreferrer' >
                     <MetaContainer>
                         <MetaLeft>

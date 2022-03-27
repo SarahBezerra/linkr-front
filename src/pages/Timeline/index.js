@@ -24,13 +24,11 @@ export default function Timeline() {
   const { auth } = useAuth();
   const config = null;
 
-  console.log(params);
-
   useEffect(() => {
     //setRequestState(statesList['loading']);
     requestPosts();
     getHeader();
-  }, [requestState]);
+  }, []);
 
   async function requestPosts() {
     let res = null;
@@ -41,8 +39,8 @@ export default function Timeline() {
       setPosts(res.data);
       const state =
         res.data.length === 0 ? statesList["empty"] : statesList["ok"];
-      setRequestState(state);
       await requestLikes();
+      setRequestState(state);
     } catch {
       setRequestState(statesList["error"]);
     }
@@ -50,7 +48,7 @@ export default function Timeline() {
 
   async function requestLikes() {
     try {
-      const res = await api.getLikes("3435a095-9964-4c03-b26d-2914d2714f46");
+      const res = await api.getLikes(auth.token);
       setLikes(res.data);
     } catch (err) {
       console.log("aconteceu um erro em likes");

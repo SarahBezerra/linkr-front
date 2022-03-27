@@ -1,10 +1,19 @@
 import { useRef } from "react";
 import { PencilSharp, Trash } from "react-ionicons";
+import useAuth from "../../hooks/useAuth";
+import api from "../../services/api";
 import BoxIcons from "./style";
 
-export default function TrashAndEditIcons() {
+export default function TrashAndEdit({ infos }) {
+  const { auth } = useAuth();
   async function handleClickDelete() {
+    const confirm = window.confirm("Deseja deletar?");
+
+    if (!confirm) return;
+
     try {
+      await api.deletePost(infos.id, auth.token);
+      alert("deletado com sucesso");
     } catch (err) {
       console.log("aconteceu um erro em delete");
     }

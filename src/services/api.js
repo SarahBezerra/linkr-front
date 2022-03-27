@@ -30,15 +30,17 @@ function getPostsByHashtag(hashtag) {
   return axios.get(`${BASE_URL}/hashtag/${hashtag}`, config);
 }
 
-function getLikes() {
+function getLikes(token) {
   return axios.get(`${BASE_URL}/like`, createConfig(token));
 }
 
 function postLikeOrNot(idPost, token) {
-  return axios.post(`${BASE_URL}/like/${idPost}`, createConfig(token));
+  return axios.post(`${BASE_URL}/like/${idPost}`, {}, createConfig(token));
 }
 
-function deletePost(idPost, token) {}
+function deletePost(idPost, token) {
+  return axios.delete(`${BASE_URL}/posts/${idPost}`, createConfig(token));
+}
 
 const api = {
   createConfig,
