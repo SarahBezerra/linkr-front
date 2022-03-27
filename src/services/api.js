@@ -1,4 +1,5 @@
 import axios from "axios";
+
 const BASE_URL = process.env.REACT_APP_PUBLIC_URL
   ? process.env.REACT_APP_PUBLIC_URL
   : "http://localhost:5000";
@@ -8,11 +9,11 @@ function createConfig(token) {
 }
 
 function postSignUp(signUpData) {
-    return axios.post(`${BASE_URL}/sign-up`, signUpData);
+  return axios.post(`${BASE_URL}/sign-up`, signUpData);
 }
 
 function postSignIn(signInData) {
-    return axios.post(`${BASE_URL}/sign-in`, signInData);
+  return axios.post(`${BASE_URL}/sign-in`, signInData);
 }
 
 async function sendPost(token, body) {
@@ -24,17 +25,21 @@ function getPosts(config) {
   return axios.get(`${BASE_URL}/posts`, config);
 }
 
-function getPostsByHashtag(hashtag){
+function getPostsByHashtag(hashtag) {
   const config = null;
   return axios.get(`${BASE_URL}/hashtag/${hashtag}`, config);
 }
 
-function getLikes() {
-  return axios.get(`${BASE_URL}/like`);
+function getLikes(token) {
+  return axios.get(`${BASE_URL}/like`, createConfig(token));
 }
 
-function postLikeOrNot(idPost, userId) {
-  return axios.post(`${BASE_URL}/like/${idPost}`, { userId }); // lembrar que só o auth é suficiente
+function postLikeOrNot(idPost, token) {
+  return axios.post(`${BASE_URL}/like/${idPost}`, {}, createConfig(token));
+}
+
+function deletePost(idPost, token) {
+  return axios.delete(`${BASE_URL}/posts/${idPost}`, createConfig(token));
 }
 
 const api = {
@@ -45,7 +50,8 @@ const api = {
   getLikes,
   postLikeOrNot,
   postSignUp,
-  postSignIn
+  postSignIn,
+  deletePost,
 };
 
 export default api;

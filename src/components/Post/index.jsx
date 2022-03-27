@@ -4,8 +4,11 @@ import { DocumentTextOutline } from 'react-ionicons'
 import ReactHashtag from "@mdnm/react-hashtag";
 import { useNavigate } from "react-router-dom";
 import LikeHeart from "../LikeHeart";
+import TrashAndEdit from "../TrashAndEdit";
+import useAuth from "../../hooks/useAuth";
 
 function Post({infos, like, updateLikes, reloadPage}){
+    const {auth} = useAuth()
     const {
             id,
             userId,
@@ -14,19 +17,19 @@ function Post({infos, like, updateLikes, reloadPage}){
             image_url,
             metaData,
     } = infos;
-
+ 
     return (
         <Container>
             <Left>
                 <UserPhoto src={ image_url } alt=''/>
                 <ContentLikes>
                     <LikeHeart idPost = {id} likesInformations={like || {}} updateLikes={updateLikes} />
-                </ContentLikes>
+                </ContentLikes> 
             </Left>
             <Main>
                 <UserName> { username } </UserName>
                 <Message reloadPage={reloadPage}>{ text }</Message>
-
+                   {userId === auth.userId ? <TrashAndEdit infos = {infos} /> : ''}
                 <a href={metaData.url} target='_blank' rel='noreferrer' >
                     <MetaContainer>
                         <MetaLeft>
@@ -67,7 +70,4 @@ function Message({children, reloadPage}){
         </UserText>
     )
 }
-
-
-
 export default Post;
