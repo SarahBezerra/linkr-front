@@ -18,15 +18,19 @@ function postSignIn(signInData) {
 
 async function sendPost(token, body) {
   const config = createConfig(token);
-  const promise = await axios.post(`${BASE_URL}/posts`, body, config);
-  return promise;
+  return axios.post(`${BASE_URL}/posts`, body, config);
 }
 
 function getPosts(config) {
   return axios.get(`${BASE_URL}/posts`, config);
 }
 
-function getLikes(token) {
+function getPostsByHashtag(hashtag) {
+  const config = null;
+  return axios.get(`${BASE_URL}/hashtag/${hashtag}`, config);
+}
+
+function getLikes() {
   return axios.get(`${BASE_URL}/like`, createConfig(token));
 }
 
@@ -39,6 +43,7 @@ function deletePost(idPost, token) {}
 const api = {
   createConfig,
   getPosts,
+  getPostsByHashtag,
   sendPost,
   getLikes,
   postLikeOrNot,

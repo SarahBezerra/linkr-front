@@ -3,14 +3,21 @@ import HeaderContent from "./HeaderContent";
 import HeaderMenu from "./HeaderMenu";
 import DropDownMenu from "./DropDownMenu/DropDownMenu";
 import { useNavigate, useLocation } from "react-router-dom";
+import useAuth from "../../hooks/useAuth";
 
 export default function Header({ menuSelect, setMenuSelect }) {
+
+  const {auth, logout} = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
-  function handleClick(event) {
-    navigate("/");
+  console.log(auth);
+
+  function handleClick() {
+    
+    logout();
     setMenuSelect(false);
+    navigate("/");
   }
 
   return(
@@ -19,10 +26,10 @@ export default function Header({ menuSelect, setMenuSelect }) {
               <span>linkr</span>
 
               <div style={{position: 'relative'}}>
-                  <HeaderMenu menuSelect={menuSelect} setMenuSelect={setMenuSelect}/>
+                  <HeaderMenu menuSelect={menuSelect} setMenuSelect={setMenuSelect} imageUrl={auth?.image_url}/>
               </div>
           </HeaderContent>
-          {<DropDownMenu dropDownDisplay={menuSelect === false ? false: true} onClick={(e) => {handleClick(e)}}>Logout</DropDownMenu>}
+          {<DropDownMenu dropDownDisplay={menuSelect === false ? false: true} onClick={() => {handleClick()}}>Logout</DropDownMenu>}
               
       </HeaderContainer>
   )

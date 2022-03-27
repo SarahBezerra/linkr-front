@@ -7,9 +7,11 @@ import { SpinnerCircular } from "spinners-react";
 
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
+import useAuth from "../../hooks/useAuth";
 import api from "../../services/api";
 
 export default function SignIn() {
+  const { auth, login } = useAuth();
   const navigate = useNavigate();
   const [isEnabled, setIsEnabled] = useState(true);
   const [signInData, setSignInData] = useState({
@@ -21,9 +23,9 @@ export default function SignIn() {
     setSignInData({ ...signInData, [e.target.name]: e.target.value });
   }
 
-  function setAndPersistToken(token) {
-    localStorage.setItem("token", token);
-  }
+  // function setAndPersistToken(token) {
+  // 	localStorage.setItem("token", token);
+  // }
 
   function handleLogin(e) {
     e.preventDefault();
@@ -33,7 +35,7 @@ export default function SignIn() {
       .postSignIn(signInData)
       .then((response) => {
         setIsEnabled(true);
-        setAndPersistToken(response.data);
+        login(response.data);
         navigate("/timeline");
       })
       .catch((error) => {

@@ -4,9 +4,14 @@ import { DocumentTextOutline } from 'react-ionicons'
 import ReactHashtag from "@mdnm/react-hashtag";
 import { useNavigate } from "react-router-dom";
 import LikeHeart from "../LikeHeart";
+<<<<<<< HEAD
 import TrashAndEditIcons  from "../TrashAndEditIcons";
     
 function Post({infos, like, updateLikes}){
+=======
+
+function Post({infos, like, updateLikes, reloadPage}){
+>>>>>>> main
     const {
             id,
             userId,
@@ -26,8 +31,13 @@ function Post({infos, like, updateLikes}){
             </Left>
             <Main>
                 <UserName> { username } </UserName>
+<<<<<<< HEAD
                 <Message> { text } </Message>
               <TrashAndEditIcons/>
+=======
+                <Message reloadPage={reloadPage}>{ text }</Message>
+
+>>>>>>> main
                 <a href={metaData.url} target='_blank' rel='noreferrer' >
                     <MetaContainer>
                         <MetaLeft>
@@ -49,11 +59,12 @@ function Post({infos, like, updateLikes}){
     )
 }
 
-function Message({children}){
+function Message({children, reloadPage}){
 
     const navigate = useNavigate();
 
     function handleHashtagLink({innerText}){
+            reloadPage('');
             const hashtag = innerText.replace('#','');
             navigate(`/hashtag/${hashtag}`);
     };
