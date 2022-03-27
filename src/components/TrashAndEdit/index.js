@@ -9,7 +9,7 @@ import ModalBlack from "../ModalBlack";
 
 ReactModal.setAppElement("#root");
 
-export default function TrashAndEdit({ idPost, reloadPage, updatePage }) {
+export default function TrashAndEdit({ idPost, reloadPage }) {
   const { auth } = useAuth();
   const [wait, setWait] = useState(false);
   const [modal, setModal] = useState(false);
@@ -20,7 +20,6 @@ export default function TrashAndEdit({ idPost, reloadPage, updatePage }) {
       await api.deletePost(idPost, auth.token);
       setModal(false);
       reloadPage(0); // fazer o reload
-      // updatePage();
     } catch (err) {
       setModal(false);
       alert("Não foi possível excluir este post!");

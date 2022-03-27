@@ -10,12 +10,12 @@ import {
 import Img from "../Users/Image";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
+import useAuth from "../../hooks/useAuth";
 import api from "../../services/api";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import useAuth from "../../hooks/useAuth";
 
-export default function NewPost({ imageUrl, reloadPage }) {
+export default function NewPost({ imageUrl, displayCase, reloadPage }) {
   const { auth } = useAuth();
   const { userId } = useParams();
   const [url, setUrl] = useState("");
@@ -52,7 +52,7 @@ export default function NewPost({ imageUrl, reloadPage }) {
   }
 
   return (
-    <Container>
+    <Container style={{ display: displayCase }}>
       <PostContainer>
         <PictureContainer>
           <Img height={"50px"} src={imageUrl} />

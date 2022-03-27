@@ -21,8 +21,12 @@ async function sendPost(token, body) {
   return axios.post(`${BASE_URL}/posts`, body, config);
 }
 
-function getPosts(config) {
-  return axios.get(`${BASE_URL}/posts`, config);
+function getPosts() {
+  return axios.get(`${BASE_URL}/posts`);
+}
+
+function getPostsFromUser(id) {
+  return axios.get(`${BASE_URL}/posts/${id}`);
 }
 
 function getPostsByHashtag(hashtag) {
@@ -42,16 +46,23 @@ function deletePost(idPost, token) {
   return axios.delete(`${BASE_URL}/posts/${idPost}`, createConfig(token));
 }
 
+function getUser(id){
+  return axios.get(`${BASE_URL}/user/:id`, {id})
+}
+
 const api = {
   createConfig,
   getPosts,
+  getPostsFromUser,
   getPostsByHashtag,
   sendPost,
   getLikes,
   postLikeOrNot,
   postSignUp,
   postSignIn,
-  deletePost,
+  getUser,
+  deletePost
+
 };
 
 export default api;
