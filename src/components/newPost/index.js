@@ -2,18 +2,20 @@ import { PostContainer, PublishContainer, PictureContainer, Header, InputContain
 import Img from "../Users/Image";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
+import useAuth from "../../hooks/useAuth";
 import api from "../../services/api";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 
 
-export default function NewPost({imageUrl}){
+export default function NewPost({imageUrl, displayCase}){
 
     const {userId} = useParams();
     const [url, setUrl] = useState('');
     const [text, setText] = useState('');
     const [isSending, setIsSending] = useState(false);
+    const {auth} = useAuth();
     
 
     const postsItems = [{ placeholder: 'http:/..', type: 'text', value:url, state: setUrl },{ placeholder: 'Awesome article about #javascript', type: 'text', value:text, state: setText }];
@@ -24,7 +26,7 @@ export default function NewPost({imageUrl}){
         e.preventDefault();
         setIsSending(true);
         
-        const token = '8c9299c3-4ca4-4d0f-ac85-969bd048af7e'
+        const {token} = auth;
         const body ={url, text}
         try{
             await api.sendPost(token, body);
@@ -43,7 +45,7 @@ export default function NewPost({imageUrl}){
 
     return(
 
-            <Container>
+            <Container style={{display:displayCase}}>
 
                 <PostContainer>
                     <PictureContainer>

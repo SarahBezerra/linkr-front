@@ -5,7 +5,7 @@ import ReactHashtag from "@mdnm/react-hashtag";
 import { useNavigate } from "react-router-dom";
 import LikeHeart from "../LikeHeart";
 
-function Post({infos, like, updateLikes}){
+function Post({infos, like, updateLikes, onNavigate}){
     const {
             id,
             userId,
@@ -18,13 +18,13 @@ function Post({infos, like, updateLikes}){
     return (
         <Container>
             <Left>
-                <UserPhoto src={ image_url } alt=''/>
+                <UserPhoto src={ image_url } onClick={onNavigate} alt=''/>
                 <ContentLikes>
                     <LikeHeart idPost = {id} likesInformations={like || {}} updateLikes={updateLikes} />
                 </ContentLikes>
             </Left>
             <Main>
-                <UserName> { username } </UserName>
+                <UserName onClick={onNavigate}> { username } </UserName>
                 <Message>{ text }</Message>
 
                 <a href={metaData.url} target='_blank' rel='noreferrer' >

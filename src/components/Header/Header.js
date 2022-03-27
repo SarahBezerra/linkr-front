@@ -2,7 +2,9 @@ import HeaderContainer from "./HeaderContainer";
 import HeaderContent from "./HeaderContent";
 import HeaderMenu from "./HeaderMenu";
 import DropDownMenu from "./DropDownMenu/DropDownMenu";
-import { useNavigate, useLocation } from "react-router-dom";
+import Browser from "./Browser";
+import { UsersList } from "./Browser/style";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 
 export default function Header({ menuSelect, setMenuSelect }) {
@@ -23,11 +25,15 @@ export default function Header({ menuSelect, setMenuSelect }) {
   return(
       <HeaderContainer display={(location.pathname === '/' || location.pathname === '/sign-up') ? 'none' : 'inital'}>
           <HeaderContent>
-              <span>linkr</span>
+              <Link to={`/timeline`}>
+                <h1>linkr</h1>
+              </Link>
 
-              <div style={{position: 'relative'}}>
-                  <HeaderMenu menuSelect={menuSelect} setMenuSelect={setMenuSelect} imageUrl={auth?.image_url}/>
-              </div>
+              
+              <Browser/>
+              
+              <HeaderMenu menuSelect={menuSelect} setMenuSelect={setMenuSelect} imageUrl={auth?.image_url}/>
+
           </HeaderContent>
           {<DropDownMenu dropDownDisplay={menuSelect === false ? false: true} onClick={() => {handleClick()}}>Logout</DropDownMenu>}
               

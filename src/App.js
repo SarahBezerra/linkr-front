@@ -7,26 +7,31 @@ import SignUp from "./pages/SignUpPage/index";
 import SignIn from './pages/SignInPage/index';
 import Hashtag from "./pages/Hashtag";
 import Content from "./components/PageLayout/Content";
+import UserPage from "./pages/userPage";
 import { AuthProvider } from "./contexts/authContext";
+import {PageProvider} from './contexts/pageContext';
 //import { Container } from './components/Post/style';
 
 
 function App() {
   const [menuSelect, setMenuSelect] = useState(false);
-  
+
   return (
 
         <Content>
           <AuthProvider>
-            <BrowserRouter>
-              <Header menuSelect={menuSelect} setMenuSelect={setMenuSelect}/>
-              <Routes>
-                <Route path='/timeline' element={<Timeline/>} />
-                <Route path='/' element={<SignIn/>} />
-                <Route path='/sign-up' element={<SignUp/>} />
-                <Route path='/hashtag/:hashtag' element={<Hashtag/>} />
-              </Routes>
-            </BrowserRouter>
+            <PageProvider>
+              <BrowserRouter>
+                <Header menuSelect={menuSelect} setMenuSelect={setMenuSelect}/>
+                <Routes>
+                  <Route path='/' element={<SignIn/>} />
+                  <Route path='/sign-up' element={<SignUp/>} />
+                  <Route path='/timeline' element={<Timeline/>} />
+                  <Route path='/user/:id' element={<UserPage/>} />
+                  <Route path='/hashtag/:hashtag' element={<Hashtag/>} />
+                </Routes>
+              </BrowserRouter>
+            </PageProvider>
           </AuthProvider>
         </Content>
   )

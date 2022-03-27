@@ -23,8 +23,12 @@ async function sendPost(token, body) {
 
 }
 
-function getPosts(config) {
-  return axios.get(`${BASE_URL}/posts`, config);
+function getPosts() {
+  return axios.get(`${BASE_URL}/posts`);
+}
+
+function getPostsFromUser(id) {
+  return axios.get(`${BASE_URL}/posts/${id}`);
 }
 
 function getLikes() {
@@ -35,14 +39,20 @@ function postLikeOrNot(idPost, userId) {
   return axios.post(`${BASE_URL}/like/${idPost}`, { userId }); // lembrar que só o auth é suficiente
 }
 
+function getUser(id){
+  return axios.get(`${BASE_URL}/user/:id`, {id})
+}
+
 const api = {
   createConfig,
   getPosts,
+  getPostsFromUser,
   sendPost,
   getLikes,
   postLikeOrNot,
   postSignUp,
-  postSignIn
+  postSignIn,
+  getUser
 };
 
 export default api;

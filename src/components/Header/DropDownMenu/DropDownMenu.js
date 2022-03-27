@@ -17,7 +17,7 @@ top:${props => props.dropDownDisplay === true? '100%':'-200px'};
 right: 0;
 transition: ${props => props.dropDownDisplay === true ?'top 0.5s ease-out' :'top 1s ease-in'};
 
-z-index: 1;
+z-index: -1;
 
 background-color: #151515;
 border-bottom-left-radius: 20px;
