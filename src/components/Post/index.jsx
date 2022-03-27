@@ -5,8 +5,10 @@ import ReactHashtag from "@mdnm/react-hashtag";
 import { useNavigate } from "react-router-dom";
 import LikeHeart from "../LikeHeart";
 import TrashAndEdit from "../TrashAndEdit";
+import useAuth from "../../hooks/useAuth";
 
 function Post({infos, like, updateLikes, reloadPage}){
+    const {auth} = useAuth()
     const {
             id,
             userId,
@@ -15,7 +17,7 @@ function Post({infos, like, updateLikes, reloadPage}){
             image_url,
             metaData,
     } = infos;
-
+ 
     return (
         <Container>
             <Left>
@@ -27,7 +29,7 @@ function Post({infos, like, updateLikes, reloadPage}){
             <Main>
                 <UserName> { username } </UserName>
                 <Message reloadPage={reloadPage}>{ text }</Message>
-                   <TrashAndEdit infos = {infos} />
+                   {userId === auth.userId ? <TrashAndEdit infos = {infos} /> : ''}
                 <a href={metaData.url} target='_blank' rel='noreferrer' >
                     <MetaContainer>
                         <MetaLeft>

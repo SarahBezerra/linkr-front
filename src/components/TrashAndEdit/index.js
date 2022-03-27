@@ -1,7 +1,6 @@
-import { useRef } from "react";
 import { PencilSharp, Trash } from "react-ionicons";
-import useAuth from "../../hooks/useAuth";
 import api from "../../services/api";
+import useAuth from "../../hooks/useAuth";
 import BoxIcons from "./style";
 
 export default function TrashAndEdit({ infos }) {
