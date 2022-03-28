@@ -26,8 +26,7 @@ const Page = styled.div`
 
 `;
 
-const Title = styled.h1`
-  
+const Title = styled.h1`  
   margin-bottom: 43px;
   height: fit-content;
   display:flex;

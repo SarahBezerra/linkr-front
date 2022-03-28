@@ -55,7 +55,7 @@ export default function SignIn() {
         </p>
       </div>
 
-      <RightBox>
+      <RightBox isEnabled={isEnabled}>
         <form onSubmit={handleLogin}>
           <fieldset disabled={!isEnabled}>
             <input

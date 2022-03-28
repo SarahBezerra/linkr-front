@@ -4,16 +4,21 @@ import { DocumentTextOutline } from 'react-ionicons'
 import ReactHashtag from "@mdnm/react-hashtag";
 import { useNavigate } from "react-router-dom";
 import LikeHeart from "../LikeHeart";
+import { pagesList } from "../../pages/Timeline/utils";
 import TrashAndEdit from "../TrashAndEdit";
 import useAuth from "../../hooks/useAuth";
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+import api from "../../services/api";
 
-
-function Post({infos, like, updateLikes, onNavigate, reloadPage}){
+function Post({infos, like, updateLikes, onNavigate, reloadPage, setPageAndReload}){
     const {auth} = useAuth()
+    const token = auth.token;
     const [ editMessage, setEditMessage ] = useState(false)
     const refPostMessage = useRef(infos.text)
     const [ message, setMessage ] = useState(refPostMessage.current)
+    const [ isEnabled, setIsEnabled ] = useState(true)
 
     const {
             id,
@@ -33,17 +38,16 @@ function Post({infos, like, updateLikes, onNavigate, reloadPage}){
                 </ContentLikes> 
             </Left>
             <Main>
-
                 <UserName onClick={onNavigate}> { username } </UserName>
                 {editMessage === true 
-                    ? <MessageEditing setMessage={setMessage} message={message} setEditMessage={setEditMessage} refPostMessage={refPostMessage}></MessageEditing> 
-                    : <Message ref={refPostMessage} reloadPage={reloadPage}>{ text }</Message>
+                    ? <MessageEditing setMessage={setMessage} message={message} setEditMessage={setEditMessage} refPostMessage={refPostMessage} token={token} idPost={infos.id} setEnabled={setIsEnabled} enabled={isEnabled} reloadPage={reloadPage} /> 
+                    : <Message reloadPage={reloadPage} setPageAndReload={setPageAndReload}>{ text }</Message>
                 }
 
                    {userId === auth.userId 
-                    ? <TrashAndEdit infos = {infos} setEditMessage={setEditMessage} editMessage={editMessage} refPostMessage={refPostMessage} setMessage={setMessage} /> 
+                    ? <TrashAndEdit idPost={infos.id} reloadPage={reloadPage} setEditMessage={setEditMessage} editMessage={editMessage} refPostMessage={refPostMessage} setMessage={setMessage} /> 
                     : ''}
-
+                   
                 <a href={metaData.url} target='_blank' rel='noreferrer' >
                     <MetaContainer>
                         <MetaLeft>
@@ -66,7 +70,7 @@ function Post({infos, like, updateLikes, onNavigate, reloadPage}){
 }
 
 
-function MessageEditing({setMessage, message, setEditMessage, refPostMessage}){
+function MessageEditing({setMessage, message, setEditMessage, refPostMessage, token, idPost, setEnabled, enabled, reloadPage}){
 
     function handleInputChange(e) {
         setMessage( e.target.value );
@@ -78,31 +82,57 @@ function MessageEditing({setMessage, message, setEditMessage, refPostMessage}){
             setMessage(refPostMessage.current)  
         } 
         else if(window.event.keyCode === 13){
-            console.log("mandar pro db")
+            const body = { message };
+            updatePost(body, token, idPost)
         } 
 
 
     }
 
+    async function updatePost(body, token, idPost){
+        try {
+            setEnabled(false)
+            await api.updatePost(body, token, idPost);
+            setEnabled(true)
+            reloadPage(0);
+        } catch (error) {
+            toast.error("Houve um erro ao editar seu post", { theme: "colored" });
+            toast();
+            setEnabled(true)
+        }
+    }
+
     return(
-        <Input name="text" value={message} onKeyDown={keyPress} onChange={handleInputChange} ></Input>
+        <Input 
+            autoFocus 
+            onFocus={function(e) {
+                var val = e.target.value;
+                e.target.value = '';
+                e.target.value = val;
+          }} 
+            disabled={!enabled} 
+            name="text" 
+            value={message} 
+            onKeyDown={keyPress} 
+            onChange={handleInputChange}>
+        </Input>
     )
 }
 
-function Message({children, reloadPage}){
+function Message({children, setPageAndReload}){
 
     const navigate = useNavigate();
 
     function handleHashtagLink({innerText}){
-            reloadPage('');
             const hashtag = innerText.replace('#','');
+            setPageAndReload(pagesList['hashtag']);
             navigate(`/hashtag/${hashtag}`);
     };
 
     return(
         <UserText>
             <ReactHashtag 
-                renderHashtag={(hashtagValue) => (<Hashtag onClick={(e) => {handleHashtagLink(e.target)}}>{hashtagValue}</Hashtag>)} >
+                renderHashtag={(hashtagValue) => (<Hashtag  key={hashtagValue} onClick={(e) => {handleHashtagLink(e.target)}}>{hashtagValue}</Hashtag>)} >
                 {children}
             </ReactHashtag>
         </UserText>

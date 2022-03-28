@@ -54,12 +54,12 @@ export const RightBox = styled.div`
                 width: 80%;
                 height: 65px;
 
-                background: #fff;
+                background: ${(props) => props.isEnabled ? "#FFF" : "#C0C0C0"};
                 border-radius: 6px;
                 border: none;
                 margin-bottom: 15px;
 
-                color: #000;
+                color: ${(props) => props.isEnabled ? "#000" : "#696969"};
                 font-family: 'Oswald';
                 font-size: 27px;
                 font-size: 27px;
@@ -82,6 +82,7 @@ export const RightBox = styled.div`
                 font-size: 27px;
                 font-weight: 700;
                 line-height: 40px;
+                opacity: ${(props) => props.isEnabled ? "1" : "0.7"};
             }
         }
     }

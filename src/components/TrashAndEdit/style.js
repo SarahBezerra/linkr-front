@@ -14,4 +14,4 @@ const BoxIcons = styled.div`
   }
 `;
 
-export default BoxIcons;
+export { BoxIcons };
