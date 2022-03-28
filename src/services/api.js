@@ -50,6 +50,11 @@ function getUser(id){
   return axios.get(`${BASE_URL}/user/:id`, {id})
 }
 
+function browserUsers(string) {
+  return axios.get(`${BASE_URL}/users_filter`, {params:{ username: string}});
+}
+
+
 const api = {
   createConfig,
   getPosts,
@@ -61,7 +66,8 @@ const api = {
   postSignUp,
   postSignIn,
   getUser,
-  deletePost
+  deletePost,
+  browserUsers
 
 };
 

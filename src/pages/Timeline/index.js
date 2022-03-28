@@ -5,7 +5,6 @@ import api from "../../services/api";
 import Post from "../../components/Post";
 import { Feed, Container, Page, Loading, Empty, Error, Title } from "./style";
 import NewPost from "../../components/newPost";
-import { useParams } from "react-router-dom";
 import HashTags from "../../components/Hashtags";
 import useAuth from "../../hooks/useAuth";
 import usePage from "../../hooks/usePage";
@@ -18,18 +17,22 @@ const statesList = {
 };
 
 
-export default function Timeline({newPostDisplay, userName}) {
+export default function Timeline({newPostDisplay}) {
+  
     const [requestState, setRequestState] = useState(statesList['loading']);
     const [posts, setPosts] = useState([]);
     const [likes, setLikes] = useState([]);
+    const [header, setHeader] = useState('')
     const {auth} = useAuth();
     const {page, pageUsername} = usePage();
     const {pathname} = useLocation();
     const {id} = useParams();
+    const params = useParams();
     const config = null;
 
     useEffect(() => {
       requestPosts();
+      getHeader();
     
     }, [posts,pathname]);
 
@@ -53,7 +56,7 @@ export default function Timeline({newPostDisplay, userName}) {
         setRequestState(statesList['error']);
       }
     }
-  }
+  
 
   async function requestLikes() {
     try {

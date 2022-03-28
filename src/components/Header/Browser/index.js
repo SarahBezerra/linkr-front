@@ -1,20 +1,86 @@
 import {BrowserContainer, IconContainer, InputContainer, UsersList, IntegrationContainer, User} from "./style"
 import { SearchOutline } from 'react-ionicons'
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import Img from "../../Users/Image";
+import api from "../../../services/api";
 
 
 
 export default function Browser(){
 
     const [browser, setBrowser] = useState('');
+    const [active, setActive] = useState(false);
+    const [search, setSearch] = useState('');
+    const [users, setUsers] = useState([]);
+
+
+        useEffect(() => {
+            if(browser.length >= 3){
+                filterUsers();
+            }
+        },[browser])
+
+        const filterUsers = async () => {
+            try{
+                    const result = await api.browserUsers(browser);
+                    console.log(result.data);
+                    setUsers(result.data);
+                    
+                
+            }
+            catch(error){
+                console.log(error);
+            }
+        }
+
+
+
+    function BrowserHandler(text){
+
+        if(text.length >= 3){
+
+            setSearch(text);
+            setActive(true);
+            setBrowser(text);
+        }
+
+        else{
+            setActive(false);
+            setBrowser(text);
+            setUsers('');
+
+        }
+    }
+
+    function DropDownHandler(){
+        
+    }
+
 
     return(
         <IntegrationContainer width={'40%'}>
             <BrowserContainer>
-                <UsersList>
-                    <User/>
+                <UsersList height = {users.length > 0? `30px + ${users.length}*50px`: '0px'} >
+                   { users.length === 0 ? 
+                    
+                        <User userHeight={'0px'}/>
+                   :
+
+ 
+                        users.map((user) => {
+
+                            return(
+                                <User userHeight={users.length > 0 ? '50px': '0px'}>
+                                    <Img src={user.image_url}/>
+                                    <span>{user.username}</span>
+                                </User>
+                            )
+                        })
+   
+                   }
+                
                 </UsersList>
-                <InputContainer placeholder="Search for people" value={browser} onChange={(e) => {setBrowser(e.target.value)}}/>
+                <InputContainer placeholder="Search for people" value={browser} onChange={(e) => { BrowserHandler(e.target.value);}}/>
                 
                 
                 <IconContainer>
@@ -23,10 +89,6 @@ export default function Browser(){
 
             </BrowserContainer>
         </IntegrationContainer>
-        
-        
-        
-
 
     )
 }

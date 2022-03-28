@@ -9,6 +9,7 @@ import Content from "./components/PageLayout/Content";
 import UserPage from "./pages/userPage";
 import { AuthProvider } from "./contexts/authContext";
 import {PageProvider} from './contexts/pageContext';
+import { Hashtag } from "./components/Post/style";
 //import { Container } from './components/Post/style';
 
 function App() {
