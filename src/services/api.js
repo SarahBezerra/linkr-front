@@ -50,6 +50,10 @@ function getUser(id) {
   return axios.get(`${BASE_URL}/user/:id`, { id });
 }
 
+function browserUsers(string) {
+  return axios.get(`${BASE_URL}/users_filter`, {params:{ username: string}});
+}
+
 function getTopHashtags(token) {
   const config = createConfig(token);
   return axios.get(`${BASE_URL}/topHashtags`, config);
@@ -68,6 +72,8 @@ const api = {
   getTopHashtags,
   getUser,
   deletePost,
+  browserUsers,
+
 };
 
 export default api;

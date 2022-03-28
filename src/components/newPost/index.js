@@ -16,7 +16,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import useAuth from "../../hooks/useAuth";
 
 
-export default function NewPost({ imageUrl, displayCase, reloadPage, currentPage }) {
+export default function NewPost({ imageUrl, displayCase, reloadPage, currentPage, setPageAndReload }) {
   const { auth } = useAuth();
   const { userId } = useParams();
   const [url, setUrl] = useState("");
@@ -43,6 +43,7 @@ export default function NewPost({ imageUrl, displayCase, reloadPage, currentPage
     try {
       await api.sendPost(token, body);
       setIsSending(false);
+      setPageAndReload();
       setUrl("");
       setText("");
       reloadPage(0);
