@@ -26,7 +26,7 @@ function getPosts(token) {
   return axios.get(`${BASE_URL}/posts`, config);
 }
 
-function getPostsByHashtag(hashtag, token){
+function getPostsByHashtag(hashtag, token) {
   const config = createConfig(token);
   return axios.get(`${BASE_URL}/hashtag/${hashtag}`, config);
 }
@@ -48,11 +48,11 @@ function deletePost(idPost, token) {
   return axios.delete(`${BASE_URL}/posts/${idPost}`, createConfig(token));
 }
 
-function getUser(id){
-  return axios.get(`${BASE_URL}/user/:id`, {id})
+function getUser(id) {
+  return axios.get(`${BASE_URL}/user/:id`, { id });
 }
 
-function getTopHashtags(token){
+function getTopHashtags(token) {
   const config = createConfig(token);
   return axios.get(`${BASE_URL}/topHashtags`, config);
 }
@@ -69,7 +69,7 @@ const api = {
   postSignIn,
   getTopHashtags,
   getUser,
-  deletePost
+  deletePost,
 };
 
 export default api;
