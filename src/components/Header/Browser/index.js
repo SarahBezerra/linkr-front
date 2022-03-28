@@ -28,7 +28,6 @@ export default function Browser() {
   const filterUsers = async () => {
     try {
       const result = await api.browserUsers(browser);
-      console.log(result.data);
       setUsers(result.data);
     } catch (error) {
       console.log(error);

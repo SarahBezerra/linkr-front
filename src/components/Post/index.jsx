@@ -45,7 +45,7 @@ function Post({infos, like, updateLikes, onNavigate, reloadPage, setPageAndReloa
                 }
 
                    {userId === auth.userId 
-                    ? <TrashAndEdit idPost={infos.id} reloadPage={reloadPage} setEditMessage={setEditMessage} editMessage={editMessage} refPostMessage={refPostMessage} setMessage={setMessage} /> 
+                    ? <TrashAndEdit idPost={infos.id} reloadPage={setPageAndReload} setEditMessage={setEditMessage} editMessage={editMessage} refPostMessage={refPostMessage} setMessage={setMessage} /> 
                     : ''}
                    
                 <a href={metaData.url} target='_blank' rel='noreferrer' >
