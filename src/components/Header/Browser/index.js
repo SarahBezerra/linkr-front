@@ -64,7 +64,6 @@ export default function Browser(){
     }
 
 
-
     return(
         <IntegrationContainer width={'40%'}>
             <BrowserContainer>
@@ -74,7 +73,6 @@ export default function Browser(){
                         <User userHeight={'0px'}/>
                    :
 
- 
                         users.map((user) => {
 
                             return(
@@ -92,14 +90,13 @@ export default function Browser(){
                                         }}>
                                             {user.username}
                                         </span>
-
                                 </User>
                             )
                         })
-   
                    }
                 
                 </UsersList>
+                
                 <DebounceInput element={InputContainer} value={browser} onChange={(e) => { BrowserHandler(e.target.value);}} debounceTimeout={300} />
                 
                 <IconContainer>
@@ -112,14 +109,6 @@ export default function Browser(){
     )
 }
 
-function SearchIcon(){
-
-    return(
-        <SearchOutline
-            color={'#000'}   
-            height="25px"
-            width="25px"
-
-        />
-    )
+function SearchIcon() {
+  return <SearchOutline color={"#000"} height="25px" width="25px" />;
 }
