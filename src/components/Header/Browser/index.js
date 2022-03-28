@@ -96,8 +96,8 @@ export default function Browser(){
                    }
                 
                 </UsersList>
-                
-                <DebounceInput element={InputContainer} value={browser} onChange={(e) => { BrowserHandler(e.target.value);}} debounceTimeout={300} />
+
+                <DebounceInput element={InputContainer} placeholder={'Search for people'} value={browser} onChange={(e) => { BrowserHandler(e.target.value)}} debounceTimeout={300} />
                 
                 <IconContainer>
                     <SearchIcon/>
