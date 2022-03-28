@@ -167,7 +167,7 @@ function ChooseFeed({
     );
   else if (state === statesList["empty"])
     return (
-      <>
+      <Feed>
         <NewPost
           setPageAndReload={setPageAndReload}
           imageUrl={imageUrl}
@@ -178,7 +178,7 @@ function ChooseFeed({
           {" "}
           <p>There are no posts yet</p>{" "}
         </Empty>
-      </>
+      </Feed>
     );
   else
     return (
