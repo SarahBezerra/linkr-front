@@ -23,6 +23,7 @@ export default function NewPost({ imageUrl, displayCase, reloadPage, currentPage
   const [text, setText] = useState("");
   const [isSending, setIsSending] = useState(false);
 
+
   const postsItems = [
     { placeholder: "http:/..", type: "text", value: url, state: setUrl },
     {

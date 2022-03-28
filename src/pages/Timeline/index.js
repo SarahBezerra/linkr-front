@@ -17,37 +17,35 @@ export default function Timeline({ newPostDisplay }) {
     const [likes, setLikes] = useState([]);
     const [topHashtags, setTopHashtags] = useState([]);
     const [reload, setReload] = useState(false);
-    // const [header, setHeader] = useState('');
+    const [header, setHeader] = useState('');
     const filter = useParams();
     const { id } = useParams();
     const location = useLocation();
-    const { pathname } = useLocation();
+    //const { pathname } = useLocation();
     const [page, setPage] = useState(getPage());
     const { auth } = useAuth();
-    //const { page, pageUsername } = usePage();
+    const { pagecont, pageUsername } = usePage();
     
 
     useEffect(() => {
-      debugger;
       requestPosts();
-      console.log('entrei no effect');
-      //getHeader();
+      getHeader();
     }, [page, reload]);
   
 
     async function requestPosts() {
 
-      debugger;
       setRequestState(statesList['loading']);
       let res = null;
 
       try {
+        console.log(pagesList);
         if(page === pagesList['timeline'])
           res = await api.getPosts(auth.token);
         else if(page === pagesList['hashtag']) {
           res = await api.getPostsByHashtag(currentParam(), auth.token);
         } else if (id) {
-          res = await api.getPostsFromUser(id);
+          res = await api.getPostsFromUser(id, auth.token);
         }
 
         setPosts(res.data);
@@ -84,12 +82,14 @@ export default function Timeline({ newPostDisplay }) {
       }
     }
 
-    // function getHeader(){
-    //   if(page === pagesList['timeline'])
-    //     setHeader('timeline')
-    //   else if (page === pagesList['hashtag'])  
-    //     setHeader(`#${currentParam()}`);
-    // }
+    function getHeader(){
+      if(page === pagesList['timeline'])
+        setHeader('timeline')
+      else if (page === pagesList['hashtag'])  
+        setHeader(`#${currentParam()}`);
+      else
+        setHeader(`${pagecont?.username} posts`);
+    }
     function getPage(){
         const name = location.pathname.split('/')[1];
         return pagesList[name];
@@ -106,11 +106,12 @@ export default function Timeline({ newPostDisplay }) {
   return (
     <Page>
       <Title>
-        {pathname === "/timeline"
+        {/* {pathname === "/timeline"
           ? "timeline"
           : page?.username.slice(-1) === ("s" || "S")
           ? `${page.username}' posts `
-          : `${page.username}'s posts`}
+          : `${page.username}'s posts`} */}
+          {header}
       </Title>
       <Container>
         <ChooseFeed
@@ -124,7 +125,7 @@ export default function Timeline({ newPostDisplay }) {
           setPageAndReload={setPageAndReload}
           setRequestState={setRequestState}
           Display={newPostDisplay}
-          // pageUsername={pageUsername}
+          pageUsername={pageUsername}
         />
         <HashTags topHashtags={topHashtags} setPageAndReload={setPageAndReload}></HashTags>
       </Container>
@@ -132,7 +133,7 @@ export default function Timeline({ newPostDisplay }) {
   );
 }
 
-function ChooseFeed({posts, likes, requestLikes, state, imageUrl, setPageAndReload, currentPage, newPostDisplay, /*pageUsername,*/ setRequestState}){
+function ChooseFeed({posts, likes, requestLikes, state, imageUrl, setPageAndReload, currentPage, newPostDisplay, pageUsername, setRequestState}){
   
     const navigate = useNavigate();
   
@@ -149,7 +150,7 @@ function ChooseFeed({posts, likes, requestLikes, state, imageUrl, setPageAndRelo
     else if(state === statesList['empty'])
         return (
           <>
-            <NewPost imageUrl={imageUrl} reloadPage={setRequestState} />
+            <NewPost imageUrl={imageUrl} reloadPage={setRequestState} currentPage={currentPage} />
             <Empty>
               {" "}
               <p>There are no posts yet</p>{" "}
@@ -170,7 +171,7 @@ function ChooseFeed({posts, likes, requestLikes, state, imageUrl, setPageAndRelo
                 reloadPage={setRequestState}
                 onNavigate={() => {
                   const { username } = p;
-                  // pageUsername({ username });
+                  pageUsername({ username });
                   navigate(`/user/${p.userId}`);
                 }}
               />
