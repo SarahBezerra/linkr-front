@@ -9,7 +9,7 @@ import ModalBlack from "../ModalBlack";
 
 ReactModal.setAppElement("#root");
 
-export default function TrashAndEdit({ idPost, reloadPage }) {
+export default function TrashAndEdit({ idPost, reloadPage, setEditMessage, editMessage, refPostMessage, setMessage}) {
   const { auth } = useAuth();
   const [wait, setWait] = useState(false);
   const [modal, setModal] = useState(false);
@@ -29,6 +29,15 @@ export default function TrashAndEdit({ idPost, reloadPage }) {
     }
   }
 
+  async function handleClickEdit() {
+    if(editMessage === true){
+      setEditMessage(false)
+      setMessage(refPostMessage.current)
+    }else{
+      setEditMessage(true)
+    }
+  }
+
   return (
     <BoxIcons>
       <ModalBlack
@@ -44,6 +53,7 @@ export default function TrashAndEdit({ idPost, reloadPage }) {
         title={"editar"}
         height="14px"
         width="14px"
+        onClick={() => handleClickEdit()}
       />
       <Trash
         color={"#FFFFFF"}

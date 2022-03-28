@@ -1,6 +1,8 @@
 import axios from "axios";
 
-const BASE_URL = "https://back-linkr.herokuapp.com";
+const BASE_URL = process.env.REACT_APP_PUBLIC_URL 
+  ? process.env.REACT_APP_PUBLIC_URL 
+  : 'https://back-linkr.herokuapp.com';
 
 function createConfig(token) {
   return { headers: { Authorization: `Bearer ${token}` } };
@@ -22,6 +24,11 @@ async function sendPost(token, body) {
 function getPosts(token) {
   const config = createConfig(token);
   return axios.get(`${BASE_URL}/posts`, config);
+}
+
+function updatePost(body, token, postId) {
+  const config = createConfig(token);
+  return axios.put(`${BASE_URL}/posts/${postId}`, body, config);
 }
 
 function getPostsByHashtag(hashtag, token) {
@@ -71,9 +78,9 @@ const api = {
   postSignIn,
   getTopHashtags,
   getUser,
-  deletePost,
-  browserUsers,
-
+  deletePost, 
+  updatePost,
+  browserUsers
 };
 
 export default api;

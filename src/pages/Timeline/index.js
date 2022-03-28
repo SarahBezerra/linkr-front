@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useLocation, useParams } from "react-router";
 import { SpinnerCircularFixed } from "spinners-react";
 import api from "../../services/api";
 import Post from "../../components/Post";
@@ -9,6 +8,7 @@ import HashTags from "../../components/Hashtags";
 import useAuth from "../../hooks/useAuth";
 import { pagesList, statesList } from "./utils";
 import usePage from "../../hooks/usePage";
+import { useLocation, useNavigate, useParams } from "react-router";
 
 export default function Timeline({ newPostDisplay }) {
     const [requestState, setRequestState] = useState(statesList['loading']);
