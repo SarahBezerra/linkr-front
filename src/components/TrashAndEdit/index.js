@@ -3,7 +3,7 @@ import api from "../../services/api";
 import useAuth from "../../hooks/useAuth";
 import BoxIcons from "./style";
 
-export default function TrashAndEdit({ infos }) {
+export default function TrashAndEdit({ infos, setEditMessage, editMessage, refPostMessage, setMessage }) {
   const { auth } = useAuth();
   async function handleClickDelete() {
     const confirm = window.confirm("Deseja deletar?");
@@ -18,6 +18,15 @@ export default function TrashAndEdit({ infos }) {
     }
   }
 
+  async function handleClickEdit() {
+    if(editMessage === true){
+      setEditMessage(false)
+      setMessage(refPostMessage.current)
+    }else{
+      setEditMessage(true)
+    }
+  }
+
   return (
     <BoxIcons>
       <PencilSharp
@@ -26,6 +35,7 @@ export default function TrashAndEdit({ infos }) {
         title={"editar"}
         height="14px"
         width="14px"
+        onClick={() => handleClickEdit()}
       />
       <Trash
         color={"#FFFFFF"}

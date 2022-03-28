@@ -1,15 +1,19 @@
 import { Container, UserName, UserText, MetaContainer, Left, Main, Title, 
-    Description, Url, Preview, MetaLeft, MetaRigth, UserPhoto, ContentLikes, Hashtag } from "./style";
+    Description, Url, Preview, MetaLeft, MetaRigth, UserPhoto, ContentLikes, Hashtag, Input } from "./style";
 import { DocumentTextOutline } from 'react-ionicons'
 import ReactHashtag from "@mdnm/react-hashtag";
 import { useNavigate } from "react-router-dom";
 import LikeHeart from "../LikeHeart";
 import TrashAndEdit from "../TrashAndEdit";
 import useAuth from "../../hooks/useAuth";
+import React, { useState, useRef, useEffect } from "react";
 
 
 function Post({infos, like, updateLikes, onNavigate, reloadPage}){
     const {auth} = useAuth()
+    const [ editMessage, setEditMessage ] = useState(false)
+    const refPostMessage = useRef(infos.text)
+    const [ message, setMessage ] = useState(refPostMessage.current)
 
     const {
             id,
@@ -19,7 +23,7 @@ function Post({infos, like, updateLikes, onNavigate, reloadPage}){
             image_url,
             metaData,
     } = infos;
- 
+
     return (
         <Container>
             <Left>
@@ -31,9 +35,14 @@ function Post({infos, like, updateLikes, onNavigate, reloadPage}){
             <Main>
 
                 <UserName onClick={onNavigate}> { username } </UserName>
-                <Message reloadPage={reloadPage}>{ text }</Message>
+                {editMessage === true 
+                    ? <MessageEditing setMessage={setMessage} message={message} setEditMessage={setEditMessage} refPostMessage={refPostMessage}></MessageEditing> 
+                    : <Message ref={refPostMessage} reloadPage={reloadPage}>{ text }</Message>
+                }
 
-                   {userId === auth.userId ? <TrashAndEdit infos = {infos} /> : ''}
+                   {userId === auth.userId 
+                    ? <TrashAndEdit infos = {infos} setEditMessage={setEditMessage} editMessage={editMessage} refPostMessage={refPostMessage} setMessage={setMessage} /> 
+                    : ''}
 
                 <a href={metaData.url} target='_blank' rel='noreferrer' >
                     <MetaContainer>
@@ -53,6 +62,30 @@ function Post({infos, like, updateLikes, onNavigate, reloadPage}){
             </Main>
                 
         </Container>
+    )
+}
+
+
+function MessageEditing({setMessage, message, setEditMessage, refPostMessage}){
+
+    function handleInputChange(e) {
+        setMessage( e.target.value );
+    }
+
+    function keyPress(event){
+        if(window.event.keyCode === 27){
+            setEditMessage(false)
+            setMessage(refPostMessage.current)  
+        } 
+        else if(window.event.keyCode === 13){
+            console.log("mandar pro db")
+        } 
+
+
+    }
+
+    return(
+        <Input name="text" value={message} onKeyDown={keyPress} onChange={handleInputChange} ></Input>
     )
 }
 

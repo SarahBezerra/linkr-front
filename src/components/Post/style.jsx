@@ -122,7 +122,15 @@ const Hashtag = styled.span`
     color: white;
     cursor: pointer;
 `
-
+const Input = styled.textarea`
+    width: 100%;
+    font-size:17px;
+    margin-bottom: 12px;
+    background: #FFFFFF;
+    border-radius: 7px;
+    border: none;
+    padding: 5px;
+`;
 
 export {
     Container,
@@ -139,5 +147,6 @@ export {
     MetaRigth,
     UserPhoto,
     ContentLikes,
-    Hashtag
+    Hashtag,
+    Input
 }
