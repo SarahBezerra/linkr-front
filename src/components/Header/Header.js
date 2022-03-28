@@ -6,6 +6,7 @@ import Browser from "./Browser";
 import { UsersList } from "./Browser/style";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
+import UserSearch from "../UserSearch";
 
 export default function Header({ menuSelect, setMenuSelect }) {
   const { auth, logout } = useAuth();
@@ -22,10 +23,10 @@ export default function Header({ menuSelect, setMenuSelect }) {
   return(
       <HeaderContainer display={(location.pathname === '/' || location.pathname === '/sign-up') ? 'none' : 'inital'}>
           <HeaderContent>
+
               <Link to={`/timeline`}>
                 <h1>linkr</h1>
               </Link>
-
               
               <Browser/>
               

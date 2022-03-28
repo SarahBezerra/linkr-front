@@ -13,7 +13,9 @@ import { useParams } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 import api from "../../services/api";
 import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import 'react-toastify/dist/ReactToastify.css';
+import useAuth from "../../hooks/useAuth";
+
 
 export default function NewPost({ imageUrl, displayCase, reloadPage }) {
   const { auth } = useAuth();

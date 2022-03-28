@@ -21,17 +21,18 @@ async function sendPost(token, body) {
   return axios.post(`${BASE_URL}/posts`, body, config);
 }
 
-function getPosts() {
-  return axios.get(`${BASE_URL}/posts`);
+function getPosts(token) {
+  const config = createConfig(token);
+  return axios.get(`${BASE_URL}/posts`, config);
+}
+
+function getPostsByHashtag(hashtag, token){
+  const config = createConfig(token);
+  return axios.get(`${BASE_URL}/hashtag/${hashtag}`, config);
 }
 
 function getPostsFromUser(id) {
   return axios.get(`${BASE_URL}/posts/${id}`);
-}
-
-function getPostsByHashtag(hashtag) {
-  const config = null;
-  return axios.get(`${BASE_URL}/hashtag/${hashtag}`, config);
 }
 
 function getLikes(token) {
@@ -50,6 +51,11 @@ function getUser(id){
   return axios.get(`${BASE_URL}/user/:id`, {id})
 }
 
+function getTopHashtags(token){
+  const config = createConfig(token);
+  return axios.get(`${BASE_URL}/topHashtags`, config);
+}
+
 const api = {
   createConfig,
   getPosts,
@@ -60,9 +66,9 @@ const api = {
   postLikeOrNot,
   postSignUp,
   postSignIn,
+  getTopHashtags,
   getUser,
   deletePost
-
 };
 
 export default api;

@@ -1,13 +1,12 @@
 import styled from 'styled-components'
+import { pagesList } from '../../pages/Timeline/utils';
 import { devices } from '../../styles/responsiveness';
 
 
 const Container = styled.div`
-
     width: 100%;
-    /* max-width: 100%; */
 
-    display: flex;
+    display: ${({currentPage}) =>(currentPage() !== pagesList['timeline']) ? 'none' : 'flex'};
     flex-direction: column;
     align-items: center;
     overflow: hidden;
@@ -31,8 +30,10 @@ const PostContainer = styled.div`
 
 const PictureContainer = styled.div`
 
-    width: 20%;
+    
     height:100%;
+    margin-right: 18px;
+
 
     display: flex;
     justify-content: center;
@@ -46,7 +47,7 @@ const PictureContainer = styled.div`
 
 const PublishContainer = styled.form`
 
-    width:80%;
+    flex-grow: 1;
     height: 100%;
 
     display: flex;

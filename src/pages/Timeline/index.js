@@ -7,48 +7,56 @@ import { Feed, Container, Page, Loading, Empty, Error, Title } from "./style";
 import NewPost from "../../components/newPost";
 import HashTags from "../../components/Hashtags";
 import useAuth from "../../hooks/useAuth";
+import { pagesList, statesList } from "./utils";
 import usePage from "../../hooks/usePage";
 
-const statesList = {
-  loading: 0,
-  error: 1,
-  empty: 2,
-  ok: 3,
-};
 
 export default function Timeline({ newPostDisplay }) {
-  const [requestState, setRequestState] = useState(statesList["loading"]);
-  const [posts, setPosts] = useState([]);
-  const [likes, setLikes] = useState([]);
-  const [header, setHeader] = useState("");
-  const { auth } = useAuth();
-  const { page, pageUsername } = usePage();
-  const { pathname } = useLocation();
-  const { id } = useParams();
-  const params = useParams();
-  const config = null;
+    const [requestState, setRequestState] = useState(statesList['loading']);
+    const [posts, setPosts] = useState([]);
+    const [likes, setLikes] = useState([]);
+    const [topHashtags, setTopHashtags] = useState([]);
+    const [reload, setReload] = useState(false);
+    const [header, setHeader] = useState('');
+    const filter = useParams();
+    const params = useParams();
+    const { id } = useParams();
+    const location = useLocation();
+    const { pathname } = useLocation();
+    const [page, setPage] = useState(getPage());
+    const { auth } = useAuth();
+    const { page, pageUsername } = usePage();
+    
 
-  useEffect(() => {
-    requestPosts();
-    getHeader();
-  }, [requestState, pathname]);
+    useEffect(() => {
+      requestPosts();
+      console.log('entrei no effect');
+      getHeader();
+    }, [page, reload, requestState, pathname]);
+  
 
-  async function requestPosts() {
-    try {
-      if (id) {
-        const res = await api.getPostsFromUser(id);
+    async function requestPosts() {
+
+      setRequestState(statesList['loading']);
+      let res = null;
+
+      try {
+        if(page === pagesList['timeline'])
+          res = await api.getPosts(auth.token);
+        else if(page === pagesList['hashtag']) {
+          console.log(filter);
+          res = await api.getPostsByHashtag(currentParam(), auth.token);
+        } else if (id) {
+          res = await api.getPostsFromUser(id);
+        }
+
         setPosts(res.data);
-        const state =
-          res.data.length === 0 ? statesList["empty"] : statesList["ok"];
+
+        const state = (res.data.length === 0) ? statesList['empty'] : statesList['ok'];
         setRequestState(state);
-      } else {
-        const res = await api.getPosts();
-        setPosts(res.data);
-        const state =
-          res.data.length === 0 ? statesList["empty"] : statesList["ok"];
-        setRequestState(state);
-      }
-      await requestLikes();
+
+        await requestTopHashtags();
+        await requestLikes();
     } catch {
       console.log("aconteceu um erro em posts");
       setRequestState(statesList["error"]);
@@ -65,10 +73,35 @@ export default function Timeline({ newPostDisplay }) {
     }
   }
 
-  function getHeader() {
-    if (Object.keys(params).length === 0) setHeader("timeline");
-    else setHeader(`#${params["hashtag"]}`);
-  }
+    async function requestTopHashtags() {
+      try {
+        const {data: topHashtags} = await api.getTopHashtags(auth.token);
+        setTopHashtags(topHashtags);
+        console.log(topHashtags);
+      } catch (err) {
+        console.log("aconteceu um erro ao buscar os TopHashtags");
+        setRequestState(statesList['error']);
+      }
+    }
+
+    function getHeader(){
+      if(page === pagesList['timeline'])
+        setHeader('timeline')
+      else if (page === pagesList['hashtag'])  
+        setHeader(`#${currentParam()}`);
+    }
+    function getPage(){
+        const name = location.pathname.split('/')[1];
+        return pagesList[name];
+    }
+    function currentParam(){
+      return filter[Object.keys(filter)[0]]
+    }
+    function setPageAndReload(page){
+      setPage(page);
+      setReload(!reload);
+    }
+
 
   return (
     <Page>
@@ -81,82 +114,67 @@ export default function Timeline({ newPostDisplay }) {
       </Title>
       <Container>
         <ChooseFeed
+          currentPage={getPage}
           posts={posts}
           likes={likes}
           requestLikes={requestLikes}
           state={requestState}
-          setRequestState={setRequestState}
+          setPage = {setPage}
           imageUrl={auth.image_url}
-          newPostDisplay={newPostDisplay}
+          setPageAndReload={setPageAndReload}
+          setRequestState={setRequestState}
+          Display={newPostDisplay}
           pageUsername={pageUsername}
         />
-        <HashTags></HashTags>
+        <HashTags topHashtags={topHashtags} setPageAndReload={setPageAndReload}></HashTags>
       </Container>
     </Page>
   );
 }
 
-function ChooseFeed({
-  posts,
-  likes,
-  requestLikes,
-  state,
-  imageUrl,
-  newPostDisplay,
-  pageUsername,
-  setRequestState,
-}) {
-  const navigate = useNavigate();
-  if (state === statesList["error"])
-    return (
-      <Error>
-        {" "}
-        <p>
-          An error occured while trying to fetch the posts, please refresh the
-          page
-        </p>{" "}
-      </Error>
+function ChooseFeed({posts, likes, requestLikes, state, imageUrl, setPageAndReload, currentPage, newPostDisplay, pageUsername, setRequestState}){
+  
+    const navigate = useNavigate();
+  
+    if(state === statesList['error'])
+        return ( 
+            <Error> {" "} <p>An error occured while trying to fetch the posts, please refresh the page</p> {" "} </Error>  )
+    else if(state === statesList['loading'])
+        return ( 
+            <Loading>
+                <SpinnerCircularFixed 
+                    size={200} thickness={100} speed={180} 
+                    color="rgba(57, 89, 172, 1)" secondaryColor="rgba(83, 57, 172, 0.24)" />
+            </Loading> )
+    else if(state === statesList['empty'])
+        return (
+          <>
+            <NewPost imageUrl={imageUrl} reloadPage={setRequestState} />
+            <Empty>
+              {" "}
+              <p>There are no posts yet</p>{" "}
+            </Empty>
+          </>
     );
-  else if (state === statesList["loading"])
-    return (
-      <Loading>
-        <SpinnerCircularFixed
-          size={200}
-          thickness={100}
-          speed={180}
-          color="rgba(57, 89, 172, 1)"
-          secondaryColor="rgba(83, 57, 172, 0.24)"
-        />
-      </Loading>
-    );
-  else if (state === statesList["empty"])
-    return (
-      <>
-        <NewPost imageUrl={imageUrl} reloadPage={setRequestState} />
-        <Empty>
-          {" "}
-          <p>There are no posts yet</p>{" "}
-        </Empty>
-      </>
-    );
-  else
-    return (
-      <Feed>
-        <NewPost imageUrl={imageUrl} displayCase={newPostDisplay} />
-        {posts.map((p) => (
-          <Post
-            infos={p}
-            key={p.id}
-            like={likes.find(({ postId }) => postId === p.id)}
-            updateLikes={requestLikes}
-            reloadPage={setRequestState}
-            onNavigate={() => {
-              const { username } = p;
-              pageUsername({ username });
-              navigate(`/user/${p.userId}`);
-            }}
-          />
-        ))}
-      </Feed>
-    );
+    else
+        return ( 
+          <Feed>
+            <NewPost  currentPage={currentPage} imageUrl={imageUrl} displayCase={newPostDisplay}/>
+            {posts.map((p) => (
+              <Post
+                infos={p}
+                key={p.id}
+                like={likes.find(({ postId }) => postId === p.id)}
+                updateLikes={requestLikes}
+                setPageAndReload={setPageAndReload}
+                reloadPage={setRequestState}
+                onNavigate={() => {
+                  const { username } = p;
+                  pageUsername({ username });
+                  navigate(`/user/${p.userId}`);
+                }}
+              />
+            ))}
+          </Feed>            
+        )
 }
