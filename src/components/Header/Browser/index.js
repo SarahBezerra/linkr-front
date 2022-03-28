@@ -1,11 +1,10 @@
 import {BrowserContainer, IconContainer, InputContainer, UsersList, IntegrationContainer, User} from "./style"
 import { SearchOutline } from 'react-ionicons'
 import { useEffect, useState } from "react"
+import { Link, useNavigate } from "react-router-dom";
 import Img from "../../Users/Image";
 import api from "../../../services/api";
 import { DebounceInput } from "react-debounce-input";
-import { Link } from "react-router-dom";
-
 
 
 export default function Browser(){
@@ -14,13 +13,23 @@ export default function Browser(){
     const [active, setActive] = useState(false);
     const [search, setSearch] = useState('');
     const [users, setUsers] = useState([]);
+    const navigate = useNavigate();
 
+
+    useEffect(() => {
+        setBrowser('');
+        setUsers([]);
+    },[])
 
         useEffect(() => {
+
+            
             if(browser.length >= 3){
                 filterUsers();
             }
         },[browser])
+
+
 
         const filterUsers = async () => {
             try{
@@ -70,9 +79,20 @@ export default function Browser(){
 
                             return(
                                 <User userHeight={users.length > 0 ? '50px': '0px'}>
-                                    <Img src={user.image_url}/>
-                                    
-                                    <span>{user.username}</span>
+                                    <Img src={user.image_url} onClick={() => {
+                                            setBrowser('');
+                                            setUsers([]);
+                                            navigate(`/user/${user.id}`)
+                                        }}/>
+
+                                        <span onClick={() => {
+                                            setBrowser('');
+                                            setUsers([]);
+                                            navigate(`/user/${user.id}`)
+                                        }}>
+                                            {user.username}
+                                        </span>
+
                                 </User>
                             )
                         })
