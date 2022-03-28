@@ -54,16 +54,21 @@ const UsersList = styled.ul`
 
 align-self: center;
 
-max-height: 200px;
-height: 200px;
+
+max-height: 180px;
+height: calc(${props => props.height});
 width: 100%;
 
-background-color: lightgray;
+transition: height 1s;
+
+background-color: #E7E7E7;
 
 position: absolute;
 z-index: -1;
 top:50%;
 left: 0;
+
+overflow-y: hidden;
 
 border-radius: 5px;
 padding-top:25px;
@@ -78,7 +83,31 @@ const User = styled.li`
 width: 100%;
 height: 50px;
 
-background-color: lightblue;
+padding: 0 10px;
+border-radius: 5px;
+
+display: flex;
+
+img{
+    height: 40px;
+    width: 40px;
+    align-self: center;
+}
+
+span{
+    align-self: flex-start;
+
+    color: #515151;
+
+    display: flex;
+    align-items: center;
+
+    height: 100%;
+
+    padding-left: 10px;
+    flex-grow: 1;
+
+}
 
 ` 
 

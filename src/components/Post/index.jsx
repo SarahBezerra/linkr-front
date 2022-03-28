@@ -40,7 +40,7 @@ function Post({infos, like, updateLikes, onNavigate, reloadPage, setPageAndReloa
             <Main>
                 <UserName onClick={onNavigate}> { username } </UserName>
                 {editMessage === true 
-                    ? <MessageEditing setMessage={setMessage} message={message} setEditMessage={setEditMessage} refPostMessage={refPostMessage} token={token} idPost={infos.id} setEnabled={setIsEnabled} enabled={isEnabled} reloadPage={reloadPage} /> 
+                    ? <MessageEditing setMessage={setMessage} message={message} setEditMessage={setEditMessage} refPostMessage={refPostMessage} token={token} idPost={infos.id} setEnabled={setIsEnabled} enabled={isEnabled} setPageAndReload={setPageAndReload} /> 
                     : <Message reloadPage={reloadPage} setPageAndReload={setPageAndReload}>{ text }</Message>
                 }
 
@@ -70,7 +70,7 @@ function Post({infos, like, updateLikes, onNavigate, reloadPage, setPageAndReloa
 }
 
 
-function MessageEditing({setMessage, message, setEditMessage, refPostMessage, token, idPost, setEnabled, enabled, reloadPage}){
+function MessageEditing({setMessage, message, setEditMessage, refPostMessage, token, idPost, setEnabled, enabled, setPageAndReload}){
 
     function handleInputChange(e) {
         setMessage( e.target.value );
@@ -94,7 +94,8 @@ function MessageEditing({setMessage, message, setEditMessage, refPostMessage, to
             setEnabled(false)
             await api.updatePost(body, token, idPost);
             setEnabled(true)
-            reloadPage(0);
+            setPageAndReload(pagesList['timeline']);
+
         } catch (error) {
             toast.error("Houve um erro ao editar seu post", { theme: "colored" });
             toast();
