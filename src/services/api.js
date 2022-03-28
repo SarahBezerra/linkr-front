@@ -1,8 +1,8 @@
 import axios from "axios";
 
-const BASE_URL = process.env.REACT_APP_PUBLIC_URL
-  ? process.env.REACT_APP_PUBLIC_URL
-  : "http://localhost:5000";
+const BASE_URL = process.env.REACT_APP_PUBLIC_URL 
+  ? process.env.REACT_APP_PUBLIC_URL 
+  : 'http://localhost:5000';
 
 function createConfig(token) {
   return { headers: { Authorization: `Bearer ${token}` } };
@@ -31,7 +31,7 @@ function updatePost(body, token, postId) {
   return axios.put(`${BASE_URL}/posts/${postId}`, body, config);
 }
 
-function getPostsByHashtag(hashtag, token){
+function getPostsByHashtag(hashtag, token) {
   const config = createConfig(token);
   return axios.get(`${BASE_URL}/hashtag/${hashtag}`, config);
 }
@@ -53,11 +53,15 @@ function deletePost(idPost, token) {
   return axios.delete(`${BASE_URL}/posts/${idPost}`, createConfig(token));
 }
 
-function getUser(id){
-  return axios.get(`${BASE_URL}/user/:id`, {id})
+function getUser(id) {
+  return axios.get(`${BASE_URL}/user/:id`, { id });
 }
 
-function getTopHashtags(token){
+function browserUsers(string) {
+  return axios.get(`${BASE_URL}/users_filter`, {params:{ username: string}});
+}
+
+function getTopHashtags(token) {
   const config = createConfig(token);
   return axios.get(`${BASE_URL}/topHashtags`, config);
 }
@@ -75,7 +79,8 @@ const api = {
   getTopHashtags,
   getUser,
   deletePost, 
-  updatePost
+  updatePost,
+  browserUsers
 };
 
 export default api;

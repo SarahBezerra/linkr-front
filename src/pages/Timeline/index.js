@@ -10,7 +10,6 @@ import { pagesList, statesList } from "./utils";
 import usePage from "../../hooks/usePage";
 import { useLocation, useNavigate, useParams } from "react-router";
 
-
 export default function Timeline({ newPostDisplay }) {
     const [requestState, setRequestState] = useState(statesList['loading']);
     const [posts, setPosts] = useState([]);
@@ -21,40 +20,37 @@ export default function Timeline({ newPostDisplay }) {
     const filter = useParams();
     const { id } = useParams();
     const location = useLocation();
-    //const { pathname } = useLocation();
+    const { pathname } = useLocation();
     const [page, setPage] = useState(getPage());
     const { auth } = useAuth();
-    const { pagecont, pageUsername } = usePage();
+    const { page: pageName, pageUsername } = usePage();
     
 
-    useEffect(() => {
-      requestPosts();
-      getHeader();
-    }, [page, reload]);
-  
 
-    async function requestPosts() {
+  useEffect(() => {
+    requestPosts();
+    getHeader();
+  }, [page, reload]);
 
-      setRequestState(statesList['loading']);
-      let res = null;
+  async function requestPosts() {
+    setRequestState(statesList["loading"]);
+    let res = null;
 
-      try {
-        console.log(pagesList);
-        if(page === pagesList['timeline'])
-          res = await api.getPosts(auth.token);
-        else if(page === pagesList['hashtag']) {
-          res = await api.getPostsByHashtag(currentParam(), auth.token);
-        } else if (id) {
-          res = await api.getPostsFromUser(id, auth.token);
-        }
+    try {
+      if (page === pagesList["timeline"]) res = await api.getPosts(auth.token);
+      else if (page === pagesList["hashtag"]) {
+        res = await api.getPostsByHashtag(currentParam(), auth.token);
+      } else if (id) {
+        res = await api.getPostsFromUser(id, auth.token);
+      }
 
-        setPosts(res.data);
+      setPosts(res.data);
 
-        const state = (res.data.length === 0) ? statesList['empty'] : statesList['ok'];
-        setRequestState(state);
-
-        await requestTopHashtags();
-        await requestLikes();
+      const state =
+        res.data.length === 0 ? statesList["empty"] : statesList["ok"];
+      await requestLikes();
+      await requestTopHashtags();
+      setRequestState(state);
     } catch {
       console.log("aconteceu um erro em posts");
       setRequestState(statesList["error"]);
@@ -87,8 +83,8 @@ export default function Timeline({ newPostDisplay }) {
         setHeader('timeline')
       else if (page === pagesList['hashtag'])  
         setHeader(`#${currentParam()}`);
-      else
-        setHeader(`${pagecont?.username} posts`);
+      // else
+      //   setHeader(`${pagecont?.username} posts`);
     }
     function getPage(){
         const name = location.pathname.split('/')[1];
@@ -97,21 +93,18 @@ export default function Timeline({ newPostDisplay }) {
     function currentParam(){
       return filter[Object.keys(filter)[0]]
     }
-    function setPageAndReload(page){
-      setPage(page);
+    function setPageAndReload(page = undefined){
+      if(page){
+        setPage(page);
+      }
       setReload(!reload);
     }
-
+  
 
   return (
     <Page>
       <Title>
-        {/* {pathname === "/timeline"
-          ? "timeline"
-          : page?.username.slice(-1) === ("s" || "S")
-          ? `${page.username}' posts `
-          : `${page.username}'s posts`} */}
-          {header}
+        {header ? header : pathname === '/timeline' ? 'timeline' : pageName?.username.slice(-1) === ('s'||'S') ? `${pageName.username}' posts `: `${pageName.username}'s posts`}
       </Title>
       <Container>
         <ChooseFeed
@@ -120,14 +113,17 @@ export default function Timeline({ newPostDisplay }) {
           likes={likes}
           requestLikes={requestLikes}
           state={requestState}
-          setPage = {setPage}
+          setPage={setPage}
           imageUrl={auth.image_url}
           setPageAndReload={setPageAndReload}
           setRequestState={setRequestState}
           Display={newPostDisplay}
           pageUsername={pageUsername}
         />
-        <HashTags topHashtags={topHashtags} setPageAndReload={setPageAndReload}></HashTags>
+        <HashTags
+          topHashtags={topHashtags}
+          setPageAndReload={setPageAndReload}
+        ></HashTags>
       </Container>
     </Page>
   );
@@ -150,7 +146,7 @@ function ChooseFeed({posts, likes, requestLikes, state, imageUrl, setPageAndRelo
     else if(state === statesList['empty'])
         return (
           <>
-            <NewPost imageUrl={imageUrl} reloadPage={setRequestState} currentPage={currentPage} />
+            <NewPost setPageAndReload={setPageAndReload} imageUrl={imageUrl} reloadPage={setRequestState} currentPage={currentPage} />
             <Empty>
               {" "}
               <p>There are no posts yet</p>{" "}
@@ -160,7 +156,7 @@ function ChooseFeed({posts, likes, requestLikes, state, imageUrl, setPageAndRelo
     else
         return ( 
           <Feed>
-            <NewPost  currentPage={currentPage} imageUrl={imageUrl} displayCase={newPostDisplay}/>
+            <NewPost  setPageAndReload={setPageAndReload} currentPage={currentPage} imageUrl={imageUrl} displayCase={newPostDisplay}/>
             {posts.map((p) => (
               <Post
                 infos={p}
