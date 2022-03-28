@@ -2,7 +2,7 @@ import axios from "axios";
 
 const BASE_URL = process.env.REACT_APP_PUBLIC_URL 
   ? process.env.REACT_APP_PUBLIC_URL 
-  : 'http://localhost:5000';
+  : 'https://back-linkr.herokuapp.com/';
 
 function createConfig(token) {
   return { headers: { Authorization: `Bearer ${token}` } };
