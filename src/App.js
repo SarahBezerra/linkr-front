@@ -18,18 +18,18 @@ function App() {
   return (
     <Content>
       <AuthProvider>
-        <PageProvider>
-          <BrowserRouter>
-            <Header menuSelect={menuSelect} setMenuSelect={setMenuSelect} />
-            <Routes>
-              <Route path="/" element={<SignIn />} />
-              <Route path="/sign-up" element={<SignUp />} />
-              <Route path="/timeline" element={<Timeline />} />
-              <Route path="/user/:id" element={<UserPage />} />
-              <Route path="/hashtag/:hashtag" element={<Hashtag />} />
-            </Routes>
-          </BrowserRouter>
-        </PageProvider>
+      <PageProvider>
+        <BrowserRouter>
+          <Header menuSelect={menuSelect} setMenuSelect={setMenuSelect} />
+          <Routes>
+            <Route path="/" element={<SignIn />} />
+            <Route path="/sign-up" element={<SignUp />} />
+            <Route path="/timeline" element={<Timeline />} />
+            <Route path="/user/:id" element={<UserPage />} />
+            <Route path="/hashtag/:hashtag" element={<Timeline />} />
+          </Routes>
+        </BrowserRouter>
+      </PageProvider>
       </AuthProvider>
     </Content>
   );

@@ -31,8 +31,9 @@ function getPostsByHashtag(hashtag, token){
   return axios.get(`${BASE_URL}/hashtag/${hashtag}`, config);
 }
 
-function getPostsFromUser(id) {
-  return axios.get(`${BASE_URL}/posts/${id}`);
+function getPostsFromUser(id, token) {
+  const config = createConfig(token);
+  return axios.get(`${BASE_URL}/posts/${id}`, config);
 }
 
 function getLikes(token) {

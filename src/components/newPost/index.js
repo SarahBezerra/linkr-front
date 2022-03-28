@@ -10,19 +10,19 @@ import {
 import Img from "../Users/Image";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
-import useAuth from "../../hooks/useAuth";
 import api from "../../services/api";
 import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import useAuth from "../../hooks/useAuth";
 
 
-export default function NewPost({ imageUrl, displayCase, reloadPage }) {
+export default function NewPost({ imageUrl, displayCase, reloadPage, currentPage }) {
   const { auth } = useAuth();
   const { userId } = useParams();
   const [url, setUrl] = useState("");
   const [text, setText] = useState("");
   const [isSending, setIsSending] = useState(false);
+
 
   const postsItems = [
     { placeholder: "http:/..", type: "text", value: url, state: setUrl },
@@ -54,7 +54,7 @@ export default function NewPost({ imageUrl, displayCase, reloadPage }) {
   }
 
   return (
-    <Container style={{ display: displayCase }}>
+    <Container currentPage={currentPage}>
       <PostContainer>
         <PictureContainer>
           <Img height={"50px"} src={imageUrl} />
