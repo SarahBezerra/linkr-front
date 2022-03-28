@@ -21,17 +21,19 @@ async function sendPost(token, body) {
   return axios.post(`${BASE_URL}/posts`, body, config);
 }
 
-function getPosts() {
-  return axios.get(`${BASE_URL}/posts`);
+function getPosts(token) {
+  const config = createConfig(token);
+  return axios.get(`${BASE_URL}/posts`, config);
 }
 
-function getPostsFromUser(id) {
-  return axios.get(`${BASE_URL}/posts/${id}`);
-}
-
-function getPostsByHashtag(hashtag) {
-  const config = null;
+function getPostsByHashtag(hashtag, token){
+  const config = createConfig(token);
   return axios.get(`${BASE_URL}/hashtag/${hashtag}`, config);
+}
+
+function getPostsFromUser(id, token) {
+  const config = createConfig(token);
+  return axios.get(`${BASE_URL}/posts/${id}`, config);
 }
 
 function getLikes(token) {
@@ -55,6 +57,11 @@ function browserUsers(string) {
 }
 
 
+function getTopHashtags(token){
+  const config = createConfig(token);
+  return axios.get(`${BASE_URL}/topHashtags`, config);
+}
+
 const api = {
   createConfig,
   getPosts,
@@ -65,9 +72,10 @@ const api = {
   postLikeOrNot,
   postSignUp,
   postSignIn,
+  getTopHashtags,
   getUser,
   deletePost,
-  browserUsers
+  browserUsers,
 
 };
 

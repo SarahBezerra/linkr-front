@@ -55,11 +55,11 @@ const UsersList = styled.ul`
 align-self: center;
 
 
-max-height: 200px;
+max-height: 180px;
 height: calc(${props => props.height});
 width: 100%;
 
-transition: height 2s;
+transition: height 1s;
 
 background-color: #E7E7E7;
 
@@ -67,6 +67,8 @@ position: absolute;
 z-index: -1;
 top:50%;
 left: 0;
+
+overflow-y: hidden;
 
 border-radius: 5px;
 padding-top:25px;
@@ -79,14 +81,12 @@ flex-direction: column;
 const User = styled.li`
 
 width: 100%;
-height: ${props => props.userHeight};
+height: 50px;
 
 padding: 0 10px;
 border-radius: 5px;
 
 display: flex;
-
-transition: height 3s;
 
 img{
     height: 40px;

@@ -3,6 +3,8 @@ import { SearchOutline } from 'react-ionicons'
 import { useEffect, useState } from "react"
 import Img from "../../Users/Image";
 import api from "../../../services/api";
+import { DebounceInput } from "react-debounce-input";
+import { Link } from "react-router-dom";
 
 
 
@@ -72,6 +74,7 @@ export default function Browser(){
                             return(
                                 <User userHeight={users.length > 0 ? '50px': '0px'}>
                                     <Img src={user.image_url}/>
+                                    
                                     <span>{user.username}</span>
                                 </User>
                             )
@@ -80,8 +83,7 @@ export default function Browser(){
                    }
                 
                 </UsersList>
-                <InputContainer placeholder="Search for people" value={browser} onChange={(e) => { BrowserHandler(e.target.value);}}/>
-                
+                <DebounceInput element={InputContainer} value={browser} onChange={(e) => { BrowserHandler(e.target.value);}} debounceTimeout={300} />
                 
                 <IconContainer>
                     <SearchIcon/>

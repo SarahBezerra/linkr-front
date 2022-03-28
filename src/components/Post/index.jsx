@@ -4,11 +4,11 @@ import { DocumentTextOutline } from 'react-ionicons'
 import ReactHashtag from "@mdnm/react-hashtag";
 import { useNavigate } from "react-router-dom";
 import LikeHeart from "../LikeHeart";
+import { pagesList } from "../../pages/Timeline/utils";
 import TrashAndEdit from "../TrashAndEdit";
 import useAuth from "../../hooks/useAuth";
 
-
-function Post({infos, like, updateLikes, onNavigate, reloadPage}){
+function Post({infos, like, updateLikes, onNavigate, reloadPage, setPageAndReload}){
     const {auth} = useAuth()
 
     const {
@@ -29,12 +29,9 @@ function Post({infos, like, updateLikes, onNavigate, reloadPage}){
                 </ContentLikes> 
             </Left>
             <Main>
-
                 <UserName onClick={onNavigate}> { username } </UserName>
-                <Message reloadPage={reloadPage}>{ text }</Message>
-
-                   {userId === auth.userId ? <TrashAndEdit infos = {infos} /> : ''}
-
+                <Message reloadPage={reloadPage} setPageAndReload={setPageAndReload}>{ text }</Message>
+                   {userId === auth.userId ? <TrashAndEdit idPost = {infos.id} reloadPage={reloadPage}  /> : ''}
                 <a href={metaData.url} target='_blank' rel='noreferrer' >
                     <MetaContainer>
                         <MetaLeft>
@@ -56,20 +53,20 @@ function Post({infos, like, updateLikes, onNavigate, reloadPage}){
     )
 }
 
-function Message({children, reloadPage}){
+function Message({children, setPageAndReload}){
 
     const navigate = useNavigate();
 
     function handleHashtagLink({innerText}){
-            reloadPage('');
             const hashtag = innerText.replace('#','');
+            setPageAndReload(pagesList['hashtag']);
             navigate(`/hashtag/${hashtag}`);
     };
 
     return(
         <UserText>
             <ReactHashtag 
-                renderHashtag={(hashtagValue) => (<Hashtag onClick={(e) => {handleHashtagLink(e.target)}}>{hashtagValue}</Hashtag>)} >
+                renderHashtag={(hashtagValue) => (<Hashtag  key={hashtagValue} onClick={(e) => {handleHashtagLink(e.target)}}>{hashtagValue}</Hashtag>)} >
                 {children}
             </ReactHashtag>
         </UserText>
