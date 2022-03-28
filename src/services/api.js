@@ -1,8 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = process.env.REACT_APP_PUBLIC_URL
-  ? process.env.REACT_APP_PUBLIC_URL
-  : "http://localhost:5000";
+const BASE_URL = "https://back-linkr.herokuapp.com";
 
 function createConfig(token) {
   return { headers: { Authorization: `Bearer ${token}` } };
@@ -26,7 +24,7 @@ function getPosts(token) {
   return axios.get(`${BASE_URL}/posts`, config);
 }
 
-function getPostsByHashtag(hashtag, token){
+function getPostsByHashtag(hashtag, token) {
   const config = createConfig(token);
   return axios.get(`${BASE_URL}/hashtag/${hashtag}`, config);
 }
@@ -48,16 +46,15 @@ function deletePost(idPost, token) {
   return axios.delete(`${BASE_URL}/posts/${idPost}`, createConfig(token));
 }
 
-function getUser(id){
-  return axios.get(`${BASE_URL}/user/:id`, {id})
+function getUser(id) {
+  return axios.get(`${BASE_URL}/user/:id`, { id });
 }
 
 function browserUsers(string) {
   return axios.get(`${BASE_URL}/users_filter`, {params:{ username: string}});
 }
 
-
-function getTopHashtags(token){
+function getTopHashtags(token) {
   const config = createConfig(token);
   return axios.get(`${BASE_URL}/topHashtags`, config);
 }

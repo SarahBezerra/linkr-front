@@ -10,7 +10,6 @@ import useAuth from "../../hooks/useAuth";
 import { pagesList, statesList } from "./utils";
 import usePage from "../../hooks/usePage";
 
-
 export default function Timeline({ newPostDisplay }) {
     const [requestState, setRequestState] = useState(statesList['loading']);
     const [posts, setPosts] = useState([]);
@@ -27,34 +26,31 @@ export default function Timeline({ newPostDisplay }) {
     const { page: pageName, pageUsername } = usePage();
     
 
-    useEffect(() => {
-      requestPosts();
-      getHeader();
-    }, [page, reload]);
-  
 
-    async function requestPosts() {
+  useEffect(() => {
+    requestPosts();
+    getHeader();
+  }, [page, reload]);
 
-      setRequestState(statesList['loading']);
-      let res = null;
+  async function requestPosts() {
+    setRequestState(statesList["loading"]);
+    let res = null;
 
-      try {
-        console.log(pagesList);
-        if(page === pagesList['timeline'])
-          res = await api.getPosts(auth.token);
-        else if(page === pagesList['hashtag']) {
-          res = await api.getPostsByHashtag(currentParam(), auth.token);
-        } else if (id) {
-          res = await api.getPostsFromUser(id, auth.token);
-        }
+    try {
+      if (page === pagesList["timeline"]) res = await api.getPosts(auth.token);
+      else if (page === pagesList["hashtag"]) {
+        res = await api.getPostsByHashtag(currentParam(), auth.token);
+      } else if (id) {
+        res = await api.getPostsFromUser(id, auth.token);
+      }
 
-        setPosts(res.data);
+      setPosts(res.data);
 
-        const state = (res.data.length === 0) ? statesList['empty'] : statesList['ok'];
-        setRequestState(state);
-
-        await requestTopHashtags();
-        await requestLikes();
+      const state =
+        res.data.length === 0 ? statesList["empty"] : statesList["ok"];
+      await requestLikes();
+      await requestTopHashtags();
+      setRequestState(state);
     } catch {
       console.log("aconteceu um erro em posts");
       setRequestState(statesList["error"]);
@@ -103,7 +99,7 @@ export default function Timeline({ newPostDisplay }) {
       }
       setReload(!reload);
     }
-
+  
 
   return (
     <Page>
@@ -117,14 +113,17 @@ export default function Timeline({ newPostDisplay }) {
           likes={likes}
           requestLikes={requestLikes}
           state={requestState}
-          setPage = {setPage}
+          setPage={setPage}
           imageUrl={auth.image_url}
           setPageAndReload={setPageAndReload}
           setRequestState={setRequestState}
           Display={newPostDisplay}
           pageUsername={pageUsername}
         />
-        <HashTags topHashtags={topHashtags} setPageAndReload={setPageAndReload}></HashTags>
+        <HashTags
+          topHashtags={topHashtags}
+          setPageAndReload={setPageAndReload}
+        ></HashTags>
       </Container>
     </Page>
   );

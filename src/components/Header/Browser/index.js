@@ -54,9 +54,6 @@ export default function Browser(){
         }
     }
 
-    function DropDownHandler(){
-        
-    }
 
 
     return(
