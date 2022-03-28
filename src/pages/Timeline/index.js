@@ -17,26 +17,27 @@ export default function Timeline({ newPostDisplay }) {
     const [likes, setLikes] = useState([]);
     const [topHashtags, setTopHashtags] = useState([]);
     const [reload, setReload] = useState(false);
-    const [header, setHeader] = useState('');
+    // const [header, setHeader] = useState('');
     const filter = useParams();
-    const params = useParams();
     const { id } = useParams();
     const location = useLocation();
     const { pathname } = useLocation();
     const [page, setPage] = useState(getPage());
     const { auth } = useAuth();
-    const { page, pageUsername } = usePage();
+    //const { page, pageUsername } = usePage();
     
 
     useEffect(() => {
+      debugger;
       requestPosts();
       console.log('entrei no effect');
-      getHeader();
-    }, [page, reload, requestState, pathname]);
+      //getHeader();
+    }, [page, reload]);
   
 
     async function requestPosts() {
 
+      debugger;
       setRequestState(statesList['loading']);
       let res = null;
 
@@ -44,7 +45,6 @@ export default function Timeline({ newPostDisplay }) {
         if(page === pagesList['timeline'])
           res = await api.getPosts(auth.token);
         else if(page === pagesList['hashtag']) {
-          console.log(filter);
           res = await api.getPostsByHashtag(currentParam(), auth.token);
         } else if (id) {
           res = await api.getPostsFromUser(id);
@@ -84,12 +84,12 @@ export default function Timeline({ newPostDisplay }) {
       }
     }
 
-    function getHeader(){
-      if(page === pagesList['timeline'])
-        setHeader('timeline')
-      else if (page === pagesList['hashtag'])  
-        setHeader(`#${currentParam()}`);
-    }
+    // function getHeader(){
+    //   if(page === pagesList['timeline'])
+    //     setHeader('timeline')
+    //   else if (page === pagesList['hashtag'])  
+    //     setHeader(`#${currentParam()}`);
+    // }
     function getPage(){
         const name = location.pathname.split('/')[1];
         return pagesList[name];
@@ -124,7 +124,7 @@ export default function Timeline({ newPostDisplay }) {
           setPageAndReload={setPageAndReload}
           setRequestState={setRequestState}
           Display={newPostDisplay}
-          pageUsername={pageUsername}
+          // pageUsername={pageUsername}
         />
         <HashTags topHashtags={topHashtags} setPageAndReload={setPageAndReload}></HashTags>
       </Container>
@@ -132,7 +132,7 @@ export default function Timeline({ newPostDisplay }) {
   );
 }
 
-function ChooseFeed({posts, likes, requestLikes, state, imageUrl, setPageAndReload, currentPage, newPostDisplay, pageUsername, setRequestState}){
+function ChooseFeed({posts, likes, requestLikes, state, imageUrl, setPageAndReload, currentPage, newPostDisplay, /*pageUsername,*/ setRequestState}){
   
     const navigate = useNavigate();
   
@@ -170,7 +170,7 @@ function ChooseFeed({posts, likes, requestLikes, state, imageUrl, setPageAndRelo
                 reloadPage={setRequestState}
                 onNavigate={() => {
                   const { username } = p;
-                  pageUsername({ username });
+                  // pageUsername({ username });
                   navigate(`/user/${p.userId}`);
                 }}
               />
