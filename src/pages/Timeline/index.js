@@ -198,8 +198,8 @@ function ChooseFeed({
             setPageAndReload={setPageAndReload}
             reloadPage={setRequestState}
             onNavigate={() => {
-              const { username } = p;
-              pageUsername({ username });
+              const { username, image_url } = p;
+              pageUsername({ username, image_url });
               navigate(`/user/${p.userId}`);
             }}
           />
