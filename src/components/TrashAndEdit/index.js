@@ -9,7 +9,14 @@ import ModalBlack from "../ModalBlack";
 
 ReactModal.setAppElement("#root");
 
-export default function TrashAndEdit({ idPost, reloadPage, setEditMessage, editMessage, refPostMessage, setMessage}) {
+export default function TrashAndEdit({
+  idPost,
+  reloadPage,
+  setEditMessage,
+  editMessage,
+  refPostMessage,
+  setMessage,
+}) {
   const { auth } = useAuth();
   const [wait, setWait] = useState(false);
   const [modal, setModal] = useState(false);
@@ -19,7 +26,7 @@ export default function TrashAndEdit({ idPost, reloadPage, setEditMessage, editM
     try {
       await api.deletePost(idPost, auth.token);
       setModal(false);
-      reloadPage(0); // fazer o reload
+      reloadPage(); // fazer o reload
     } catch (err) {
       setModal(false);
       alert("Não foi possível excluir este post!");
@@ -30,11 +37,11 @@ export default function TrashAndEdit({ idPost, reloadPage, setEditMessage, editM
   }
 
   async function handleClickEdit() {
-    if(editMessage === true){
-      setEditMessage(false)
-      setMessage(refPostMessage.current)
-    }else{
-      setEditMessage(true)
+    if (editMessage === true) {
+      setEditMessage(false);
+      setMessage(refPostMessage.current);
+    } else {
+      setEditMessage(true);
     }
   }
 
