@@ -55,7 +55,7 @@ export default function SignIn() {
         </p>
       </div>
 
-      <RightBox>
+      <RightBox isEnabled={isEnabled}>
         <form onSubmit={handleLogin}>
           <fieldset disabled={!isEnabled}>
             <input
@@ -76,7 +76,7 @@ export default function SignIn() {
             ></input>
             <button type="submit">
               {isEnabled ? (
-                "Sign Up"
+                "Log In"
               ) : (
                 <SpinnerCircular
                   size={50}

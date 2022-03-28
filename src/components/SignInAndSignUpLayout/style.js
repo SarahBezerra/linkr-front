@@ -16,7 +16,7 @@ line-height: 64px;
 
 .left-box{
     margin-left: 8%;
-    margin-top: 20%;
+    margin-top: 15%;
 }
 
 h1{
@@ -39,7 +39,7 @@ export const RightBox = styled.div`
     display: flex;
     align-items: center;
     flex-direction: column;
-    padding-top: 20%;
+    padding-top: 15%;
 
     form{
         width: 100%;
@@ -54,12 +54,12 @@ export const RightBox = styled.div`
                 width: 80%;
                 height: 65px;
 
-                background: #fff;
+                background: ${(props) => props.isEnabled ? "#FFF" : "#C0C0C0"};
                 border-radius: 6px;
                 border: none;
                 margin-bottom: 15px;
 
-                color: #000;
+                color: ${(props) => props.isEnabled ? "#000" : "#696969"};
                 font-family: 'Oswald';
                 font-size: 27px;
                 font-size: 27px;
@@ -82,6 +82,7 @@ export const RightBox = styled.div`
                 font-size: 27px;
                 font-weight: 700;
                 line-height: 40px;
+                opacity: ${(props) => props.isEnabled ? "1" : "0.7"};
             }
         }
     }
