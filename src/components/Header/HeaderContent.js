@@ -2,20 +2,19 @@ import styled from 'styled-components'
 
 const HeaderContent = styled.div`
 
-display: flex;
-justify-content: space-between;
-align-items: center;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
 
-background-color: #151515;
+    background-color: #151515;
 
-position: relative;
+    padding: 0 3% 0 3%;
 
-padding: 0 3% 0 3%;
+    width: 100%;
+    height: 100%;
 
-width: 100%;
-height: 100%;
 
-z-index: 2;
 
 `
 

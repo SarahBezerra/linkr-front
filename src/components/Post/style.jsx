@@ -27,6 +27,7 @@ const Left = styled.div`
 
 const Main = styled.div`
     width: 88%;
+    position: relative;
 
     a {
         cursor: pointer

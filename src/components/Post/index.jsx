@@ -5,8 +5,12 @@ import ReactHashtag from "@mdnm/react-hashtag";
 import { useNavigate } from "react-router-dom";
 import LikeHeart from "../LikeHeart";
 import { pagesList } from "../../pages/Timeline/utils";
+import TrashAndEdit from "../TrashAndEdit";
+import useAuth from "../../hooks/useAuth";
 
-function Post({infos, like, updateLikes, setPageAndReload}){
+function Post({infos, like, updateLikes, onNavigate, reloadPage, setPageAndReload}){
+    const {auth} = useAuth()
+
     const {
             id,
             userId,
@@ -15,19 +19,19 @@ function Post({infos, like, updateLikes, setPageAndReload}){
             image_url,
             metaData,
     } = infos;
-
+ 
     return (
         <Container>
             <Left>
-                <UserPhoto src={ image_url } alt=''/>
+                <UserPhoto src={ image_url } onClick={onNavigate} alt=''/>
                 <ContentLikes>
                     <LikeHeart idPost = {id} likesInformations={like || {}} updateLikes={updateLikes} />
-                </ContentLikes>
+                </ContentLikes> 
             </Left>
             <Main>
-                <UserName> { username } </UserName>
-                <Message setPageAndReload={setPageAndReload}>{ text }</Message>
-
+                <UserName onClick={onNavigate}> { username } </UserName>
+                <Message reloadPage={reloadPage} setPageAndReload={setPageAndReload}>{ text }</Message>
+                   {userId === auth.userId ? <TrashAndEdit idPost = {infos.id} reloadPage={reloadPage}  /> : ''}
                 <a href={metaData.url} target='_blank' rel='noreferrer' >
                     <MetaContainer>
                         <MetaLeft>
@@ -68,7 +72,4 @@ function Message({children, setPageAndReload}){
         </UserText>
     )
 }
-
-
-
 export default Post;
