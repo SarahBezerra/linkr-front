@@ -98,13 +98,29 @@ export default function Timeline({ newPostDisplay }) {
   return (
     <Page>
       <Title>
-        {header
-          ? header
-          : pathname === "/timeline"
-          ? "timeline"
-          : pageName?.username.slice(-1) === ("s" || "S")
-          ? `${pageName.username}' posts `
-          : `${pageName.username}'s posts`}
+        {
+        header?
+
+          header
+
+        : 
+        pathname === "/timeline"?
+
+          "timeline"
+
+        : 
+        pageName?.username.slice(-1) === ("s" || "S")?
+          <>
+            <img src={pageName.image_url}></img>
+            <span>{`${pageName.username}' posts `}</span>
+          </>
+
+        :
+          <>
+            <img src={pageName.image_url}></img>
+            <span>{`${pageName.username}'s posts`}</span>
+          </>
+        }
       </Title>
       <Container>
         <ChooseFeed

@@ -1,5 +1,6 @@
 
 import styled from 'styled-components'
+import { devices } from '../../styles/responsiveness'
 
 const HeaderContainer = styled.header`
 
@@ -38,6 +39,10 @@ div{
 span{
     align-self: center;
     height: 100%;
+}
+
+@media ${devices.tablet}{
+    position: inherit;
 }
 `
 

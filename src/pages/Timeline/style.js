@@ -36,6 +36,23 @@ const Title = styled.h1`
   font-weight: 700;
   font-size: 43px;
 
+  img{
+    width: 50px;
+    height: 50px;
+
+    margin-right:10px;
+
+    border-radius: 50%;
+
+  }
+
+  span{
+    font-family: inherit;
+    font-weight: inherit;
+
+    align-self: flex-end;
+  }
+
   @media ${devices.tablet}{
     margin-left: 17px;
   }
