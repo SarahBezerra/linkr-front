@@ -85,7 +85,7 @@ const NewCommentContent = styled.div`
   input {
     width: 89%;
     height: 39px;
-    padding: 0 46px 0 15px;
+    padding: 0 33px 0 15px;
     color: white;
 
     background: #252525;
@@ -104,13 +104,15 @@ const NewCommentContent = styled.div`
   }
 `;
 
-const IconSend = styled(FiSend)`
-  color: #f3f3f3;
-  font-size: 15px;
-
+const FloatingContainer = styled.div`
   position: absolute;
   top: 12px;
   right: 15px;
+`;
+
+const IconSend = styled(FiSend)`
+  color: #f3f3f3;
+  font-size: 15px;
 
   :hover {
     cursor: pointer;
@@ -130,4 +132,5 @@ export {
   CommentText,
   NewCommentContent,
   IconSend,
+  FloatingContainer,
 };

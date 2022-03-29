@@ -74,7 +74,7 @@ function Post({infos, like, updateLikes, onNavigate, reloadPage, setPageAndReloa
                     </a>
                 </Main>
             </Container>
-            {enabledComment ? <BoxComments/> : ''}
+            {enabledComment ? <BoxComments postId={id}/> : ''}
         </>
     )
 }
