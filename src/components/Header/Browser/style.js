@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import { devices } from '../../../styles/responsiveness'
 
 const IntegrationContainer = styled.div`
 
@@ -6,6 +7,11 @@ position:relative;
 z-index: 10;
 
 width: 40%;
+
+@media ${devices.tablet}{
+    position: inherit;
+    margin-top:150px;
+}
 
 `
 const BrowserContainer = styled.div`
