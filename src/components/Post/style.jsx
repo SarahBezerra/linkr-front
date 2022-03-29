@@ -12,6 +12,8 @@ const Container = styled.div`
     color: white;
     padding: 20px;
 
+    z-index: 0;
+
 `;
 
 const Left = styled.div`
