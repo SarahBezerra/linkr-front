@@ -11,7 +11,8 @@ import React, { useState, useRef } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import api from "../../services/api";
-import Comments from "../Comments";
+import CommentChat from "../CommentChat";
+import BoxComments from "../BoxComments";
 
 function Post({infos, like, updateLikes, onNavigate, reloadPage, setPageAndReload}){
     const {auth} = useAuth()
@@ -20,6 +21,7 @@ function Post({infos, like, updateLikes, onNavigate, reloadPage, setPageAndReloa
     const refPostMessage = useRef(infos.text)
     const [ message, setMessage ] = useState(refPostMessage.current)
     const [ isEnabled, setIsEnabled ] = useState(true)
+    const [ enabledComment, setEnabledComment] = useState(false)
 
     const {
             id,
@@ -30,46 +32,50 @@ function Post({infos, like, updateLikes, onNavigate, reloadPage, setPageAndReloa
             metaData,
     } = infos;
 
-    return (
-        <Container>
-            <Left>
-                <UserPhoto src={ image_url } onClick={onNavigate} alt=''/>
-                <ContentLikes>
-                    <LikeHeart idPost = {id} likesInformations={like || {}} updateLikes={updateLikes} />
-                </ContentLikes> 
-                <ContentComments>
-                    <Comments idPost = {id}/>
-                </ContentComments>
-            </Left>
-            <Main>
-                <UserName onClick={onNavigate}> { username } </UserName>
-                {editMessage === true 
-                    ? <MessageEditing setMessage={setMessage} message={message} setEditMessage={setEditMessage} refPostMessage={refPostMessage} token={token} idPost={infos.id} setEnabled={setIsEnabled} enabled={isEnabled} setPageAndReload={setPageAndReload} /> 
-                    : <Message reloadPage={reloadPage} setPageAndReload={setPageAndReload}>{ text }</Message>
-                }
+    console.log(enabledComment)
 
-                   {userId === auth.userId 
-                    ? <TrashAndEdit idPost={infos.id} reloadPage={setPageAndReload} setEditMessage={setEditMessage} editMessage={editMessage} refPostMessage={refPostMessage} setMessage={setMessage} /> 
-                    : ''}
-                   
-                <a href={metaData.url} target='_blank' rel='noreferrer' >
-                    <MetaContainer>
-                        <MetaLeft>
-                            <Title> { metaData.title } </Title>
-                            <Description> { metaData.description } </Description>
-                            <Url> { metaData.url } </Url>
-                        </MetaLeft>
-                        <MetaRigth>
-                        {(metaData.image !== '')
-                            ? <Preview src={ metaData.image } alt='' />
-                            : <DocumentTextOutline color={'#000000'} height="70px" width="70px" />
-                        }
-                        </MetaRigth>
-                    </MetaContainer>
-                </a>
-            </Main>
-                
-        </Container>
+    return (
+        <>
+            <Container>
+                <Left>
+                    <UserPhoto src={ image_url } onClick={onNavigate} alt=''/>
+                    <ContentLikes>
+                        <LikeHeart idPost = {id} likesInformations={like || {}} updateLikes={updateLikes} />
+                    </ContentLikes> 
+                    <ContentComments>
+                        <CommentChat idPost = {id} stateComment ={enabledComment} setComments={setEnabledComment}/>
+                    </ContentComments>
+                </Left>
+                <Main>
+                    <UserName onClick={onNavigate}> { username } </UserName>
+                    {editMessage === true 
+                        ? <MessageEditing setMessage={setMessage} message={message} setEditMessage={setEditMessage} refPostMessage={refPostMessage} token={token} idPost={infos.id} setEnabled={setIsEnabled} enabled={isEnabled} setPageAndReload={setPageAndReload} /> 
+                        : <Message reloadPage={reloadPage} setPageAndReload={setPageAndReload}>{ text }</Message>
+                    }
+
+                    {userId === auth.userId 
+                        ? <TrashAndEdit idPost={infos.id} reloadPage={setPageAndReload} setEditMessage={setEditMessage} editMessage={editMessage} refPostMessage={refPostMessage} setMessage={setMessage} /> 
+                        : ''}
+                    
+                    <a href={metaData.url} target='_blank' rel='noreferrer' >
+                        <MetaContainer>
+                            <MetaLeft>
+                                <Title> { metaData.title } </Title>
+                                <Description> { metaData.description } </Description>
+                                <Url> { metaData.url } </Url>
+                            </MetaLeft>
+                            <MetaRigth>
+                            {(metaData.image !== '')
+                                ? <Preview src={ metaData.image } alt='' />
+                                : <DocumentTextOutline color={'#000000'} height="70px" width="70px" />
+                            }
+                            </MetaRigth>
+                        </MetaContainer>
+                    </a>
+                </Main>
+            </Container>
+            {enabledComment ? <BoxComments/> : ''}
+        </>
     )
 }
 

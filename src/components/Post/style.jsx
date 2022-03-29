@@ -84,10 +84,10 @@ const ContentLikes = styled.div`
 `;
 
 const ContentComments = styled.div`
-    margin-left: -8px;
+    margin-left: -13px;
 
     @media ${devices.tablet} {
-        margin-left: -18px;
+        margin-left: -11px;
     }
 `
 
