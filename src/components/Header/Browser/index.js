@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Img from "../../Users/Image";
 import api from "../../../services/api";
 import { DebounceInput } from "react-debounce-input";
+import usePage from "../../../hooks/usePage";
 
 
 export default function Browser(){
@@ -14,6 +15,7 @@ export default function Browser(){
     const [search, setSearch] = useState('');
     const [users, setUsers] = useState([]);
     const navigate = useNavigate();
+    const {page, pageUsername} = usePage();
 
 
     useEffect(() => {
@@ -75,17 +77,24 @@ export default function Browser(){
 
                         users.map((user) => {
 
+                            const {username, image_url} = user;
+
                             return(
                                 <User userHeight={users.length > 0 ? '50px': '0px'}>
                                     <Img src={user.image_url} onClick={() => {
+
+                                            
                                             setBrowser('');
                                             setUsers([]);
+                                            pageUsername({username, image_url});
                                             navigate(`/user/${user.id}`)
                                         }}/>
 
                                         <span onClick={() => {
+                                            
                                             setBrowser('');
                                             setUsers([]);
+                                            pageUsername({username, image_url});
                                             navigate(`/user/${user.id}`)
                                         }}>
                                             {user.username}
