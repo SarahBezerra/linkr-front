@@ -1,8 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = process.env.REACT_APP_PUBLIC_URL 
-  ? process.env.REACT_APP_PUBLIC_URL 
-  : 'https://back-linkr.herokuapp.com';
+const BASE_URL = process.env.REACT_APP_PUBLIC_URL;
 
 function createConfig(token) {
   return { headers: { Authorization: `Bearer ${token}` } };
@@ -58,7 +56,9 @@ function getUser(id) {
 }
 
 function browserUsers(string) {
-  return axios.get(`${BASE_URL}/users_filter`, {params:{ username: string}});
+  return axios.get(`${BASE_URL}/users_filter`, {
+    params: { username: string },
+  });
 }
 
 function getTopHashtags(token) {
@@ -78,9 +78,9 @@ const api = {
   postSignIn,
   getTopHashtags,
   getUser,
-  deletePost, 
+  deletePost,
   updatePost,
-  browserUsers
+  browserUsers,
 };
 
 export default api;

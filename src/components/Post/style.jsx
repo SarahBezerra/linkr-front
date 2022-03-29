@@ -83,6 +83,14 @@ const ContentLikes = styled.div`
    width: 80%;
 `;
 
+const ContentComments = styled.div`
+    margin-left: -8px;
+
+    @media ${devices.tablet} {
+        margin-left: -18px;
+    }
+`
+
 const MetaRigth = styled.div`
     width: 30%;
     background-color: white;
@@ -147,6 +155,7 @@ export {
     MetaRigth,
     UserPhoto,
     ContentLikes,
+    ContentComments,
     Hashtag,
     Input
 }

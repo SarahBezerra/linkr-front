@@ -1,5 +1,5 @@
 import { Container, UserName, UserText, MetaContainer, Left, Main, Title, 
-    Description, Url, Preview, MetaLeft, MetaRigth, UserPhoto, ContentLikes, Hashtag, Input } from "./style";
+    Description, Url, Preview, MetaLeft, MetaRigth, UserPhoto, ContentLikes, Hashtag, Input, ContentComments } from "./style";
 import { DocumentTextOutline } from 'react-ionicons'
 import ReactHashtag from "@mdnm/react-hashtag";
 import { useNavigate } from "react-router-dom";
@@ -11,6 +11,7 @@ import React, { useState, useRef } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import api from "../../services/api";
+import Comments from "../Comments";
 
 function Post({infos, like, updateLikes, onNavigate, reloadPage, setPageAndReload}){
     const {auth} = useAuth()
@@ -36,6 +37,9 @@ function Post({infos, like, updateLikes, onNavigate, reloadPage, setPageAndReloa
                 <ContentLikes>
                     <LikeHeart idPost = {id} likesInformations={like || {}} updateLikes={updateLikes} />
                 </ContentLikes> 
+                <ContentComments>
+                    <Comments idPost = {id}/>
+                </ContentComments>
             </Left>
             <Main>
                 <UserName onClick={onNavigate}> { username } </UserName>
