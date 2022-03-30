@@ -17,7 +17,7 @@ import api from "../../services/api";
 import LoadingCircular from "../LoadingCircular";
 import PulseLoader from "react-spinners/PulseLoader";
 
-export default function BoxComments({ postId, updateComments }) {
+export default function BoxComments({ postId, numberComment, updateComments }) {
   const { auth } = useAuth();
   const [comment, setComment] = useState("");
   const [listComments, setListComments] = useState(false);
@@ -77,10 +77,12 @@ export default function BoxComments({ postId, updateComments }) {
               <DividerLine />
             </ContentComment>
           ))
-        ) : (
+        ) : numberComment?.numbercomments > 0 ? (
           <ContentLoading>
             <PulseLoader />
           </ContentLoading>
+        ) : (
+          ""
         )}
 
         <NewCommentContent>

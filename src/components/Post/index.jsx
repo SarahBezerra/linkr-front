@@ -72,7 +72,7 @@ function Post({infos, like, updateLikes, numberComment,updateComments, onNavigat
                     </a>
                 </Main>
             </Container>
-            {enabledComment ? <BoxComments postId={id} updateComments={updateComments}/> : ''}
+            {enabledComment ? <BoxComments postId={id} numberComment={numberComment} updateComments={updateComments}/> : ''}
         </>
     )
 }
