@@ -9,54 +9,50 @@ const Page = styled.div`
   justify-content: center;
   align-items: center;
 
-  & > *{
+  & > * {
     padding: 0 10px 0 10px;
     width: 100%;
-    max-width:940px;
+    max-width: 940px;
   }
 
-  @media ${devices.tablet} { 
-
-    & > *{
+  @media ${devices.tablet} {
+    & > * {
       width: 100%;
       padding: initial;
     }
-    
   }
-
 `;
 
-const Title = styled.h1`  
+const Title = styled.h1`
   margin-bottom: 43px;
   height: fit-content;
-  display:flex;
+  display: flex;
   align-items: center;
-  color: #FFF;
-  font-family: 'Oswald', sans-serif;
+  color: #fff;
+  font-family: "Oswald", sans-serif;
   font-weight: 700;
   font-size: 43px;
 
-  img{
+  img {
     width: 50px;
     height: 50px;
 
-    margin-right:10px;
+    margin-right: 10px;
 
     border-radius: 50%;
-
   }
 
-  span{
+  span {
     font-family: inherit;
     font-weight: inherit;
 
     align-self: flex-end;
   }
 
-  @media ${devices.tablet}{
+  @media ${devices.tablet} {
     margin-left: 17px;
   }
-`
+`;
 
 const Container = styled.div`
   display: flex;
@@ -79,18 +75,14 @@ const Feed = styled.div`
     border-radius: 16px;
   }
 
-
   @media ${devices.tablet} {
-    
     max-width: initial;
     width: 100%;
-    
+
     & > div {
-      border-radius: 0px
+      border-radius: 0px;
     }
-}
-
-
+  }
 `;
 
 const Loading = styled(Feed)`

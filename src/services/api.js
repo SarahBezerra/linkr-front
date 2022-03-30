@@ -1,8 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = process.env.REACT_APP_PUBLIC_URL 
-  ? process.env.REACT_APP_PUBLIC_URL 
-  : 'https://back-linkr.herokuapp.com';
+const BASE_URL = process.env.REACT_APP_PUBLIC_URL;
 
 function createConfig(token) {
   return { headers: { Authorization: `Bearer ${token}` } };
@@ -53,12 +51,30 @@ function deletePost(idPost, token) {
   return axios.delete(`${BASE_URL}/posts/${idPost}`, createConfig(token));
 }
 
+function getCommentsNumber(token) {
+  return axios.get(`${BASE_URL}/comments`, createConfig(token));
+}
+
+function getCommentsPost(idPost, token) {
+  return axios.get(`${BASE_URL}/comments/${idPost}`, createConfig(token));
+}
+
+function postComment(token, postId, text) {
+  return axios.post(
+    `${BASE_URL}/comments/${postId}`,
+    { text },
+    createConfig(token)
+  );
+}
+
 function getUser(id) {
   return axios.get(`${BASE_URL}/user/:id`, { id });
 }
 
 function browserUsers(string) {
-  return axios.get(`${BASE_URL}/users_filter`, {params:{ username: string}});
+  return axios.get(`${BASE_URL}/users_filter`, {
+    params: { username: string },
+  });
 }
 
 function getTopHashtags(token) {
@@ -74,13 +90,16 @@ const api = {
   sendPost,
   getLikes,
   postLikeOrNot,
+  getCommentsNumber,
+  getCommentsPost,
+  postComment,
   postSignUp,
   postSignIn,
   getTopHashtags,
   getUser,
-  deletePost, 
+  deletePost,
   updatePost,
-  browserUsers
+  browserUsers,
 };
 
 export default api;
