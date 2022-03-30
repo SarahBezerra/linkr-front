@@ -6,8 +6,6 @@ import { Container, Hashtag, Title } from "./style";
 
 export default function HashTags({topHashtags}){
 
-
-
     const navigate = useNavigate();
     const {timeLine} = useContext(PageContext);
 

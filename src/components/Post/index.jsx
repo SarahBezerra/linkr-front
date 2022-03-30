@@ -1,5 +1,7 @@
-import { PostContainer, UserName, UserText, MetaContainer, Left, Main, Title, 
-    Description, Url, Preview, MetaLeft, MetaRigth, UserPhoto, ContentLikes, Hashtag, Input, SharedInfo, Container } from "./style";
+import { PostContainer, Container, UserName, UserText, MetaContainer, Left, Main, Title, 
+    Description, Url, Preview, MetaLeft, MetaRigth, UserPhoto, ContentLikes, Hashtag, Input, SharedInfo, ContentComments } from "./style";
+import CommentChat from "../CommentChat";
+import BoxComments from "../BoxComments";
 import { DocumentTextOutline } from 'react-ionicons'
 import ReactHashtag from "@mdnm/react-hashtag";
 import { useNavigate } from "react-router-dom";
@@ -8,12 +10,12 @@ import { pagesList } from "../../pages/Timeline/utils";
 import TrashAndEdit from "../TrashAndEdit";
 import useAuth from "../../hooks/useAuth";
 import React, { useState, useRef, useContext } from "react";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import api from "../../services/api";
 import PageContext from "../../contexts/pageContext";
 
-function Post({infos, like, updateLikes, onNavigate, reloadPage}){
+function Post({infos, like, updateLikes, numberComment,updateComments, onNavigate, reloadPage}){
     const { timeLine } = useContext(PageContext);
     const {auth} = useAuth()
     const token = auth.token;
@@ -21,6 +23,7 @@ function Post({infos, like, updateLikes, onNavigate, reloadPage}){
     const refPostMessage = useRef(infos.text)
     const [ message, setMessage ] = useState(refPostMessage.current)
     const [ isEnabled, setIsEnabled ] = useState(true)
+    const [ enabledComment, setEnabledComment] = useState(false)
 
     const {
             id,
@@ -45,6 +48,9 @@ function Post({infos, like, updateLikes, onNavigate, reloadPage}){
                     <ContentLikes>
                         <LikeHeart idPost = {id} likesInformations={like || {}} updateLikes={updateLikes} />
                     </ContentLikes> 
+                    <ContentComments>
+                        <CommentChat number = {numberComment} stateComment ={enabledComment} setComments={setEnabledComment}/>
+                    </ContentComments>
                 </Left>
                 <Main>
                     <UserName onClick={onNavigate}> { username } </UserName>
@@ -77,6 +83,7 @@ function Post({infos, like, updateLikes, onNavigate, reloadPage}){
                 </Main>
                     
             </PostContainer>
+            {enabledComment ? <BoxComments postId={id} numberComment={numberComment} updateComments={updateComments}/> : ''}
         </Container>
     )
 }

@@ -5,7 +5,7 @@ import { useContext, useState } from "react";
 import { useParams, useLocation } from "react-router-dom";
 import api from "../../services/api";
 import { ToastContainer, toast } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
+import "react-toastify/dist/ReactToastify.css";
 import useAuth from "../../hooks/useAuth";
 import PageContext from "../../contexts/pageContext";
 
@@ -18,7 +18,6 @@ export default function NewPost({ imageUrl, displayCase, reloadPage}) {
   const [url, setUrl] = useState("");
   const [text, setText] = useState("");
   const [isSending, setIsSending] = useState(false);
-
 
   const postsItems = [
     { placeholder: "http:/..", type: "text", value: url, state: setUrl },
@@ -92,6 +91,7 @@ function Inputs({ postsItems, isSending }) {
       {postsItems.map((item, index) => {
         return (
           <InputContainer
+            key={item.type + index}
             as={index === 0 ? "" : "textarea"}
             disabled={isSending ? true : false}
             padding={index === 0 ? "0 15px 0 15px;" : "10px 15px 0 15px;"}
