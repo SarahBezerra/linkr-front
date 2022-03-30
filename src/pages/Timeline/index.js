@@ -17,6 +17,7 @@ import FollowButton from "../../components/FollowButton/index";
 export default function Timeline({ newPostDisplay }) {
   const [requestState, setRequestState] = useState(statesList["loading"]);
   const [posts, setPosts] = useState([]);
+  const [newPosts, setNewPosts] = useState([]);
   const [likes, setLikes] = useState([]);
   const [topHashtags, setTopHashtags] = useState([]);
   const [reload, setReload] = useState(false);
@@ -185,43 +186,48 @@ export default function Timeline({ newPostDisplay }) {
       </Title>
       <Container>
       <div style={{display:'flex', flexDirection: 'column', width: '100%'}}>
-            <ChooseFeed
-              currentPage={getPage}
-              posts={posts}
-              likes={likes}
-              requestLikes={requestLikes}
-              state={requestState}
-              setPage={setPage}
-              imageUrl={auth.image_url}
-              setPageAndReload={setPageAndReload}
-              setRequestState={setRequestState}
-              Display={newPostDisplay}
-              pageUsername={pageUsername}
-            />
+        <ChooseFeed
+          currentPage={getPage}
+          posts={posts}
+          likes={likes}
+          requestLikes={requestLikes}
+          state={requestState}
+          setPage={setPage}
+          imageUrl={auth.image_url}
+          setPageAndReload={setPageAndReload}
+          setRequestState={setRequestState}
+          Display={newPostDisplay}
+          pageUsername={pageUsername}
+          comments={comments}
+          requestComments={requestComments}
+        />
 
-            <InfiniteScroll 
-              element={Feed}
-              initialLoad={false}
-              loadMore={loadFunc}
-              threshold={50}
-              hasMore={keepLoading ? true: false}
-              loader={<div className="loader" key={0}>Loading ...</div>}
-            >
-              {newPosts.map((p) => (
-                <Post
-                  infos={p}
-                  key={p.id}
-                  like={likes.find(({ postId }) => postId === p.id)}
-                  updateLikes={requestLikes}
-                  setPageAndReload={setPageAndReload}
-                  reloadPage={setRequestState}
-                  onNavigate={() => {
-                    const { username, image_url } = p;
-                    pageUsername({ username, image_url });
-                    navigate(`/user/${p.userId}`);
-                  }}
-                />
-              ))}
+           <InfiniteScroll 
+            element={Feed}
+            initialLoad={false}
+            loadMore={loadFunc}
+            threshold={50}
+            hasMore={keepLoading ? true: false}
+            loader={<div className="loader" key={0}>Loading ...</div>}
+          >
+          {newPosts.map((p) => (
+            <Post
+              infos={p}
+              key={p.id}
+              like={likes.find(({ postId }) => postId === p.id)}
+              updateLikes={requestLikes}
+              numberComment={comments.find(({ postId }) => postId === p.id)}
+              updateComments={requestComments}
+              setPage={setPage}
+              setPageAndReload={setPageAndReload}
+              reloadPage={setRequestState}
+              onNavigate={() => {
+                const { username, image_url } = p;
+                pageUsername({ username, image_url });
+                navigate(`/user/${p.userId}`);
+              }}
+            />
+          ))}
 
             </InfiniteScroll>
           </div>
@@ -235,13 +241,14 @@ export default function Timeline({ newPostDisplay }) {
 }
 
 function ChooseFeed({
+  currentPage,
   posts,
   likes,
   requestLikes,
   state,
   imageUrl,
+  setPage,
   setPageAndReload,
-  currentPage,
   newPostDisplay,
   pageUsername,
   setRequestState,
@@ -298,20 +305,20 @@ function ChooseFeed({
         />
         {posts.map((p) => (
           <Post
-            infos={p}
-            key={p.id}
-            like={likes.find(({ postId }) => postId === p.id)}
-            updateLikes={requestLikes}
-            numberComment={comments.find(({ postId }) => postId === p.id)}
-            updateComments={requestComments}
-            setPageAndReload={setPageAndReload}
-            reloadPage={setRequestState}
-            onNavigate={() => {
-              const { username, image_url } = p;
-              pageUsername({ username, image_url });
-              navigate(`/user/${p.userId}`);
-            }}
-          />
+          infos={p}
+          key={p.id}
+          like={likes.find(({ postId }) => postId === p.id)}
+          updateLikes={requestLikes}
+          numberComment={comments.find(({ postId }) => postId === p.id)}
+          updateComments={requestComments}
+          setPageAndReload={setPageAndReload}
+          reloadPage={setRequestState}
+          onNavigate={() => {
+            const { username, image_url } = p;
+            pageUsername({ username, image_url });
+            navigate(`/user/${p.userId}`);
+          }}
+        />
         ))}
       </Feed>
     );

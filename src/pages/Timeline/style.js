@@ -69,7 +69,6 @@ const Container = styled.div`
 
 const Feed = styled.div`
   max-width: 611px;
-  width: 67%;
   display: flex;
   justify-content: center;
   align-items: center;
