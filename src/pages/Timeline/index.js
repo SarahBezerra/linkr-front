@@ -1,18 +1,25 @@
 import { useEffect, useState } from "react";
 import { SpinnerCircularFixed } from "spinners-react";
+import { useLocation, useNavigate, useParams } from "react-router";
+import InfiniteScroll from 'react-infinite-scroller'
+
 import api from "../../services/api";
 import Post from "../../components/Post";
 import { Feed, Container, Page, Loading, Empty, Error, Title } from "./style";
 import NewPost from "../../components/newPost";
 import HashTags from "../../components/Hashtags";
-import useAuth from "../../hooks/useAuth";
 import { pagesList, statesList } from "./utils";
+
+import useAuth from "../../hooks/useAuth";
 import usePage from "../../hooks/usePage";
-import { useLocation, useNavigate, useParams } from "react-router";
+import { Infinite } from "react-ionicons";
+
+
 
 export default function Timeline({ newPostDisplay }) {
   const [requestState, setRequestState] = useState(statesList["loading"]);
   const [posts, setPosts] = useState([]);
+  const [newPosts, setNewPosts] = useState([]);
   const [likes, setLikes] = useState([]);
   const [topHashtags, setTopHashtags] = useState([]);
   const [reload, setReload] = useState(false);
@@ -21,31 +28,38 @@ export default function Timeline({ newPostDisplay }) {
   const { id } = useParams();
   const location = useLocation();
   const { pathname } = useLocation();
+  const navigate = useNavigate();
   const [page, setPage] = useState(getPage());
   const { auth } = useAuth();
   const { page: pageName, pageUsername } = usePage();
+  const [loadCount, setLoadCount] = useState(0);
+  const [keepLoading, setKeepLoading] = useState(true)
+
 
   useEffect(() => {
-    requestPosts();
-    getHeader();
+
+        requestPosts(loadCount);
+        getHeader();
+      
   }, [page, reload]);
 
+
   async function requestPosts() {
+    
     setRequestState(statesList["loading"]);
     let res = null;
 
     try {
-      if (page === pagesList["timeline"]) res = await api.getPosts(auth.token);
+      if (page === pagesList["timeline"]) res = await api.getPosts(auth.token, loadCount);
       else if (page === pagesList["hashtag"]) {
-        res = await api.getPostsByHashtag(currentParam(), auth.token);
+        res = await api.getPostsByHashtag(currentParam(), auth.token, loadCount);
       } else if (id) {
-        res = await api.getPostsFromUser(id, auth.token);
+        res = await api.getPostsFromUser(id, auth.token, loadCount);
       }
 
       setPosts(res.data);
 
-      const state =
-        res.data.length === 0 ? statesList["empty"] : statesList["ok"];
+      const state = res.data.length === 0 ? statesList["empty"] : statesList["ok"];
       await requestLikes();
       await requestTopHashtags();
       setRequestState(state);
@@ -55,6 +69,7 @@ export default function Timeline({ newPostDisplay }) {
     }
   }
 
+  
   async function requestLikes() {
     try {
       const res = await api.getLikes(auth.token);
@@ -74,76 +89,144 @@ export default function Timeline({ newPostDisplay }) {
       setRequestState(statesList["error"]);
     }
   }
-
+  
   function getHeader() {
     if (page === pagesList["timeline"]) setHeader("timeline");
     else if (page === pagesList["hashtag"]) setHeader(`#${currentParam()}`);
     // else
     //   setHeader(`${pagecont?.username} posts`);
   }
+
   function getPage() {
     const name = location.pathname.split("/")[1];
     return pagesList[name];
   }
+  
   function currentParam() {
     return filter[Object.keys(filter)[0]];
   }
+  
   function setPageAndReload(page = undefined) {
     if (page) {
       setPage(page);
     }
     setReload(!reload);
   }
+  
+  async function requestNewPosts(loadCount) {
+    const count = loadCount + 1;
+    let res = null;
+
+    try {
+      if (page === pagesList["timeline"]) res = await api.getPosts(auth.token, count);
+      else if (page === pagesList["hashtag"]) {
+        res = await api.getPostsByHashtag(currentParam(), auth.token, count);
+      } else if (id) {
+        res = await api.getPostsFromUser(id, auth.token, count);
+      }
+
+      
+      if(newPosts.length === res.data.length){
+        setKeepLoading(false);
+      }
+      
+      setNewPosts(res.data);
+      setLoadCount(count);
+
+      await requestLikes();
+      await requestTopHashtags();
+
+    } catch {
+      console.log("aconteceu um erro em posts");
+    }
+  }
+
+  function loadFunc(){
+    console.log('oi');
+    requestNewPosts(loadCount);
+  }
+
 
   return (
-    <Page>
-      <Title>
-        {
-        header?
+    <Page >
 
-          header
+        <Title>
+          {
+          header?
+            header
+          : 
+          pathname === "/timeline"?
+            "timeline"
+          : 
+          pageName?.username.slice(-1) === ("s" || "S")?
+            <>
+              <img src={pageName.image_url}></img>
+              <span>{`${pageName.username}' posts `}</span>
+            </>
 
-        : 
-        pathname === "/timeline"?
+          :
+            <>
+              <img src={pageName.image_url}></img>
+              <span>{`${pageName.username}'s posts`}</span>
+            </>
+          }
+        </Title>
+        <Container>
+          <div style={{display:'flex', flexDirection: 'column', width: '100%'}}>
+            <ChooseFeed
+              currentPage={getPage}
+              posts={posts}
+              likes={likes}
+              requestLikes={requestLikes}
+              state={requestState}
+              setPage={setPage}
+              imageUrl={auth.image_url}
+              setPageAndReload={setPageAndReload}
+              setRequestState={setRequestState}
+              Display={newPostDisplay}
+              pageUsername={pageUsername}
+            />
 
-          "timeline"
+            <InfiniteScroll 
+              element={Feed}
+              initialLoad={false}
+              loadMore={loadFunc}
+              threshold={50}
+              hasMore={keepLoading ? true: false}
+              loader={<div className="loader" key={0}>Loading ...</div>}
+            >
+              {newPosts.map((p) => (
+                <Post
+                  infos={p}
+                  key={p.id}
+                  like={likes.find(({ postId }) => postId === p.id)}
+                  updateLikes={requestLikes}
+                  setPageAndReload={setPageAndReload}
+                  reloadPage={setRequestState}
+                  onNavigate={() => {
+                    const { username, image_url } = p;
+                    pageUsername({ username, image_url });
+                    navigate(`/user/${p.userId}`);
+                  }}
+                />
+              ))}
 
-        : 
-        pageName?.username.slice(-1) === ("s" || "S")?
-          <>
-            <img src={pageName.image_url}></img>
-            <span>{`${pageName.username}' posts `}</span>
-          </>
+            </InfiniteScroll>
+          </div>
 
-        :
-          <>
-            <img src={pageName.image_url}></img>
-            <span>{`${pageName.username}'s posts`}</span>
-          </>
-        }
-      </Title>
-      <Container>
-        <ChooseFeed
-          currentPage={getPage}
-          posts={posts}
-          likes={likes}
-          requestLikes={requestLikes}
-          state={requestState}
-          setPage={setPage}
-          imageUrl={auth.image_url}
-          setPageAndReload={setPageAndReload}
-          setRequestState={setRequestState}
-          Display={newPostDisplay}
-          pageUsername={pageUsername}
-        />
-        <HashTags
-          topHashtags={topHashtags}
-          setPageAndReload={setPageAndReload}
-        ></HashTags>
-      </Container>
+          <HashTags
+            topHashtags={topHashtags}
+            setPageAndReload={setPageAndReload}
+          ></HashTags>
+
+        </Container>
+
+
     </Page>
   );
 }
+
+
 
 function ChooseFeed({
   posts,
@@ -157,7 +240,9 @@ function ChooseFeed({
   pageUsername,
   setRequestState,
 }) {
+
   const navigate = useNavigate();
+
 
   if (state === statesList["error"])
     return (
@@ -199,12 +284,14 @@ function ChooseFeed({
   else
     return (
       <Feed>
+
         <NewPost
           setPageAndReload={setPageAndReload}
           currentPage={currentPage}
           imageUrl={imageUrl}
           displayCase={newPostDisplay}
         />
+
         {posts.map((p) => (
           <Post
             infos={p}
@@ -221,5 +308,9 @@ function ChooseFeed({
           />
         ))}
       </Feed>
+
+        
+        
+      
     );
 }

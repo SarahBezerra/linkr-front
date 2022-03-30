@@ -15,6 +15,8 @@ import { Hashtag } from "./components/Post/style";
 function App() {
   const [menuSelect, setMenuSelect] = useState(false);
 
+
+
   return (
     <Content>
       <AuthProvider>
@@ -25,8 +27,8 @@ function App() {
             <Route path="/" element={<SignIn />} />
             <Route path="/sign-up" element={<SignUp />} />
             <Route path="/timeline" element={<Timeline />} />
-            <Route path="/user/:id" element={<UserPage />} />
-            <Route path="/hashtag/:hashtag" element={<Timeline />} />
+            <Route path="/user/:id" element={<UserPage />}/>
+            <Route path="/hashtag/:hashtag" element={<Timeline/>}/>
           </Routes>
         </BrowserRouter>
       </PageProvider>

@@ -8,6 +8,7 @@ const Page = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  overflow: hidden;
 
   & > *{
     padding: 0 10px 0 10px;
@@ -63,11 +64,12 @@ const Container = styled.div`
   justify-content: center;
   align-items: flex-start;
   gap: 25px;
+  overflow: hidden;
 `;
 
 const Feed = styled.div`
   max-width: 611px;
-  width: 67%;
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
