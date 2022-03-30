@@ -24,6 +24,8 @@ export default function Timeline({ newPostDisplay }) {
   const [ isUserProfile, setIsUserProfile ] = useState(false);
   const [ isFollower, setIsFollower ] = useState(false);
   const [comments, setComments] = useState([]);
+  const [loadCount, setLoadCount] = useState(0);
+  const [keepLoading, setKeepLoading] = useState(true)
 
   const filter = useParams();
   const { id } = useParams();
