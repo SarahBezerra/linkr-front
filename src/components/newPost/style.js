@@ -6,7 +6,7 @@ import { devices } from '../../styles/responsiveness';
 const Container = styled.div`
     width: 100%;
 
-    display: ${({currentPage}) =>(currentPage() !== pagesList['timeline']) ? 'none' : 'flex'};
+    display: ${({currentPage}) =>(currentPage !== pagesList['timeline']) ? 'none' : 'flex'};
     flex-direction: column;
     align-items: center;
     overflow: hidden;

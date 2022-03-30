@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { SpinnerCircularFixed } from "spinners-react";
 import api from "../../services/api";
 import Post from "../../components/Post";
@@ -9,40 +9,44 @@ import useAuth from "../../hooks/useAuth";
 import { pagesList, statesList } from "./utils";
 import usePage from "../../hooks/usePage";
 import { useLocation, useNavigate, useParams } from "react-router";
+import PageContext from "../../contexts/pageContext";
 
 export default function Timeline({ newPostDisplay }) {
+  const { timeLine } = useContext(PageContext);
   const [requestState, setRequestState] = useState(statesList["loading"]);
+  //const [page, setPage] = useState(getPage());
+  //const [reload, setReload] = useState(false);
   const [posts, setPosts] = useState([]);
   const [likes, setLikes] = useState([]);
   const [topHashtags, setTopHashtags] = useState([]);
-  const [reload, setReload] = useState(false);
   const [header, setHeader] = useState("");
   const filter = useParams();
   const { id } = useParams();
   const location = useLocation();
   const { pathname } = useLocation();
-  const [page, setPage] = useState(getPage());
   const { auth } = useAuth();
   const { page: pageName, pageUsername } = usePage();
 
   useEffect(() => {
+    if( timeLine.page === -1) return  timeLine.setPageAndReload(timeLine.getPage(location));
     requestPosts();
     getHeader();
-  }, [page, reload]);
+  }, [timeLine.page, timeLine.reload]);
 
   async function requestPosts() {
     setRequestState(statesList["loading"]);
     let res = null;
 
     try {
-      if (page === pagesList["timeline"]) res = await api.getPosts(auth.token);
-      else if (page === pagesList["hashtag"]) {
+      if (timeLine.page === pagesList["timeline"]) res = await api.getPosts(auth.token);
+      else if (timeLine.page === pagesList["hashtag"]) {
         res = await api.getPostsByHashtag(currentParam(), auth.token);
       } else if (id) {
         res = await api.getPostsFromUser(id, auth.token);
       }
 
       setPosts(res.data);
+
 
       const state =
         res.data.length === 0 ? statesList["empty"] : statesList["ok"];
@@ -76,24 +80,24 @@ export default function Timeline({ newPostDisplay }) {
   }
 
   function getHeader() {
-    if (page === pagesList["timeline"]) setHeader("timeline");
-    else if (page === pagesList["hashtag"]) setHeader(`#${currentParam()}`);
+    if (timeLine.page === pagesList["timeline"]) setHeader("timeline");
+    else if (timeLine.page === pagesList["hashtag"]) setHeader(`#${currentParam()}`);
     // else
     //   setHeader(`${pagecont?.username} posts`);
-  }
-  function getPage() {
-    const name = location.pathname.split("/")[1];
-    return pagesList[name];
   }
   function currentParam() {
     return filter[Object.keys(filter)[0]];
   }
-  function setPageAndReload(page = undefined) {
-    if (page) {
-      setPage(page);
-    }
-    setReload(!reload);
-  }
+  // function getPage() {
+  //   const name = location.pathname.split("/")[1];
+  //   return pagesList[name];
+  // }
+  // function setPageAndReload(page = undefined) {
+  //   if (page) {
+  //     setPage(page);
+  //   }
+  //   setReload(!reload);
+  // }
 
   return (
     <Page>
@@ -111,34 +115,30 @@ export default function Timeline({ newPostDisplay }) {
         : 
         pageName?.username.slice(-1) === ("s" || "S")?
           <>
-            <img src={pageName.image_url}></img>
+            <img src={pageName.image_url} alt=''></img>
             <span>{`${pageName.username}' posts `}</span>
           </>
 
         :
           <>
-            <img src={pageName.image_url}></img>
+            <img src={pageName.image_url} alt=''></img>
             <span>{`${pageName.username}'s posts`}</span>
           </>
         }
       </Title>
       <Container>
         <ChooseFeed
-          currentPage={getPage}
           posts={posts}
           likes={likes}
           requestLikes={requestLikes}
           state={requestState}
-          setPage={setPage}
           imageUrl={auth.image_url}
-          setPageAndReload={setPageAndReload}
           setRequestState={setRequestState}
           Display={newPostDisplay}
           pageUsername={pageUsername}
         />
         <HashTags
           topHashtags={topHashtags}
-          setPageAndReload={setPageAndReload}
         ></HashTags>
       </Container>
     </Page>
@@ -151,8 +151,6 @@ function ChooseFeed({
   requestLikes,
   state,
   imageUrl,
-  setPageAndReload,
-  currentPage,
   newPostDisplay,
   pageUsername,
   setRequestState,
@@ -185,10 +183,8 @@ function ChooseFeed({
     return (
       <Feed>
         <NewPost
-          setPageAndReload={setPageAndReload}
           imageUrl={imageUrl}
           reloadPage={setRequestState}
-          currentPage={currentPage}
         />
         <Empty>
           {" "}
@@ -200,8 +196,6 @@ function ChooseFeed({
     return (
       <Feed>
         <NewPost
-          setPageAndReload={setPageAndReload}
-          currentPage={currentPage}
           imageUrl={imageUrl}
           displayCase={newPostDisplay}
         />
@@ -211,7 +205,6 @@ function ChooseFeed({
             key={p.id}
             like={likes.find(({ postId }) => postId === p.id)}
             updateLikes={requestLikes}
-            setPageAndReload={setPageAndReload}
             reloadPage={setRequestState}
             onNavigate={() => {
               const { username, image_url } = p;

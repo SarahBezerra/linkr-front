@@ -1,5 +1,5 @@
-import { Container, UserName, UserText, MetaContainer, Left, Main, Title, 
-    Description, Url, Preview, MetaLeft, MetaRigth, UserPhoto, ContentLikes, Hashtag, Input } from "./style";
+import { PostContainer, UserName, UserText, MetaContainer, Left, Main, Title, 
+    Description, Url, Preview, MetaLeft, MetaRigth, UserPhoto, ContentLikes, Hashtag, Input, SharedInfo, Container } from "./style";
 import { DocumentTextOutline } from 'react-ionicons'
 import ReactHashtag from "@mdnm/react-hashtag";
 import { useNavigate } from "react-router-dom";
@@ -7,12 +7,14 @@ import LikeHeart from "../LikeHeart";
 import { pagesList } from "../../pages/Timeline/utils";
 import TrashAndEdit from "../TrashAndEdit";
 import useAuth from "../../hooks/useAuth";
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useContext } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import api from "../../services/api";
+import PageContext from "../../contexts/pageContext";
 
-function Post({infos, like, updateLikes, onNavigate, reloadPage, setPageAndReload}){
+function Post({infos, like, updateLikes, onNavigate, reloadPage}){
+    const { timeLine } = useContext(PageContext);
     const {auth} = useAuth()
     const token = auth.token;
     const [ editMessage, setEditMessage ] = useState(false)
@@ -27,44 +29,54 @@ function Post({infos, like, updateLikes, onNavigate, reloadPage, setPageAndReloa
             text,
             image_url,
             metaData,
+            repost,
     } = infos;
 
     return (
         <Container>
-            <Left>
-                <UserPhoto src={ image_url } onClick={onNavigate} alt=''/>
-                <ContentLikes>
-                    <LikeHeart idPost = {id} likesInformations={like || {}} updateLikes={updateLikes} />
-                </ContentLikes> 
-            </Left>
-            <Main>
-                <UserName onClick={onNavigate}> { username } </UserName>
-                {editMessage === true 
-                    ? <MessageEditing setMessage={setMessage} message={message} setEditMessage={setEditMessage} refPostMessage={refPostMessage} token={token} idPost={infos.id} setEnabled={setIsEnabled} enabled={isEnabled} setPageAndReload={setPageAndReload} /> 
-                    : <Message reloadPage={reloadPage} setPageAndReload={setPageAndReload}>{ text }</Message>
-                }
+            {(repost) && 
+            <SharedInfo> <img src='https://i.imgur.com/UA6vhit.png' alt='' />  
+                <p> Reposted by <span>{repost?.reposterName}</span></p>
+            </SharedInfo>
+            }
+            <PostContainer>
+                <Left>
+                    <UserPhoto src={ image_url } onClick={onNavigate} alt=''/>
+                    <ContentLikes>
+                        <LikeHeart idPost = {id} likesInformations={like || {}} updateLikes={updateLikes} />
+                    </ContentLikes> 
+                </Left>
+                <Main>
+                    <UserName onClick={onNavigate}> { username } </UserName>
+                    {editMessage === true 
+                        ? <MessageEditing setMessage={setMessage} message={message} setEditMessage={setEditMessage} 
+                            refPostMessage={refPostMessage} token={token} idPost={infos.id} setEnabled={setIsEnabled} 
+                            enabled={isEnabled} setPageAndReload={timeLine.setPageAndReload} /> 
+                        : <Message reloadPage={reloadPage} setPageAndReload={timeLine.setPageAndReload}>{ text }</Message>
+                    }
 
-                   {userId === auth.userId 
-                    ? <TrashAndEdit idPost={infos.id} reloadPage={setPageAndReload} setEditMessage={setEditMessage} editMessage={editMessage} refPostMessage={refPostMessage} setMessage={setMessage} /> 
-                    : ''}
-                   
-                <a href={metaData.url} target='_blank' rel='noreferrer' >
-                    <MetaContainer>
-                        <MetaLeft>
-                            <Title> { metaData.title } </Title>
-                            <Description> { metaData.description } </Description>
-                            <Url> { metaData.url } </Url>
-                        </MetaLeft>
-                        <MetaRigth>
-                        {(metaData.image !== '')
-                            ? <Preview src={ metaData.image } alt='' />
-                            : <DocumentTextOutline color={'#000000'} height="70px" width="70px" />
-                        }
-                        </MetaRigth>
-                    </MetaContainer>
-                </a>
-            </Main>
-                
+                    {userId === auth.userId 
+                        ? <TrashAndEdit idPost={infos.id} setEditMessage={setEditMessage} editMessage={editMessage} refPostMessage={refPostMessage} setMessage={setMessage} /> 
+                        : ''}
+                    
+                    <a href={metaData.url} target='_blank' rel='noreferrer' >
+                        <MetaContainer>
+                            <MetaLeft>
+                                <Title> { metaData.title } </Title>
+                                <Description> { metaData.description } </Description>
+                                <Url> { metaData.url } </Url>
+                            </MetaLeft>
+                            <MetaRigth>
+                            {(metaData.image !== '')
+                                ? <Preview src={ metaData.image } alt='' />
+                                : <DocumentTextOutline color={'#000000'} height="70px" width="70px" />
+                            }
+                            </MetaRigth>
+                        </MetaContainer>
+                    </a>
+                </Main>
+                    
+            </PostContainer>
         </Container>
     )
 }
@@ -124,7 +136,7 @@ function Message({children, setPageAndReload}){
 
     const navigate = useNavigate();
 
-    function handleHashtagLink({innerText}){
+    function handleHashtagLink(innerText){
             const hashtag = innerText.replace('#','');
             setPageAndReload(pagesList['hashtag']);
             navigate(`/hashtag/${hashtag}`);
@@ -133,7 +145,11 @@ function Message({children, setPageAndReload}){
     return(
         <UserText>
             <ReactHashtag 
-                renderHashtag={(hashtagValue) => (<Hashtag  key={hashtagValue} onClick={(e) => {handleHashtagLink(e.target)}}>{hashtagValue}</Hashtag>)} >
+                renderHashtag={(hashtagValue) => {
+                    const hashtags = hashtagValue.match(/([#|＃][^(#|＃|(\s))]+)/gi);
+                    return hashtags.map(h => <Hashtag  key={h} onClick={(e) => {handleHashtagLink(h)}}>{h}</Hashtag>)
+                }
+                }>
                 {children}
             </ReactHashtag>
         </UserText>

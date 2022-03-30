@@ -2,16 +2,40 @@ import styled from "styled-components";
 import { devices } from "../../styles/responsiveness";
 
 const Container = styled.div`
+
+    width: 100%;
+    background-color: #1E1E1E;
+    border-radius: 16px;
+    color: white;
+
+`;
+
+const PostContainer = styled.div`
     display:flex;
 
     width: 100%;
-    /* max-width:100%; */
     background-color: black;
-    /* min-height: 300px; */
     border-radius: 16px;
     color: white;
     padding: 20px;
 
+`;
+
+const SharedInfo = styled.div`
+    display:flex;
+    align-items: center;
+    img {
+        margin-left: 13px;
+        height: 15px;
+    }
+    p {
+        font-size: 11px;
+        line-height: 35px;
+        margin-left: 13px;
+    }
+    span {
+        font-weight:700;
+    }
 `;
 
 const Left = styled.div`
@@ -134,6 +158,8 @@ const Input = styled.textarea`
 
 export {
     Container,
+    PostContainer,
+    SharedInfo,
     Left,
     Main,
     UserName,
