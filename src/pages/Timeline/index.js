@@ -9,6 +9,7 @@ import useAuth from "../../hooks/useAuth";
 import { pagesList, statesList } from "./utils";
 import usePage from "../../hooks/usePage";
 import { useLocation, useNavigate, useParams } from "react-router";
+import FollowButton from "../../components/FollowButton/index";
 
 export default function Timeline({ newPostDisplay }) {
   const [requestState, setRequestState] = useState(statesList["loading"]);
@@ -24,6 +25,8 @@ export default function Timeline({ newPostDisplay }) {
   const [page, setPage] = useState(getPage());
   const { auth } = useAuth();
   const { page: pageName, pageUsername } = usePage();
+  const [ isUserProfile, setIsUserProfile ] = useState(false);
+  const [ isFollower, setIsFollower ] = useState(false);
   const [comments, setComments] = useState([]);
 
   useEffect(() => {
@@ -36,11 +39,15 @@ export default function Timeline({ newPostDisplay }) {
     let res = null;
 
     try {
-      if (page === pagesList["timeline"]) res = await api.getPosts(auth.token);
-      else if (page === pagesList["hashtag"]) {
+      if (page === pagesList["timeline"]) {
+        res = await api.getPosts(auth.token);
+      } else if (page === pagesList["hashtag"]) {
         res = await api.getPostsByHashtag(currentParam(), auth.token);
       } else if (id) {
         res = await api.getPostsFromUser(id, auth.token);
+        const userInfos = await api.getFollowers( id , auth.token );
+        if(userInfos.data.isUserProfile) setIsUserProfile(true);
+        if(userInfos.data.isFollower) setIsFollower(true);
       }
 
       setPosts(res.data);
@@ -106,6 +113,8 @@ export default function Timeline({ newPostDisplay }) {
     setReload(!reload);
   }
 
+  const token = auth.token;
+
   return (
     <Page>
       <Title>
@@ -113,17 +122,25 @@ export default function Timeline({ newPostDisplay }) {
           header
         ) : pathname === "/timeline" ? (
           "timeline"
-        ) : pageName?.username.slice(-1) === ("s" || "S") ? (
-          <>
+        )
+        : 
+
+        <>
+          <div>
             <img src={pageName.image_url}></img>
-            <span>{`${pageName.username}' posts `}</span>
-          </>
-        ) : (
-          <>
-            <img src={pageName.image_url}></img>
-            <span>{`${pageName.username}'s posts`}</span>
-          </>
-        )}
+            <span>{`
+              ${pageName.username}${
+                (pageName?.username.slice(-1) === ("s" || "S"))
+                ?
+                "'"
+                :
+                "'s"
+              } posts`
+            }</span> 
+          </div>
+          {(isUserProfile) ? <></> : <FollowButton id={id} token={token} isFollower={isFollower} setIsFollower={setIsFollower} />}
+        </>
+        }
       </Title>
       <Container>
         <ChooseFeed
