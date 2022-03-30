@@ -2,7 +2,8 @@ import axios from "axios";
 
 const BASE_URL = process.env.REACT_APP_PUBLIC_URL 
   ? process.env.REACT_APP_PUBLIC_URL 
-  : 'https://back-linkr.herokuapp.com';
+  : 'http://localhost:5000'
+  //: 'https://back-linkr.herokuapp.com';
 
 function createConfig(token) {
   return { headers: { Authorization: `Bearer ${token}` } };
@@ -66,6 +67,21 @@ function getTopHashtags(token) {
   return axios.get(`${BASE_URL}/topHashtags`, config);
 }
 
+function getFollowers(pageUserId, token) {
+  const config = createConfig(token);
+  return axios.get(`${BASE_URL}/follows/${pageUserId}`, config);
+}
+
+function postFollow(pageUserId, token) {
+  const config = createConfig(token);
+  return axios.post(`${BASE_URL}/follows`, {pageUserId}, config);
+}
+
+function deleteFollow(pageUserId, token) {
+  const config = createConfig(token);
+  return axios.delete(`${BASE_URL}/follows/${pageUserId}`, config);
+}
+
 const api = {
   createConfig,
   getPosts,
@@ -80,7 +96,10 @@ const api = {
   getUser,
   deletePost, 
   updatePost,
-  browserUsers
+  browserUsers,
+  getFollowers,
+  postFollow,
+  deleteFollow
 };
 
 export default api;

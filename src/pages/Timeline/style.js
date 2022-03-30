@@ -31,10 +31,16 @@ const Title = styled.h1`
   height: fit-content;
   display:flex;
   align-items: center;
+  justify-content: space-between;
   color: #FFF;
   font-family: 'Oswald', sans-serif;
   font-weight: 700;
   font-size: 43px;
+
+  div {
+    display: flex;
+    align-items: center;
+  }
 
   img{
     width: 50px;
