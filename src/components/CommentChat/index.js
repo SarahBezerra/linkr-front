@@ -1,6 +1,6 @@
 import { BoxComment, IconComment } from "./style";
 
-export default function CommentChat({ idPost, stateComment, setComments }) {
+export default function CommentChat({ number, stateComment, setComments }) {
   function handleClickComment() {
     setComments(!stateComment);
   }
@@ -8,7 +8,10 @@ export default function CommentChat({ idPost, stateComment, setComments }) {
   return (
     <BoxComment>
       <IconComment onClick={handleClickComment} />
-      <p>12 comments</p>
+      <p>
+        {number?.numbercomments || 0}
+        {number?.numbercomments !== 1 ? " comments" : " comment"}
+      </p>
     </BoxComment>
   );
 }

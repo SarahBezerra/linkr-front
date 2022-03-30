@@ -24,6 +24,7 @@ export default function Timeline({ newPostDisplay }) {
   const [page, setPage] = useState(getPage());
   const { auth } = useAuth();
   const { page: pageName, pageUsername } = usePage();
+  const [comments, setComments] = useState([]);
 
   useEffect(() => {
     requestPosts();
@@ -48,6 +49,7 @@ export default function Timeline({ newPostDisplay }) {
         res.data.length === 0 ? statesList["empty"] : statesList["ok"];
       await requestLikes();
       await requestTopHashtags();
+      await requestComments();
       setRequestState(state);
     } catch {
       console.log("aconteceu um erro em posts");
@@ -62,6 +64,15 @@ export default function Timeline({ newPostDisplay }) {
     } catch (err) {
       console.log("aconteceu um erro em likes");
       setRequestState(statesList["error"]);
+    }
+  }
+
+  async function requestComments() {
+    try {
+      const res = await api.getCommentsNumber(auth.token);
+      setComments(res.data);
+    } catch {
+      console.log("Aconteceu um erro ao pegar número de comentários");
     }
   }
 
@@ -98,29 +109,21 @@ export default function Timeline({ newPostDisplay }) {
   return (
     <Page>
       <Title>
-        {
-        header?
-
+        {header ? (
           header
-
-        : 
-        pathname === "/timeline"?
-
+        ) : pathname === "/timeline" ? (
           "timeline"
-
-        : 
-        pageName?.username.slice(-1) === ("s" || "S")?
+        ) : pageName?.username.slice(-1) === ("s" || "S") ? (
           <>
             <img src={pageName.image_url}></img>
             <span>{`${pageName.username}' posts `}</span>
           </>
-
-        :
+        ) : (
           <>
             <img src={pageName.image_url}></img>
             <span>{`${pageName.username}'s posts`}</span>
           </>
-        }
+        )}
       </Title>
       <Container>
         <ChooseFeed
@@ -135,6 +138,8 @@ export default function Timeline({ newPostDisplay }) {
           setRequestState={setRequestState}
           Display={newPostDisplay}
           pageUsername={pageUsername}
+          comments={comments}
+          requestComments={requestComments}
         />
         <HashTags
           topHashtags={topHashtags}
@@ -156,6 +161,8 @@ function ChooseFeed({
   newPostDisplay,
   pageUsername,
   setRequestState,
+  comments,
+  requestComments,
 }) {
   const navigate = useNavigate();
 
@@ -211,6 +218,8 @@ function ChooseFeed({
             key={p.id}
             like={likes.find(({ postId }) => postId === p.id)}
             updateLikes={requestLikes}
+            numberComment={comments.find(({ postId }) => postId === p.id)}
+            updateComments={requestComments}
             setPageAndReload={setPageAndReload}
             reloadPage={setRequestState}
             onNavigate={() => {

@@ -17,7 +17,7 @@ import api from "../../services/api";
 import LoadingCircular from "../LoadingCircular";
 import PulseLoader from "react-spinners/PulseLoader";
 
-export default function BoxComments({ postId }) {
+export default function BoxComments({ postId, updateComments }) {
   const { auth } = useAuth();
   const [comment, setComment] = useState("");
   const [listComments, setListComments] = useState(false);
@@ -46,6 +46,7 @@ export default function BoxComments({ postId }) {
       setWaitLittle(false);
       setWaitLarge(true);
       await getPostsWithId();
+      updateComments();
       setWaitLarge(false);
     } catch {
       console.log("Ocorrou um erro nos comentários");

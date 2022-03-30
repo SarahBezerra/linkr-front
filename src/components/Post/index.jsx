@@ -14,7 +14,7 @@ import api from "../../services/api";
 import CommentChat from "../CommentChat";
 import BoxComments from "../BoxComments";
 
-function Post({infos, like, updateLikes, onNavigate, reloadPage, setPageAndReload}){
+function Post({infos, like, updateLikes, numberComment,updateComments, onNavigate, reloadPage, setPageAndReload}){
     const {auth} = useAuth()
     const token = auth.token;
     const [ editMessage, setEditMessage ] = useState(false)
@@ -41,7 +41,7 @@ function Post({infos, like, updateLikes, onNavigate, reloadPage, setPageAndReloa
                         <LikeHeart idPost = {id} likesInformations={like || {}} updateLikes={updateLikes} />
                     </ContentLikes> 
                     <ContentComments>
-                        <CommentChat idPost = {id} stateComment ={enabledComment} setComments={setEnabledComment}/>
+                        <CommentChat number = {numberComment} stateComment ={enabledComment} setComments={setEnabledComment}/>
                     </ContentComments>
                 </Left>
                 <Main>
@@ -72,7 +72,7 @@ function Post({infos, like, updateLikes, onNavigate, reloadPage, setPageAndReloa
                     </a>
                 </Main>
             </Container>
-            {enabledComment ? <BoxComments postId={id}/> : ''}
+            {enabledComment ? <BoxComments postId={id} updateComments={updateComments}/> : ''}
         </>
     )
 }
