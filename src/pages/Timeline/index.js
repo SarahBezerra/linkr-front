@@ -113,6 +113,39 @@ export default function Timeline({ newPostDisplay }) {
     setReload(!reload);
   }
 
+  async function requestNewPosts(loadCount) {
+    const count = loadCount + 1;
+    let res = null;
+
+    try {
+      if (page === pagesList["timeline"]) res = await api.getPosts(auth.token, count);
+      else if (page === pagesList["hashtag"]) {
+        res = await api.getPostsByHashtag(currentParam(), auth.token, count);
+      } else if (id) {
+        res = await api.getPostsFromUser(id, auth.token, count);
+      }
+
+      
+      if(newPosts.length === res.data.length){
+        setKeepLoading(false);
+      }
+      
+      setNewPosts(res.data);
+      setLoadCount(count);
+
+      await requestLikes();
+      await requestTopHashtags();
+
+    } catch {
+      console.log("aconteceu um erro em posts");
+    }
+  }
+
+  function loadFunc(){
+    console.log('oi');
+    requestNewPosts(loadCount);
+  }
+
   const token = auth.token;
 
   return (
