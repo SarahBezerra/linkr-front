@@ -176,21 +176,47 @@ export default function Timeline({ newPostDisplay }) {
         }
       </Title>
       <Container>
-        <ChooseFeed
-          currentPage={getPage}
-          posts={posts}
-          likes={likes}
-          requestLikes={requestLikes}
-          state={requestState}
-          setPage={setPage}
-          imageUrl={auth.image_url}
-          setPageAndReload={setPageAndReload}
-          setRequestState={setRequestState}
-          Display={newPostDisplay}
-          pageUsername={pageUsername}
-          comments={comments}
-          requestComments={requestComments}
-        />
+      <div style={{display:'flex', flexDirection: 'column', width: '100%'}}>
+            <ChooseFeed
+              currentPage={getPage}
+              posts={posts}
+              likes={likes}
+              requestLikes={requestLikes}
+              state={requestState}
+              setPage={setPage}
+              imageUrl={auth.image_url}
+              setPageAndReload={setPageAndReload}
+              setRequestState={setRequestState}
+              Display={newPostDisplay}
+              pageUsername={pageUsername}
+            />
+
+            <InfiniteScroll 
+              element={Feed}
+              initialLoad={false}
+              loadMore={loadFunc}
+              threshold={50}
+              hasMore={keepLoading ? true: false}
+              loader={<div className="loader" key={0}>Loading ...</div>}
+            >
+              {newPosts.map((p) => (
+                <Post
+                  infos={p}
+                  key={p.id}
+                  like={likes.find(({ postId }) => postId === p.id)}
+                  updateLikes={requestLikes}
+                  setPageAndReload={setPageAndReload}
+                  reloadPage={setRequestState}
+                  onNavigate={() => {
+                    const { username, image_url } = p;
+                    pageUsername({ username, image_url });
+                    navigate(`/user/${p.userId}`);
+                  }}
+                />
+              ))}
+
+            </InfiniteScroll>
+          </div>
         <HashTags
           topHashtags={topHashtags}
           setPageAndReload={setPageAndReload}
