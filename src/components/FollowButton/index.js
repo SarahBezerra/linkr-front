@@ -42,6 +42,7 @@ function FollowButton({ id, token, isFollower, setIsFollower }) {
         isFollower 
         ? 
         <Button 
+            className="unfollow"
             disabled={!enabled} 
             enabled={enabled} 
             onClick={() => unfollowOrFollowUser("unfollow")}
