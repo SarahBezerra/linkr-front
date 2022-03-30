@@ -51,6 +51,10 @@ function deletePost(idPost, token) {
   return axios.delete(`${BASE_URL}/posts/${idPost}`, createConfig(token));
 }
 
+function getCommentsPost(idPost, token) {
+  return axios.get(`${BASE_URL}/comments/${idPost}`, createConfig(token));
+}
+
 function postComment(token, postId, text) {
   return axios.post(
     `${BASE_URL}/comments/${postId}`,
@@ -82,6 +86,7 @@ const api = {
   sendPost,
   getLikes,
   postLikeOrNot,
+  getCommentsPost,
   postComment,
   postSignUp,
   postSignIn,

@@ -17,6 +17,7 @@ const ContainerComments = styled.div`
   img {
     clip-path: circle();
     height: 39px;
+    width: 39px;
     margin-right: 18px;
   }
 `;
@@ -123,6 +124,18 @@ const IconSend = styled(FiSend)`
   }
 `;
 
+const ContentLoading = styled.div`
+  display: flex;
+  height: 50px;
+  padding-top: 20px;
+  justify-content: center;
+  width: 100%;
+
+  span {
+    transform: rotate(90deg);
+  }
+`;
+
 export {
   ContainerComments,
   ContentComment,
@@ -131,6 +144,7 @@ export {
   InformationsUser,
   CommentText,
   NewCommentContent,
+  ContentLoading,
   IconSend,
   FloatingContainer,
 };

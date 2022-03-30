@@ -1,7 +1,3 @@
-import { useState } from "react";
-import useAuth from "../../hooks/useAuth";
-import api from "../../services/api";
-import LoadingCircular from "../LoadingCircular";
 import {
   ContainerComments,
   ContentComment,
@@ -12,19 +8,45 @@ import {
   NewCommentContent,
   IconSend,
   FloatingContainer,
+  ContentLoading,
 } from "./style";
+import { useEffect } from "react";
+import { useState } from "react";
+import useAuth from "../../hooks/useAuth";
+import api from "../../services/api";
+import LoadingCircular from "../LoadingCircular";
+import PulseLoader from "react-spinners/PulseLoader";
 
 export default function BoxComments({ postId }) {
   const { auth } = useAuth();
   const [comment, setComment] = useState("");
-  const [wait, setWait] = useState(false);
+  const [listComments, setListComments] = useState(false);
+  const [waitLittle, setWaitLittle] = useState(false);
+  const [waitLarge, setWaitLarge] = useState(false);
+
+  useEffect(() => {
+    getPostsWithId();
+  }, []);
+
+  async function getPostsWithId() {
+    try {
+      const res = await api.getCommentsPost(postId, auth.token);
+      setListComments(res.data);
+    } catch {
+      console.log("Ocorrou um erro ao pegar comentários do post");
+    }
+  }
 
   async function postNewComment() {
-    setWait(true);
+    setWaitLittle(true);
 
     try {
       await api.postComment(auth.token, postId, comment);
-      setWait(false);
+      setComment("");
+      setWaitLittle(false);
+      setWaitLarge(true);
+      await getPostsWithId();
+      setWaitLarge(false);
     } catch {
       console.log("Ocorrou um erro nos comentários");
     }
@@ -35,37 +57,47 @@ export default function BoxComments({ postId }) {
   }
 
   return (
-    <ContainerComments>
-      <ContentComment>
-        <CommentUser>
-          <img src="https://randomuser.me/api/portraits/women/33.jpg" />
-          <InformationsUser>
-            <div>
-              <p>Joaquina Tavares</p>
-              <span>• following</span>
-            </div>
-            <CommentText>
-              Também achei, mudou minha vidaTambém achei, mudou minha vida
-              Também achei, mudou minha vida Também achei, mudou minha vida
-              Também achei, mudou minha vida Também achei, mudou minha vida
-              Também achei, mudou minha vida Também achei, mudou minha vida
-              Também achei, mudou minha vida Também achei, mudou minha vida
-            </CommentText>
-          </InformationsUser>
-        </CommentUser>
-        <DividerLine />
-      </ContentComment>
-      <NewCommentContent>
-        <img src="https://randomuser.me/api/portraits/women/33.jpg" />
-        <input placeholder="write a comment..." onChange={handleInputChange} />
-        <FloatingContainer>
-          {wait ? (
-            <LoadingCircular size="16px" />
-          ) : (
-            <IconSend onClick={postNewComment} />
-          )}
-        </FloatingContainer>
-      </NewCommentContent>
-    </ContainerComments>
+    <>
+      <ContainerComments>
+        {listComments && !waitLarge ? (
+          listComments.map((oneComment, i) => (
+            <ContentComment key={i + oneComment.image_url}>
+              <CommentUser>
+                <img src={oneComment.image_url} />
+                <InformationsUser>
+                  <div>
+                    <p>{oneComment.username}</p>
+                    {oneComment.followUser ? <span>• following</span> : ""}
+                    {oneComment.authorPost ? <span>• post's author</span> : ""}
+                  </div>
+                  <CommentText>{oneComment.text}</CommentText>
+                </InformationsUser>
+              </CommentUser>
+              <DividerLine />
+            </ContentComment>
+          ))
+        ) : (
+          <ContentLoading>
+            <PulseLoader />
+          </ContentLoading>
+        )}
+
+        <NewCommentContent>
+          <img src={auth.image_url} />
+          <input
+            value={comment}
+            placeholder="write a comment..."
+            onChange={handleInputChange}
+          />
+          <FloatingContainer>
+            {waitLittle ? (
+              <LoadingCircular size="16px" />
+            ) : (
+              <IconSend onClick={postNewComment} />
+            )}
+          </FloatingContainer>
+        </NewCommentContent>
+      </ContainerComments>
+    </>
   );
 }

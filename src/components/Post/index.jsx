@@ -32,8 +32,6 @@ function Post({infos, like, updateLikes, onNavigate, reloadPage, setPageAndReloa
             metaData,
     } = infos;
 
-    console.log(enabledComment)
-
     return (
         <>
             <Container>
