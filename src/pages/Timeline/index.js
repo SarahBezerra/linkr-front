@@ -1,5 +1,9 @@
 import { useEffect, useState } from "react";
+import { useLocation, useNavigate, useParams } from "react-router";
 import { SpinnerCircularFixed } from "spinners-react";
+import InfiniteScroll from 'react-infinite-scroller'
+
+
 import api from "../../services/api";
 import Post from "../../components/Post";
 import { Feed, Container, Page, Loading, Empty, Error, Title } from "./style";
@@ -8,7 +12,6 @@ import HashTags from "../../components/Hashtags";
 import useAuth from "../../hooks/useAuth";
 import { pagesList, statesList } from "./utils";
 import usePage from "../../hooks/usePage";
-import { useLocation, useNavigate, useParams } from "react-router";
 import FollowButton from "../../components/FollowButton/index";
 
 export default function Timeline({ newPostDisplay }) {
@@ -18,16 +21,19 @@ export default function Timeline({ newPostDisplay }) {
   const [topHashtags, setTopHashtags] = useState([]);
   const [reload, setReload] = useState(false);
   const [header, setHeader] = useState("");
+  const [ isUserProfile, setIsUserProfile ] = useState(false);
+  const [ isFollower, setIsFollower ] = useState(false);
+  const [comments, setComments] = useState([]);
+
   const filter = useParams();
   const { id } = useParams();
   const location = useLocation();
   const { pathname } = useLocation();
   const [page, setPage] = useState(getPage());
+  const navigate = useNavigate();
+
   const { auth } = useAuth();
   const { page: pageName, pageUsername } = usePage();
-  const [ isUserProfile, setIsUserProfile ] = useState(false);
-  const [ isFollower, setIsFollower ] = useState(false);
-  const [comments, setComments] = useState([]);
 
   useEffect(() => {
     requestPosts();
