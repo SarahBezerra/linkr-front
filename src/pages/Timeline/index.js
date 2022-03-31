@@ -41,25 +41,35 @@ export default function Timeline({ newPostDisplay }) {
   useEffect(() => {
     requestPosts();
     getHeader();
-  }, [page, reload]);
+    if(pathname === '/timeline'){
+      setPage(pagesList['timeline']);
+    }
+  }, [page, reload, pathname]);
 
   async function requestPosts() {
     setRequestState(statesList["loading"]);
+    const count = loadCount + 1;
     let res = null;
 
     try {
       if (page === pagesList["timeline"]) {
-        res = await api.getPosts(auth.token);
+        res = await api.getPosts(auth.token, count);
       } else if (page === pagesList["hashtag"]) {
-        res = await api.getPostsByHashtag(currentParam(), auth.token);
+        res = await api.getPostsByHashtag(currentParam(), auth.token, count);
       } else if (id) {
-        res = await api.getPostsFromUser(id, auth.token);
+        res = await api.getPostsFromUser(id, auth.token, count);
+
         const userInfos = await api.getFollowers( id , auth.token );
         if(userInfos.data.isUserProfile) setIsUserProfile(true);
         if(userInfos.data.isFollower) setIsFollower(true);
       }
 
-      setPosts(res.data);
+      if(newPosts.length === res.data.length){
+        setKeepLoading(false);
+      }
+      
+      setNewPosts(res.data);
+      setLoadCount(count);
 
       const state =
         res.data.length === 0 ? statesList["empty"] : statesList["ok"];
@@ -122,37 +132,40 @@ export default function Timeline({ newPostDisplay }) {
     setReload(!reload);
   }
 
-  async function requestNewPosts(loadCount) {
-    const count = loadCount + 1;
-    let res = null;
+  // async function requestNewPosts(loadCount) {
+  //   const count = loadCount + 1;
+  //   let res = null;
 
-    try {
-      if (page === pagesList["timeline"]) res = await api.getPosts(auth.token, count);
-      else if (page === pagesList["hashtag"]) {
-        res = await api.getPostsByHashtag(currentParam(), auth.token, count);
-      } else if (id) {
-        res = await api.getPostsFromUser(id, auth.token, count);
-      }
+  //   try {
+  //     if (page === pagesList["timeline"]) res = await api.getPosts(auth.token, count);
+  //     else if (page === pagesList["hashtag"]) {
+  //       res = await api.getPostsByHashtag(currentParam(), auth.token, count);
+  //     } else if (id) {
+  //       res = await api.getPostsFromUser(id, auth.token, count);
+  //       const userInfos = await api.getFollowers( id , auth.token );
+  //       if(userInfos.data.isUserProfile) setIsUserProfile(true);
+  //       if(userInfos.data.isFollower) setIsFollower(true);
+  //     }
 
       
-      if(newPosts.length === res.data.length){
-        setKeepLoading(false);
-      }
+  //     if(newPosts.length === res.data.length){
+  //       setKeepLoading(false);
+  //     }
       
-      setNewPosts(res.data);
-      setLoadCount(count);
+  //     setNewPosts(res.data);
+  //     setLoadCount(count);
 
-      await requestLikes();
-      await requestTopHashtags();
+  //     await requestLikes();
+  //     await requestTopHashtags();
 
-    } catch {
-      console.log("aconteceu um erro em posts");
-    }
-  }
+  //   } catch {
+  //     console.log("aconteceu um erro em posts");
+  //   }
+  // }
 
   function loadFunc(){
     console.log('oi');
-    requestNewPosts(loadCount);
+    requestPosts(loadCount);
   }
 
   const token = auth.token;
@@ -204,7 +217,7 @@ export default function Timeline({ newPostDisplay }) {
 
            <InfiniteScroll 
             element={Feed}
-            initialLoad={false}
+            initialLoad={true}
             loadMore={loadFunc}
             threshold={50}
             hasMore={keepLoading ? true: false}
@@ -254,6 +267,7 @@ function ChooseFeed({
   setRequestState,
   comments,
   requestComments,
+  children
 }) {
   const navigate = useNavigate();
 
@@ -303,23 +317,7 @@ function ChooseFeed({
           imageUrl={imageUrl}
           displayCase={newPostDisplay}
         />
-        {posts.map((p) => (
-          <Post
-          infos={p}
-          key={p.id}
-          like={likes.find(({ postId }) => postId === p.id)}
-          updateLikes={requestLikes}
-          numberComment={comments.find(({ postId }) => postId === p.id)}
-          updateComments={requestComments}
-          setPageAndReload={setPageAndReload}
-          reloadPage={setRequestState}
-          onNavigate={() => {
-            const { username, image_url } = p;
-            pageUsername({ username, image_url });
-            navigate(`/user/${p.userId}`);
-          }}
-        />
-        ))}
+        {children}
       </Feed>
     );
 }
