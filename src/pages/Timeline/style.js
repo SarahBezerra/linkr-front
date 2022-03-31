@@ -29,8 +29,8 @@ const Title = styled.h1`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  color: #FFF;
-  font-family: 'Oswald', sans-serif;
+  color: #fff;
+  font-family: "Oswald", sans-serif;
   font-weight: 700;
   font-size: 43px;
 
@@ -39,7 +39,7 @@ const Title = styled.h1`
     align-items: center;
   }
 
-  img{
+  img {
     width: 50px;
     height: 50px;
 
