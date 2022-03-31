@@ -7,7 +7,7 @@ const BoxIcons = styled.div`
   right: 0;
 
   span {
-    margin-left: 5px;
+    margin-left: 10px;
     :hover {
       cursor: pointer;
     }
