@@ -104,10 +104,12 @@ const Loading = styled(Feed)`
 const Empty = styled(Loading)`
   background-color: black;
   color: white;
+  width: 100%;
 
   * {
     font-size: 30px;
     text-align: center;
+    line-height: 40px;
   }
 `;
 const Error = Empty;
