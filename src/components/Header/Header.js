@@ -8,7 +8,7 @@ import { useNavigate, useLocation, Link } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 import UserSearch from "../UserSearch";
 
-export default function Header({ menuSelect, setMenuSelect, reload }) {
+export default function Header({ menuSelect, setMenuSelect }) {
   const { auth, logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
@@ -25,7 +25,7 @@ export default function Header({ menuSelect, setMenuSelect, reload }) {
           <HeaderContent>
 
               <Link to={`/timeline`}>
-                <h1 onClick={reload}>linkr</h1>
+                <h1>linkr</h1>
               </Link>
               
               <Browser/>

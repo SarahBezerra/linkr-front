@@ -14,14 +14,13 @@ import { Hashtag } from "./components/Post/style";
 
 function App() {
   const [menuSelect, setMenuSelect] = useState(false);
-  const [reload, setReload] = useState(false);
 
   return (
     <Content>
       <AuthProvider>
       <PageProvider>
         <BrowserRouter>
-          <Header menuSelect={menuSelect} setMenuSelect={setMenuSelect} reload={() => {setReload(!reload)}} />
+          <Header menuSelect={menuSelect} setMenuSelect={setMenuSelect} />
           <Routes>
             <Route path="/" element={<SignIn />} />
             <Route path="/sign-up" element={<SignUp />} />
