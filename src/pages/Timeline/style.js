@@ -93,8 +93,8 @@ const Feed = styled.div`
 `;
 
 const Loading = styled(Feed)`
-  height: 100%;
-  min-height: 550px;
+  height: 200px;
+  margin-bottom: 50px;
   border-radius: 16px;
   background-color: #00000014;
   padding-bottom: initial;
@@ -107,11 +107,7 @@ const Loading = styled(Feed)`
 const Empty = styled(Loading)`
   background-color: black;
   color: white;
-<<<<<<< HEAD
   width: 100%;
-=======
-  width:100%;
->>>>>>> searchBarImprov
 
   * {
     font-size: 30px;

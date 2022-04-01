@@ -18,6 +18,7 @@ export default function RePost({ postId, posterId }) {
 
     try {
       await api.toggleRePost(postId, auth.token);
+      setWait(false);
       setPageAndReload();
 
     } catch {
