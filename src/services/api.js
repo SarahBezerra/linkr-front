@@ -44,8 +44,8 @@ function getPostsFromUser(id, token, loadCount) {
   return axios.get(`${BASE_URL}/posts/${id}`, config);
 }
 
-function getNewPostsWithInterval(id, token) {
-  return axios.get(`${BASE_URL}/newposts/${id}`, createConfig(token));
+function getNewPostsWithInterval(id, body, token) {
+  return axios.post(`${BASE_URL}/newposts/${id}`, body, createConfig(token));
 }
 
 function getLikes(token) {

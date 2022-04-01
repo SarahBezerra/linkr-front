@@ -13,7 +13,13 @@ export default function NewPostsTag({ lastPost }) {
   const { auth } = useAuth();
 
   useInterval(async () => {
-    const res = await api.getNewPostsWithInterval(lastPost?.id, auth.token);
+    const isRepost =
+      lastPost.repost !== undefined ? { date: lastPost.repost.date } : {};
+    const res = await api.getNewPostsWithInterval(
+      lastPost?.id,
+      isRepost,
+      auth.token
+    );
     setnewPosts(res.data.count);
     setShowTag(true);
   }, 5000);
