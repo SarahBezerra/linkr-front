@@ -1,8 +1,8 @@
 import { useContext, useEffect, useState } from "react";
 import { SpinnerCircularFixed } from "spinners-react";
 
-import InfiniteScroll from "react-infinite-scroller";
 import LoadingCircular from "../../components/LoadingCircular";
+import InfiniteScroll from "react-infinite-scroller";
 import LoadingAnimation from "../../components/Timeline/index";
 
 import api from "../../services/api";
@@ -182,7 +182,7 @@ export default function Timeline({ newPostDisplay }) {
           style={{ display: "flex", flexDirection: "column", width: "100%" }}
         >
           <ChooseFeed
-            posts={posts}
+            posts={newPosts}
             likes={likes}
             requestLikes={requestLikes}
             state={requestState}
@@ -200,7 +200,12 @@ export default function Timeline({ newPostDisplay }) {
             loadMore={loadFunc}
             threshold={50}
             hasMore={keepLoading ? true : false}
-            loader={<LoadingAnimation size={50} />}
+            loader={
+              <LoadingAnimation
+                display={loadCount === 0 ? "none" : "flex"}
+                size={50}
+              />
+            }
           >
             {newPosts.map((p) => (
               <Post
