@@ -15,7 +15,7 @@ export function InfiniteLoading({size}){
 
 const LoadingContainer = styled.div`
 
-display: flex;
+display: ${props => props.display};
 flex-direction: column;
 align-items: center;
 

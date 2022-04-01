@@ -1,9 +1,9 @@
 import { LoadingContainer, LoadingText, InfiniteLoading } from "./style";
 
-export default function LoadingAnimation({size}){
+export default function LoadingAnimation({size, display}){
 
     return(
-        <LoadingContainer>
+        <LoadingContainer display={display}>
             <InfiniteLoading size={size}/>
 
             <LoadingText>
