@@ -3,6 +3,8 @@ const statesList = {
     'error' : 1,
     'empty': 2,
     'ok': 3,
+    'noPosts': 4,
+    'noFriends': 5
   }
 
 const pagesList = {

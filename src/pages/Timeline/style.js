@@ -69,7 +69,6 @@ const Container = styled.div`
 
 const Feed = styled.div`
   max-width: 611px;
-  width: 67%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -105,10 +104,12 @@ const Loading = styled(Feed)`
 const Empty = styled(Loading)`
   background-color: black;
   color: white;
+  width: 100%;
 
   * {
     font-size: 30px;
     text-align: center;
+    line-height: 40px;
   }
 `;
 const Error = Empty;

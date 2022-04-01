@@ -42,6 +42,7 @@ export default function NewPost({ imageUrl, displayCase, reloadPage}) {
       setUrl("");
       setText("");
       reloadPage(0);
+      
     } catch (error) {
       toast.error("Houve um erro ao publicar seu link", { theme: "colored" });
       toast();
