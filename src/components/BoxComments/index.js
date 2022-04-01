@@ -64,7 +64,7 @@ export default function BoxComments({ postId, numberComment, updateComments }) {
           listComments.map((oneComment, i) => (
             <ContentComment key={i + oneComment.image_url}>
               <CommentUser>
-                <img src={oneComment.image_url} />
+                <img src={oneComment.image_url} alt=''/>
                 <InformationsUser>
                   <div>
                     <p>{oneComment.username}</p>
