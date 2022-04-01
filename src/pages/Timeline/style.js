@@ -49,8 +49,8 @@ const Title = styled.h1`
   }
 
   span {
-    font-family: inherit;
-    font-weight: inherit;
+    font-family: 'Oswald';
+    font-weight: 700;
 
     align-self: flex-end;
   }
@@ -104,6 +104,7 @@ const Loading = styled(Feed)`
 const Empty = styled(Loading)`
   background-color: black;
   color: white;
+  width:100%;
 
   * {
     font-size: 30px;

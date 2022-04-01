@@ -74,7 +74,14 @@ z-index: -1;
 top:50%;
 left: 0;
 
-overflow-y: hidden;
+overflow-y: scroll;
+
+::-webkit-scrollbar{
+    width: 0px;  /* Remove scrollbar space */
+    background: transparent;  /* Optional: just make scrollbar invisible */
+}
+
+box-sizing: border-box;
 
 border-radius: 5px;
 padding-top:25px;
@@ -87,12 +94,15 @@ flex-direction: column;
 const User = styled.li`
 
 width: 100%;
-height: 50px;
+min-height: 50px;
 
 padding: 0 10px;
 border-radius: 5px;
 
 display: flex;
+flex-grow: 1;
+
+
 
 img{
     height: 40px;
