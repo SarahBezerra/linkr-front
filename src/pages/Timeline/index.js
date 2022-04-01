@@ -49,8 +49,6 @@ export default function Timeline({ newPostDisplay }) {
     getHeader();
   }, [timeLine.page, timeLine.reload]);
 
-  console.log(newPosts);
-
   async function requestPosts() {
     setRequestState(statesList["loading"]);
     const count = loadCount + 1;
