@@ -1,29 +1,20 @@
-import {
-  PostContainer,
-  PublishContainer,
-  PictureContainer,
-  Header,
-  InputContainer,
-  Container,
-  Button,
-} from "./style";
+import { PostContainer, PublishContainer, PictureContainer, Header, InputContainer,
+  Container, Button } from "./style";
 import Img from "../Users/Image";
-import { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useContext, useState } from "react";
+import { useParams, useLocation } from "react-router-dom";
 import api from "../../services/api";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import useAuth from "../../hooks/useAuth";
+import PageContext from "../../contexts/pageContext";
 
-export default function NewPost({
-  imageUrl,
-  displayCase,
-  reloadPage,
-  currentPage,
-  setPageAndReload,
-}) {
+
+export default function NewPost({ imageUrl, displayCase, reloadPage}) {
+  const { timeLine } = useContext(PageContext);
   const { auth } = useAuth();
   const { userId } = useParams();
+  const location = useLocation();
   const [url, setUrl] = useState("");
   const [text, setText] = useState("");
   const [isSending, setIsSending] = useState(false);
@@ -47,7 +38,7 @@ export default function NewPost({
     try {
       await api.sendPost(token, body);
       setIsSending(false);
-      setPageAndReload();
+      timeLine.setPageAndReload();
       setUrl("");
       setText("");
       reloadPage(0);
@@ -60,7 +51,7 @@ export default function NewPost({
   }
 
   return (
-    <Container currentPage={currentPage}>
+    <Container currentPage={timeLine.getPage(location)}>
       <PostContainer>
         <PictureContainer>
           <Img height={"50px"} src={imageUrl} />

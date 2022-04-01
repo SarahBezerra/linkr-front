@@ -51,9 +51,15 @@ function getNewPostsWithInterval(id, token) {
 function getLikes(token) {
   return axios.get(`${BASE_URL}/like`, createConfig(token));
 }
-
 function postLikeOrNot(idPost, token) {
   return axios.post(`${BASE_URL}/like/${idPost}`, {}, createConfig(token));
+}
+
+function getRePosts(token) {
+  return axios.get(`${BASE_URL}/rePost`, createConfig(token));
+}
+function toggleRePost(idPost, token) {
+  return axios.post(`${BASE_URL}/rePost/${idPost}`, {}, createConfig(token));
 }
 
 function deletePost(idPost, token) {
@@ -80,10 +86,9 @@ function getUser(id) {
   return axios.get(`${BASE_URL}/user/:id`, { id });
 }
 
-function browserUsers(string) {
-  return axios.get(`${BASE_URL}/users_filter`, {
-    params: { username: string },
-  });
+function browserUsers(string, id) {
+  const params = { userId: id, username: string };
+  return axios.get(`${BASE_URL}/users_filter`, { params });
 }
 
 function getTopHashtags(token) {
@@ -128,6 +133,8 @@ const api = {
   getFollowers,
   postFollow,
   deleteFollow,
+  getRePosts,
+  toggleRePost,
 };
 
 export default api;

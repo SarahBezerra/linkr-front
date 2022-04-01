@@ -1,5 +1,4 @@
 import { useState } from "react";
-import ReactDOMServer from "react-dom/server";
 import ReactTooltip from "react-tooltip";
 import { SpinnerInfinity } from "spinners-react";
 import useAuth from "../../hooks/useAuth";

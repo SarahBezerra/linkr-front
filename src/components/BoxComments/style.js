@@ -5,7 +5,6 @@ import { devices } from "../../styles/responsiveness";
 const ContainerComments = styled.div`
   width: 100%;
   min-height: 40px;
-  margin-top: -46px;
   padding: 16px 20px 0 20px;
 
   background-color: #1e1e1e;

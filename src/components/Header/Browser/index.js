@@ -13,6 +13,7 @@ import Img from "../../Users/Image";
 import api from "../../../services/api";
 import { DebounceInput } from "react-debounce-input";
 import usePage from "../../../hooks/usePage";
+import useAuth from "../../../hooks/useAuth";
 
 export default function Browser() {
   const [browser, setBrowser] = useState("");
@@ -21,6 +22,7 @@ export default function Browser() {
   const [users, setUsers] = useState([]);
   const navigate = useNavigate();
   const { page, pageUsername } = usePage();
+  const { auth } = useAuth();
 
   useEffect(() => {
     setBrowser("");
@@ -35,7 +37,7 @@ export default function Browser() {
 
   const filterUsers = async () => {
     try {
-      const result = await api.browserUsers(browser);
+      const result = await api.browserUsers(browser, auth.userId);
       setUsers(result.data);
     } catch (error) {
       console.log(error);
@@ -90,6 +92,11 @@ export default function Browser() {
                     }}
                   >
                     {user.username}
+                    {user.status === 1 ? (
+                      <span style={{ color: "#C5C5C5" }}>• following</span>
+                    ) : (
+                      ""
+                    )}
                   </span>
                 </User>
               );
