@@ -1,4 +1,5 @@
 import { useContext, useState } from "react";
+import { useLocation } from "react-router";
 import { Reload } from "react-ionicons";
 import useInterval from "use-interval";
 
@@ -9,6 +10,7 @@ import { BoxTag } from "./style";
 
 export default function NewPostsTag({ lastPost }) {
   const { timeLine } = useContext(PageContext);
+  const location = useLocation();
   const [showTag, setShowTag] = useState(false);
   const [newPosts, setnewPosts] = useState(0);
   const { auth } = useAuth();
@@ -34,7 +36,7 @@ export default function NewPostsTag({ lastPost }) {
   return (
     <>
       {newPosts !== 0 && showTag ? (
-        <BoxTag onClick={pushNewPosts}>
+        <BoxTag onClick={pushNewPosts} currentPage={timeLine.getPage(location)}>
           <div>
             <p>{newPosts} new posts, load more!</p>
             <Reload color={"#FFFFFF"} height="25px" width="25px" rotate />

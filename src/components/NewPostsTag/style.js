@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { pagesList } from "../../pages/Timeline/utils";
 
 const BoxTag = styled.div`
   width: 100%;
@@ -8,7 +9,8 @@ const BoxTag = styled.div`
   background: #1877f2;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 
-  display: flex;
+  display: ${({ currentPage }) =>
+    currentPage !== pagesList["timeline"] ? "none" : "flex"};
   align-items: center;
   justify-content: center;
 
