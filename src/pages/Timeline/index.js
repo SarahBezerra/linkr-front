@@ -1,8 +1,9 @@
 import { useContext, useEffect, useState } from "react";
 import { SpinnerCircularFixed } from "spinners-react";
+
 import LoadingCircular from "../../components/LoadingCircular";
-import InfiniteScroll from 'react-infinite-scroller'
-import LoadingAnimation from '../../components/Timeline/index'
+import InfiniteScroll from "react-infinite-scroller";
+import LoadingAnimation from "../../components/Timeline/index";
 
 import api from "../../services/api";
 import Post from "../../components/Post";
@@ -15,6 +16,7 @@ import usePage from "../../hooks/usePage";
 import { useLocation, useNavigate, useParams } from "react-router";
 import PageContext from "../../contexts/pageContext";
 import FollowButton from "../../components/FollowButton/index";
+import NewPostsTag from "../../components/NewPostsTag";
 
 export default function Timeline({ newPostDisplay }) {
   const [requestState, setRequestState] = useState(statesList["loading"]);
@@ -24,21 +26,30 @@ export default function Timeline({ newPostDisplay }) {
   const [likes, setLikes] = useState([]);
   const [topHashtags, setTopHashtags] = useState([]);
   const [header, setHeader] = useState("");
-  const [ isUserProfile, setIsUserProfile ] = useState(false);
-  const [ isFollower, setIsFollower ] = useState(false);
+  const [isUserProfile, setIsUserProfile] = useState(false);
+  const [isFollower, setIsFollower] = useState(false);
   const [comments, setComments] = useState([]);
-  const [keepLoading, setKeepLoading] = useState(true)
+  const [keepLoading, setKeepLoading] = useState(true);
 
   const filter = useParams();
   const { id } = useParams();
   const location = useLocation();
   const { pathname } = useLocation();
   const { auth } = useAuth();
-  const { pageInfo: pageName, pageUsername, loadCount, setLoadCount, timeLine, newPosts, setNewPosts} = usePage();
+  const {
+    pageInfo: pageName,
+    pageUsername,
+    loadCount,
+    setLoadCount,
+    timeLine,
+    newPosts,
+    setNewPosts,
+  } = usePage();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if( timeLine.page !== timeLine.getPage(location) ) return  timeLine.setPageAndReload(timeLine.getPage(location));
+    if (timeLine.page !== timeLine.getPage(location))
+      return timeLine.setPageAndReload(timeLine.getPage(location));
     requestPosts(loadCount);
     getHeader();
   }, [timeLine.page, timeLine.reload]);
@@ -50,34 +61,33 @@ export default function Timeline({ newPostDisplay }) {
     let res = null;
 
     try {
-      if (timeLine.page === pagesList["timeline"]) 
+      if (timeLine.page === pagesList["timeline"])
         res = await api.getPosts(auth.token, count);
       else if (timeLine.page === pagesList["hashtag"]) {
         res = await api.getPostsByHashtag(currentParam(), auth.token, count);
       } else if (id) {
         res = await api.getPostsFromUser(id, auth.token, count);
 
-        const userInfos = await api.getFollowers( id , auth.token );
-        if(userInfos.data.isUserProfile) setIsUserProfile(true);
-        if(userInfos.data.isFollower) setIsFollower(true);
+        const userInfos = await api.getFollowers(id, auth.token);
+        if (userInfos.data.isUserProfile) setIsUserProfile(true);
+        if (userInfos.data.isFollower) setIsFollower(true);
       }
 
       let state = [];
-      if((res.data.noFriends || res.data.noPosts) && id){
+      if ((res.data.noFriends || res.data.noPosts) && id) {
         res.data = [];
-        state = statesList["empty"]
-      }else if(res.data.noFriends){
+        state = statesList["empty"];
+      } else if (res.data.noFriends) {
         res.data = [];
-        state = statesList["noFriends"]
-      }else if(res.data.noPosts){
+        state = statesList["noFriends"];
+      } else if (res.data.noPosts) {
         res.data = [];
-        state = statesList["noPosts"]
-      }else{
-        state = statesList["ok"]
+        state = statesList["noPosts"];
+      } else {
+        state = statesList["ok"];
       }
 
-      if(newPosts.length === res.data.length){
-
+      if (newPosts.length === res.data.length) {
         setKeepLoading(false);
       }
       setNewPosts(res.data);
@@ -125,7 +135,8 @@ export default function Timeline({ newPostDisplay }) {
 
   function getHeader() {
     if (timeLine.page === pagesList["timeline"]) setHeader("timeline");
-    else if (timeLine.page === pagesList["hashtag"]) setHeader(`#${currentParam()}`);
+    else if (timeLine.page === pagesList["hashtag"])
+      setHeader(`#${currentParam()}`);
     // else
     //   setHeader(`${pagecont?.username} posts`);
   }
@@ -133,7 +144,7 @@ export default function Timeline({ newPostDisplay }) {
     return filter[Object.keys(filter)[0]];
   }
 
-  function loadFunc(){
+  function loadFunc() {
     requestPosts(loadCount);
   }
 
@@ -146,71 +157,77 @@ export default function Timeline({ newPostDisplay }) {
           header
         ) : pathname === "/timeline" ? (
           "timeline"
-        )
-        : 
-
-        <>
-          <div>
-            <img src={pageName.image_url} alt=''></img>
-            <span>{`
+        ) : (
+          <>
+            <div>
+              <img src={pageName.image_url} alt=""></img>
+              <span>{`
               ${pageName.username}${
-                (pageName?.username.slice(-1) === ("s" || "S"))
-                ?
-                "'"
-                :
-                "'s"
-              } posts`
-            }</span> 
-          </div>
-          {(isUserProfile) ? <></> : <FollowButton id={id} token={token} isFollower={isFollower} setIsFollower={setIsFollower} />}
-        </>
-        }
+                pageName?.username.slice(-1) === ("s" || "S") ? "'" : "'s"
+              } posts`}</span>
+            </div>
+            {isUserProfile ? (
+              <></>
+            ) : (
+              <FollowButton
+                id={id}
+                token={token}
+                isFollower={isFollower}
+                setIsFollower={setIsFollower}
+              />
+            )}
+          </>
+        )}
       </Title>
       <Container>
-      <div style={{display:'flex', flexDirection: 'column', width: '100%'}}>
-        <ChooseFeed
-          posts={posts}
-          likes={likes}
-          requestLikes={requestLikes}
-          state={requestState}
-          imageUrl={auth.image_url}
-          setRequestState={setRequestState}
-          Display={newPostDisplay}
-          pageUsername={pageUsername}
-          comments={comments}
-          requestComments={requestComments}
-        />
+        <div
+          style={{ display: "flex", flexDirection: "column", width: "100%" }}
+        >
+          <ChooseFeed
+            posts={newPosts}
+            likes={likes}
+            requestLikes={requestLikes}
+            state={requestState}
+            imageUrl={auth.image_url}
+            setRequestState={setRequestState}
+            Display={newPostDisplay}
+            pageUsername={pageUsername}
+            comments={comments}
+            requestComments={requestComments}
+          />
 
-           <InfiniteScroll 
+          <InfiniteScroll
             element={Feed}
             initialLoad={false}
             loadMore={loadFunc}
             threshold={50}
-            hasMore={keepLoading ? true: false}
-            loader={<LoadingAnimation display={loadCount === 0 ? 'none' : 'flex'} size={50}/>}
+            hasMore={keepLoading ? true : false}
+            loader={
+              <LoadingAnimation
+                display={loadCount === 0 ? "none" : "flex"}
+                size={50}
+              />
+            }
           >
-          {newPosts.map((p) => (
-            <Post
-              infos={p}
-              key={p.id}
-              like={likes.find(({ postId }) => postId === p.id)}
-              updateLikes={requestLikes}
-              numberComment={comments.find(({ postId }) => postId === p.id)}
-              updateComments={requestComments}
-              reloadPage={setRequestState}
-              onNavigate={() => {
-                const { username, image_url } = p;
-                pageUsername({ username, image_url });
-                navigate(`/user/${p.userId}`);
-              }}
-            />
-          ))}
-
-            </InfiniteScroll>
-          </div>
-        <HashTags
-          topHashtags={topHashtags}
-        ></HashTags>
+            {newPosts.map((p) => (
+              <Post
+                infos={p}
+                key={p.id}
+                like={likes.find(({ postId }) => postId === p.id)}
+                updateLikes={requestLikes}
+                numberComment={comments.find(({ postId }) => postId === p.id)}
+                updateComments={requestComments}
+                reloadPage={setRequestState}
+                onNavigate={() => {
+                  const { username, image_url } = p;
+                  pageUsername({ username, image_url });
+                  navigate(`/user/${p.userId}`);
+                }}
+              />
+            ))}
+          </InfiniteScroll>
+        </div>
+        <HashTags topHashtags={topHashtags}></HashTags>
       </Container>
     </Page>
   );
@@ -221,14 +238,14 @@ function ChooseFeed({
   posts,
   likes,
   requestLikes,
+  comments,
+  requestComments,
   state,
   imageUrl,
   newPostDisplay,
   pageUsername,
   setRequestState,
-  comments,
-  requestComments,
-  children
+  children,
 }) {
   const navigate = useNavigate();
 
@@ -254,31 +271,32 @@ function ChooseFeed({
         />
       </Loading>
     );
-  else if (state === statesList["noFriends"] || state === statesList["noPosts"] || state === statesList["empty"])
+  else if (
+    state === statesList["noFriends"] ||
+    state === statesList["noPosts"] ||
+    state === statesList["empty"]
+  )
     return (
       <Feed>
-        <NewPost
-          imageUrl={imageUrl}
-          reloadPage={setRequestState}
-        />
+        <NewPost imageUrl={imageUrl} reloadPage={setRequestState} />
         <Empty>
-          { state === statesList["noFriends"] ? 
-            <p>You don't follow anyone yet.<br></br> Search for new friends!</p> 
-            : state === statesList["noPosts"] ?
+          {state === statesList["noFriends"] ? (
+            <p>
+              You don't follow anyone yet.<br></br> Search for new friends!
+            </p>
+          ) : state === statesList["noPosts"] ? (
             <p>No posts found from your friends</p>
-            :
+          ) : (
             <p>No posts yet</p>
-          }
+          )}
         </Empty>
       </Feed>
     );
   else
     return (
       <Feed>
-        <NewPost
-          imageUrl={imageUrl}
-          displayCase={newPostDisplay}
-        />
+        <NewPost imageUrl={imageUrl} displayCase={newPostDisplay} />
+        <NewPostsTag lastPost={posts[0]} />
         {posts.map((p) => (
           <Post
             infos={p}

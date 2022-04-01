@@ -1,8 +1,8 @@
 import axios from "axios";
 
-const BASE_URL = process.env.REACT_APP_PUBLIC_URL 
-? process.env.REACT_APP_PUBLIC_URL 
-: 'https://back-linkr.herokuapp.com';
+const BASE_URL = process.env.REACT_APP_PUBLIC_URL
+  ? process.env.REACT_APP_PUBLIC_URL
+  : "https://back-linkr.herokuapp.com";
 
 function createConfig(token) {
   return { headers: { Authorization: `Bearer ${token}` } };
@@ -23,7 +23,7 @@ async function sendPost(token, body) {
 
 function getPosts(token, loadCount) {
   const config = createConfig(token);
-  config.params = {loadCount}
+  config.params = { loadCount };
   return axios.get(`${BASE_URL}/posts`, config);
 }
 
@@ -34,14 +34,18 @@ function updatePost(body, token, postId) {
 
 function getPostsByHashtag(hashtag, token, loadCount) {
   const config = createConfig(token);
-  config.params = {loadCount}
+  config.params = { loadCount };
   return axios.get(`${BASE_URL}/hashtag/${hashtag}`, config);
 }
 
 function getPostsFromUser(id, token, loadCount) {
   const config = createConfig(token);
-  config.params = {loadCount}
+  config.params = { loadCount };
   return axios.get(`${BASE_URL}/posts/${id}`, config);
+}
+
+function getNewPostsWithInterval(id, body, token) {
+  return axios.post(`${BASE_URL}/newposts/${id}`, body, createConfig(token));
 }
 
 function getLikes(token) {
@@ -51,10 +55,10 @@ function postLikeOrNot(idPost, token) {
   return axios.post(`${BASE_URL}/like/${idPost}`, {}, createConfig(token));
 }
 
-function getRePosts(token){
+function getRePosts(token) {
   return axios.get(`${BASE_URL}/rePost`, createConfig(token));
 }
-function toggleRePost(idPost,token){
+function toggleRePost(idPost, token) {
   return axios.post(`${BASE_URL}/rePost/${idPost}`, {}, createConfig(token));
 }
 
@@ -83,8 +87,8 @@ function getUser(id) {
 }
 
 function browserUsers(string, id) {
-  const params = {userId: id, username: string}
-  return axios.get(`${BASE_URL}/users_filter`, {params});
+  const params = { userId: id, username: string };
+  return axios.get(`${BASE_URL}/users_filter`, { params });
 }
 
 function getTopHashtags(token) {
@@ -99,7 +103,7 @@ function getFollowers(pageUserId, token) {
 
 function postFollow(pageUserId, token) {
   const config = createConfig(token);
-  return axios.post(`${BASE_URL}/follows`, {pageUserId}, config);
+  return axios.post(`${BASE_URL}/follows`, { pageUserId }, config);
 }
 
 function deleteFollow(pageUserId, token) {
@@ -112,6 +116,7 @@ const api = {
   getPosts,
   getPostsFromUser,
   getPostsByHashtag,
+  getNewPostsWithInterval,
   sendPost,
   getLikes,
   postLikeOrNot,

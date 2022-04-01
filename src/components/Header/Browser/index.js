@@ -22,7 +22,7 @@ export default function Browser() {
   const [users, setUsers] = useState([]);
   const navigate = useNavigate();
   const { page, pageUsername } = usePage();
-  const {auth} = useAuth();
+  const { auth } = useAuth();
 
   useEffect(() => {
     setBrowser("");
@@ -36,10 +36,8 @@ export default function Browser() {
   }, [browser]);
 
   const filterUsers = async () => {
-
     try {
       const result = await api.browserUsers(browser, auth.userId);
-      console.log(result.data);
       setUsers(result.data);
     } catch (error) {
       console.log(error);
@@ -93,7 +91,12 @@ export default function Browser() {
                       navigate(`/user/${user.id}`);
                     }}
                   >
-                    {user.username}{user.status === 1 ? <span style={{color: '#C5C5C5'}}>• following</span> : ''}
+                    {user.username}
+                    {user.status === 1 ? (
+                      <span style={{ color: "#C5C5C5" }}>• following</span>
+                    ) : (
+                      ""
+                    )}
                   </span>
                 </User>
               );
