@@ -17,19 +17,16 @@ import PageContext from "../../contexts/pageContext";
 import FollowButton from "../../components/FollowButton/index";
 
 export default function Timeline({ newPostDisplay }) {
-  const { timeLine } = useContext(PageContext);
   const [requestState, setRequestState] = useState(statesList["loading"]);
   //const [page, setPage] = useState(getPage());
   //const [reload, setReload] = useState(false);
   const [posts, setPosts] = useState([]);
-  const [newPosts, setNewPosts] = useState([]);
   const [likes, setLikes] = useState([]);
   const [topHashtags, setTopHashtags] = useState([]);
   const [header, setHeader] = useState("");
   const [ isUserProfile, setIsUserProfile ] = useState(false);
   const [ isFollower, setIsFollower ] = useState(false);
   const [comments, setComments] = useState([]);
-  const [loadCount, setLoadCount] = useState(0);
   const [keepLoading, setKeepLoading] = useState(true)
 
   const filter = useParams();
@@ -37,7 +34,7 @@ export default function Timeline({ newPostDisplay }) {
   const location = useLocation();
   const { pathname } = useLocation();
   const { auth } = useAuth();
-  const { pageInfo: pageName, pageUsername } = usePage();
+  const { pageInfo: pageName, pageUsername, loadCount, setLoadCount, timeLine, newPosts, setNewPosts} = usePage();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -47,7 +44,8 @@ export default function Timeline({ newPostDisplay }) {
   }, [timeLine.page, timeLine.reload]);
 
   async function requestPosts() {
-    setRequestState(statesList["loading"]);
+    // setRequestState(statesList["loading"]);
+
     const count = loadCount + 1;
     let res = null;
 
@@ -80,9 +78,9 @@ export default function Timeline({ newPostDisplay }) {
       }
 
       if(newPosts.length === res.data.length){
+
         setKeepLoading(false);
       }
-      
       setNewPosts(res.data);
       setLoadCount(count);
 
@@ -186,7 +184,7 @@ export default function Timeline({ newPostDisplay }) {
 
            <InfiniteScroll 
             element={Feed}
-            initialLoad={true}
+            initialLoad={false}
             loadMore={loadFunc}
             threshold={50}
             hasMore={keepLoading ? true: false}

@@ -7,11 +7,12 @@ import api from "../../services/api";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import useAuth from "../../hooks/useAuth";
+import usePage from "../../hooks/usePage";
 import PageContext from "../../contexts/pageContext";
 
 
 export default function NewPost({ imageUrl, displayCase, reloadPage}) {
-  const { timeLine } = useContext(PageContext);
+  const { timeLine, setNewPosts, setLoadCount } = usePage();
   const { auth } = useAuth();
   const { userId } = useParams();
   const location = useLocation();
@@ -38,10 +39,12 @@ export default function NewPost({ imageUrl, displayCase, reloadPage}) {
     try {
       await api.sendPost(token, body);
       setIsSending(false);
+      setNewPosts([]);
+      setLoadCount(0);
       timeLine.setPageAndReload();
       setUrl("");
       setText("");
-      reloadPage(0);
+      // reloadPage(0);
       
     } catch (error) {
       toast.error("Houve um erro ao publicar seu link", { theme: "colored" });

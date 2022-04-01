@@ -15,6 +15,8 @@ export function PageProvider({children}){
     const [pageInfo, setPageInfo] = useState(persistedPage);
     const [reload, setReload] = useState(false);
     const [rePosts, setRePosts] = useState([]);
+    const [loadCount, setLoadCount] = useState(0);
+    const [newPosts, setNewPosts] = useState([]);
     const { auth } = useAuth();
 
     function pageUsername(pageData){
@@ -52,7 +54,8 @@ export function PageProvider({children}){
 
 
     return(
-        <PageContext.Provider value={{page, pageInfo, pageUsername, setPageAndReload, timeLine, rePosts}}>
+        <PageContext.Provider value={{page, pageInfo, pageUsername, setPageAndReload, timeLine,
+         rePosts, loadCount, setLoadCount, newPosts, setNewPosts}}>
             {children}
         </PageContext.Provider>
     )

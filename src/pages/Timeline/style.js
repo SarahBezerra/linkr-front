@@ -104,11 +104,7 @@ const Loading = styled(Feed)`
 const Empty = styled(Loading)`
   background-color: black;
   color: white;
-<<<<<<< HEAD
-  width: 100%;
-=======
   width:100%;
->>>>>>> searchBarImprov
 
   * {
     font-size: 30px;
