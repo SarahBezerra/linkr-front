@@ -66,6 +66,21 @@ export default function Timeline({ newPostDisplay }) {
         if (userInfos.data.isFollower) setIsFollower(true);
       }
 
+      let state = [];
+
+      if ((res.data.noFriends || res.data.noPosts) && id) {
+        res.data = [];
+        state = statesList["empty"];
+      } else if (res.data.noFriends) {
+        res.data = [];
+        state = statesList["noFriends"];
+      } else if (res.data.noPosts) {
+        res.data = [];
+        state = statesList["noPosts"];
+      } else {
+        state = statesList["ok"];
+      }
+
       if (newPosts.length === res.data.length) {
         setKeepLoading(false);
       }
@@ -73,8 +88,6 @@ export default function Timeline({ newPostDisplay }) {
       setNewPosts(res.data);
       setLoadCount(count);
 
-      const state =
-        res.data.length === 0 ? statesList["empty"] : statesList["ok"];
       await requestLikes();
       await requestTopHashtags();
       await requestComments();
@@ -287,7 +300,11 @@ function ChooseFeed({
         />
       </Loading>
     );
-  else if (state === statesList["empty"])
+  else if (
+    state === statesList["noFriends"] ||
+    state === statesList["noPosts"] ||
+    state === statesList["empty"]
+  )
     return (
       <Feed>
         <NewPost
@@ -297,8 +314,15 @@ function ChooseFeed({
           currentPage={currentPage}
         />
         <Empty>
-          {" "}
-          <p>There are no posts yet</p>{" "}
+          {state === statesList["noFriends"] ? (
+            <p>
+              You don't follow anyone yet.<br></br> Search for new friends!
+            </p>
+          ) : state === statesList["noPosts"] ? (
+            <p>No posts found from your friends</p>
+          ) : (
+            <p>No posts yet</p>
+          )}
         </Empty>
       </Feed>
     );
