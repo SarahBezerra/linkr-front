@@ -1,9 +1,6 @@
-import { useEffect, useState } from "react";
-import { useLocation, useNavigate, useParams } from "react-router";
+import { useContext, useEffect, useState } from "react";
 import { SpinnerCircularFixed } from "spinners-react";
 import InfiniteScroll from 'react-infinite-scroller'
-
-
 import api from "../../services/api";
 import Post from "../../components/Post";
 import { Feed, Container, Page, Loading, Empty, Error, Title } from "./style";
@@ -12,15 +9,19 @@ import HashTags from "../../components/Hashtags";
 import useAuth from "../../hooks/useAuth";
 import { pagesList, statesList } from "./utils";
 import usePage from "../../hooks/usePage";
+import { useLocation, useNavigate, useParams } from "react-router";
+import PageContext from "../../contexts/pageContext";
 import FollowButton from "../../components/FollowButton/index";
 
 export default function Timeline({ newPostDisplay }) {
+  const { timeLine } = useContext(PageContext);
   const [requestState, setRequestState] = useState(statesList["loading"]);
+  //const [page, setPage] = useState(getPage());
+  //const [reload, setReload] = useState(false);
   const [posts, setPosts] = useState([]);
   const [newPosts, setNewPosts] = useState([]);
   const [likes, setLikes] = useState([]);
   const [topHashtags, setTopHashtags] = useState([]);
-  const [reload, setReload] = useState(false);
   const [header, setHeader] = useState("");
   const [ isUserProfile, setIsUserProfile ] = useState(false);
   const [ isFollower, setIsFollower ] = useState(false);
@@ -32,19 +33,15 @@ export default function Timeline({ newPostDisplay }) {
   const { id } = useParams();
   const location = useLocation();
   const { pathname } = useLocation();
-  const [page, setPage] = useState(getPage());
+  const { auth } = useAuth();
+  const { pageInfo: pageName, pageUsername } = usePage();
   const navigate = useNavigate();
 
-  const { auth } = useAuth();
-  const { page: pageName, pageUsername } = usePage();
-
   useEffect(() => {
+    if( timeLine.page !== timeLine.getPage(location) ) return  timeLine.setPageAndReload(timeLine.getPage(location));
     requestPosts();
     getHeader();
-    if(pathname === '/timeline'){
-      setPage(pagesList['timeline']);
-    }
-  }, [page, reload, pathname]);
+  }, [timeLine.page, timeLine.reload]);
 
   async function requestPosts() {
     setRequestState(statesList["loading"]);
@@ -52,9 +49,9 @@ export default function Timeline({ newPostDisplay }) {
     let res = null;
 
     try {
-      if (page === pagesList["timeline"]) {
+      if (timeLine.page === pagesList["timeline"]) 
         res = await api.getPosts(auth.token, count);
-      } else if (page === pagesList["hashtag"]) {
+      else if (timeLine.page === pagesList["hashtag"]) {
         res = await api.getPostsByHashtag(currentParam(), auth.token, count);
       } else if (id) {
         res = await api.getPostsFromUser(id, auth.token, count);
@@ -87,6 +84,7 @@ export default function Timeline({ newPostDisplay }) {
       setLoadCount(count);
 
       await requestLikes();
+      await timeLine.requestRePosts();
       await requestTopHashtags();
       await requestComments();
       setRequestState(state);
@@ -126,55 +124,14 @@ export default function Timeline({ newPostDisplay }) {
   }
 
   function getHeader() {
-    if (page === pagesList["timeline"]) setHeader("timeline");
-    else if (page === pagesList["hashtag"]) setHeader(`#${currentParam()}`);
+    if (timeLine.page === pagesList["timeline"]) setHeader("timeline");
+    else if (timeLine.page === pagesList["hashtag"]) setHeader(`#${currentParam()}`);
     // else
     //   setHeader(`${pagecont?.username} posts`);
-  }
-  function getPage() {
-    const name = location.pathname.split("/")[1];
-    return pagesList[name];
   }
   function currentParam() {
     return filter[Object.keys(filter)[0]];
   }
-  function setPageAndReload(page = undefined) {
-    if (page) {
-      setPage(page);
-    }
-    setReload(!reload);
-  }
-
-  // async function requestNewPosts(loadCount) {
-  //   const count = loadCount + 1;
-  //   let res = null;
-
-  //   try {
-  //     if (page === pagesList["timeline"]) res = await api.getPosts(auth.token, count);
-  //     else if (page === pagesList["hashtag"]) {
-  //       res = await api.getPostsByHashtag(currentParam(), auth.token, count);
-  //     } else if (id) {
-  //       res = await api.getPostsFromUser(id, auth.token, count);
-  //       const userInfos = await api.getFollowers( id , auth.token );
-  //       if(userInfos.data.isUserProfile) setIsUserProfile(true);
-  //       if(userInfos.data.isFollower) setIsFollower(true);
-  //     }
-
-      
-  //     if(newPosts.length === res.data.length){
-  //       setKeepLoading(false);
-  //     }
-      
-  //     setNewPosts(res.data);
-  //     setLoadCount(count);
-
-  //     await requestLikes();
-  //     await requestTopHashtags();
-
-  //   } catch {
-  //     console.log("aconteceu um erro em posts");
-  //   }
-  // }
 
   function loadFunc(){
     requestPosts(loadCount);
@@ -194,7 +151,7 @@ export default function Timeline({ newPostDisplay }) {
 
         <>
           <div>
-            <img src={pageName.image_url}></img>
+            <img src={pageName.image_url} alt=''></img>
             <span>{`
               ${pageName.username}${
                 (pageName?.username.slice(-1) === ("s" || "S"))
@@ -212,14 +169,11 @@ export default function Timeline({ newPostDisplay }) {
       <Container>
       <div style={{display:'flex', flexDirection: 'column', width: '100%'}}>
         <ChooseFeed
-          currentPage={getPage}
           posts={posts}
           likes={likes}
           requestLikes={requestLikes}
           state={requestState}
-          setPage={setPage}
           imageUrl={auth.image_url}
-          setPageAndReload={setPageAndReload}
           setRequestState={setRequestState}
           Display={newPostDisplay}
           pageUsername={pageUsername}
@@ -243,8 +197,6 @@ export default function Timeline({ newPostDisplay }) {
               updateLikes={requestLikes}
               numberComment={comments.find(({ postId }) => postId === p.id)}
               updateComments={requestComments}
-              setPage={setPage}
-              setPageAndReload={setPageAndReload}
               reloadPage={setRequestState}
               onNavigate={() => {
                 const { username, image_url } = p;
@@ -258,7 +210,6 @@ export default function Timeline({ newPostDisplay }) {
           </div>
         <HashTags
           topHashtags={topHashtags}
-          setPageAndReload={setPageAndReload}
         ></HashTags>
       </Container>
     </Page>
@@ -272,8 +223,6 @@ function ChooseFeed({
   requestLikes,
   state,
   imageUrl,
-  setPage,
-  setPageAndReload,
   newPostDisplay,
   pageUsername,
   setRequestState,
@@ -309,10 +258,8 @@ function ChooseFeed({
     return (
       <Feed>
         <NewPost
-          setPageAndReload={setPageAndReload}
           imageUrl={imageUrl}
           reloadPage={setRequestState}
-          currentPage={currentPage}
         />
         <Empty>
           { state === statesList["noFriends"] ? 
@@ -329,12 +276,25 @@ function ChooseFeed({
     return (
       <Feed>
         <NewPost
-          setPageAndReload={setPageAndReload}
-          currentPage={currentPage}
           imageUrl={imageUrl}
           displayCase={newPostDisplay}
         />
-        {children}
+        {posts.map((p) => (
+          <Post
+            infos={p}
+            key={p.id}
+            like={likes.find(({ postId }) => postId === p.id)}
+            updateLikes={requestLikes}
+            numberComment={comments.find(({ postId }) => postId === p.id)}
+            updateComments={requestComments}
+            reloadPage={setRequestState}
+            onNavigate={() => {
+              const { username, image_url } = p;
+              pageUsername({ username, image_url });
+              navigate(`/user/${p.userId}`);
+            }}
+          />
+        ))}
       </Feed>
     );
 }

@@ -4,11 +4,12 @@ import {
   StyledLink,
 } from "../../components/SignInAndSignUpLayout/style";
 import { SpinnerCircular } from "spinners-react";
-
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import useAuth from "../../hooks/useAuth";
 import api from "../../services/api";
+import usePage from "../../hooks/usePage";
+import { pagesList } from "../Timeline/utils";
 
 export default function SignIn() {
   const { auth, login } = useAuth();
@@ -23,9 +24,10 @@ export default function SignIn() {
     setSignInData({ ...signInData, [e.target.name]: e.target.value });
   }
 
-  // function setAndPersistToken(token) {
-  // 	localStorage.setItem("token", token);
-  // }
+  useEffect(()=>{
+    if(auth)
+      navigate('/timeline');
+  }, []);
 
   function handleLogin(e) {
     e.preventDefault();

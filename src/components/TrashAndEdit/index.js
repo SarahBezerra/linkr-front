@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { PencilSharp, Trash } from "react-ionicons";
 import ReactModal from "react-modal";
 
@@ -6,18 +6,19 @@ import api from "../../services/api";
 import useAuth from "../../hooks/useAuth";
 import { BoxIcons } from "./style";
 import ModalBlack from "../ModalBlack";
+import PageContext from "../../contexts/pageContext";
 
 ReactModal.setAppElement("#root");
 
 export default function TrashAndEdit({
   idPost,
-  reloadPage,
   setEditMessage,
   editMessage,
   refPostMessage,
   setMessage,
 }) {
   const { auth } = useAuth();
+  const { timeLine } = useContext(PageContext);
   const [wait, setWait] = useState(false);
   const [modal, setModal] = useState(false);
 
@@ -26,7 +27,7 @@ export default function TrashAndEdit({
     try {
       await api.deletePost(idPost, auth.token);
       setModal(false);
-      reloadPage(); // fazer o reload
+      timeLine.setPageAndReload();
     } catch (err) {
       setModal(false);
       alert("Não foi possível excluir este post!");
