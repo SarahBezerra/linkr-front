@@ -39,7 +39,7 @@ export default function Timeline({ newPostDisplay }) {
 
   useEffect(() => {
     if( timeLine.page !== timeLine.getPage(location) ) return  timeLine.setPageAndReload(timeLine.getPage(location));
-    requestPosts();
+    requestPosts(loadCount);
     getHeader();
   }, [timeLine.page, timeLine.reload]);
 
@@ -63,7 +63,6 @@ export default function Timeline({ newPostDisplay }) {
       }
 
       let state = [];
-
       if((res.data.noFriends || res.data.noPosts) && id){
         res.data = [];
         state = statesList["empty"]

@@ -3,6 +3,7 @@ import { devices } from "../../styles/responsiveness";
 
 const Page = styled.div`
   width: 100%;
+  height: 100%;
   padding-top: 144px;
   display: flex;
   flex-direction: column;
@@ -61,10 +62,11 @@ const Title = styled.h1`
 `;
 
 const Container = styled.div`
+  height: 100%;
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  gap: 25px;
+  gap: 25px;  
 `;
 
 const Feed = styled.div`
@@ -91,7 +93,8 @@ const Feed = styled.div`
 `;
 
 const Loading = styled(Feed)`
-  min-height: 550px;
+  height: 200px;
+  margin-bottom: 50px;
   border-radius: 16px;
   background-color: #00000014;
   padding-bottom: initial;
