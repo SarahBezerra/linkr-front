@@ -1,5 +1,5 @@
 import { PostContainer, Container, UserName, UserText, MetaContainer, Left, Main, Title, 
-    Description, Url, Preview, MetaLeft, MetaRigth, UserPhoto, ContentLikes, Hashtag, Input, SharedInfo, ContentComments } from "./style";
+    Description, Url, Preview, MetaLeft, MetaRigth, UserPhoto, ContentLikes, Hashtag, Input, SharedInfo, ContentComments, ContentRePosts } from "./style";
 import CommentChat from "../CommentChat";
 import BoxComments from "../BoxComments";
 import { DocumentTextOutline } from 'react-ionicons'
@@ -14,6 +14,7 @@ import { toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import api from "../../services/api";
 import PageContext from "../../contexts/pageContext";
+import RePost from "../Repost";
 
 function Post({infos, like, updateLikes, numberComment,updateComments, onNavigate, reloadPage}){
     const { timeLine } = useContext(PageContext);
@@ -51,6 +52,9 @@ function Post({infos, like, updateLikes, numberComment,updateComments, onNavigat
                     <ContentComments>
                         <CommentChat number = {numberComment} stateComment ={enabledComment} setComments={setEnabledComment}/>
                     </ContentComments>
+                    <ContentRePosts>
+                        <RePost postId={id} posterId={userId}/>
+                    </ContentRePosts>
                 </Left>
                 <Main>
                     <UserName onClick={onNavigate}> { username } </UserName>

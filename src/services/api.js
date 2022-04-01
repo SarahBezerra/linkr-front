@@ -44,9 +44,15 @@ function getPostsFromUser(id, token) {
 function getLikes(token) {
   return axios.get(`${BASE_URL}/like`, createConfig(token));
 }
-
 function postLikeOrNot(idPost, token) {
   return axios.post(`${BASE_URL}/like/${idPost}`, {}, createConfig(token));
+}
+
+function getRePosts(token){
+  return axios.get(`${BASE_URL}/rePost`, createConfig(token));
+}
+function toggleRePost(idPost,token){
+  return axios.post(`${BASE_URL}/rePost/${idPost}`, {}, createConfig(token));
 }
 
 function deletePost(idPost, token) {
@@ -119,7 +125,9 @@ const api = {
   browserUsers,
   getFollowers,
   postFollow,
-  deleteFollow
+  deleteFollow,
+  getRePosts,
+  toggleRePost,
 };
 
 export default api;

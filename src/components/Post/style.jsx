@@ -116,6 +116,7 @@ const ContentComments = styled.div`
         margin-left: -11px;
     }
 `
+const ContentRePosts = styled(ContentComments)``;
 
 const MetaRigth = styled.div`
     width: 30%;
@@ -184,6 +185,7 @@ export {
     UserPhoto,
     ContentLikes,
     ContentComments,
+    ContentRePosts,
     Hashtag,
     Input
 }

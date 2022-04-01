@@ -26,13 +26,13 @@ export default function Timeline({ newPostDisplay }) {
   const location = useLocation();
   const { pathname } = useLocation();
   const { auth } = useAuth();
-  const { page: pageName, pageUsername } = usePage();
+  const { pageInfo: pageName, pageUsername } = usePage();
   const [ isUserProfile, setIsUserProfile ] = useState(false);
   const [ isFollower, setIsFollower ] = useState(false);
   const [comments, setComments] = useState([]);
 
   useEffect(() => {
-    if( timeLine.page === -1) return  timeLine.setPageAndReload(timeLine.getPage(location));
+    if( timeLine.page !== timeLine.getPage(location) ) return  timeLine.setPageAndReload(timeLine.getPage(location));
     requestPosts();
     getHeader();
   }, [timeLine.page, timeLine.reload]);
@@ -59,6 +59,7 @@ export default function Timeline({ newPostDisplay }) {
       const state =
         res.data.length === 0 ? statesList["empty"] : statesList["ok"];
       await requestLikes();
+      await timeLine.requestRePosts();
       await requestTopHashtags();
       await requestComments();
       setRequestState(state);
