@@ -1,6 +1,12 @@
 import { useContext, useEffect, useState } from "react";
 import { SpinnerCircularFixed } from "spinners-react";
+import LoadingCircular from "../../components/LoadingCircular";
 import InfiniteScroll from 'react-infinite-scroller'
+<<<<<<< HEAD
+=======
+import LoadingAnimation from '../../components/Timeline/index'
+
+>>>>>>> searchBarImprov
 import api from "../../services/api";
 import Post from "../../components/Post";
 import { Feed, Container, Page, Loading, Empty, Error, Title } from "./style";
@@ -187,7 +193,7 @@ export default function Timeline({ newPostDisplay }) {
             loadMore={loadFunc}
             threshold={50}
             hasMore={keepLoading ? true: false}
-            loader={<div className="loader" key={0}>Loading ...</div>}
+            loader={<LoadingAnimation size={50}/>}
           >
           {newPosts.map((p) => (
             <Post
