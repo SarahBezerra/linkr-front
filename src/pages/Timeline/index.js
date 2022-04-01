@@ -39,7 +39,7 @@ export default function Timeline({ newPostDisplay }) {
 
   useEffect(() => {
     if( timeLine.page !== timeLine.getPage(location) ) return  timeLine.setPageAndReload(timeLine.getPage(location));
-    requestPosts();
+    //requestPosts();
     getHeader();
   }, [timeLine.page, timeLine.reload]);
 
@@ -134,7 +134,7 @@ export default function Timeline({ newPostDisplay }) {
   }
 
   function loadFunc(){
-    requestPosts(loadCount);
+    //requestPosts(loadCount);
   }
 
   const token = auth.token;
