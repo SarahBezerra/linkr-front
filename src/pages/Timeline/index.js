@@ -46,6 +46,8 @@ export default function Timeline({ newPostDisplay }) {
     }
   }, [page, reload, pathname]);
 
+  console.log(newPosts);
+
   async function requestPosts() {
     setRequestState(statesList["loading"]);
     const count = loadCount + 1;
@@ -163,7 +165,6 @@ export default function Timeline({ newPostDisplay }) {
   // }
 
   function loadFunc() {
-    console.log("oi");
     requestPosts(loadCount);
   }
 
@@ -204,18 +205,11 @@ export default function Timeline({ newPostDisplay }) {
         >
           <ChooseFeed
             currentPage={getPage}
-            posts={posts}
-            likes={likes}
-            requestLikes={requestLikes}
+            posts={newPosts}
             state={requestState}
-            setPage={setPage}
             imageUrl={auth.image_url}
             setPageAndReload={setPageAndReload}
-            setRequestState={setRequestState}
-            Display={newPostDisplay}
-            pageUsername={pageUsername}
-            comments={comments}
-            requestComments={requestComments}
+            display={newPostDisplay}
           />
 
           <InfiniteScroll
@@ -262,17 +256,11 @@ export default function Timeline({ newPostDisplay }) {
 function ChooseFeed({
   currentPage,
   posts,
-  likes,
-  requestLikes,
   state,
   imageUrl,
-  setPage,
   setPageAndReload,
-  newPostDisplay,
-  pageUsername,
+  display,
   setRequestState,
-  comments,
-  requestComments,
   children,
 }) {
   const navigate = useNavigate();
@@ -321,9 +309,9 @@ function ChooseFeed({
           setPageAndReload={setPageAndReload}
           currentPage={currentPage}
           imageUrl={imageUrl}
-          displayCase={newPostDisplay}
+          displayCase={display}
         />
-        <NewPostsTag />
+        <NewPostsTag lastPost={posts[0]} />
         {children}
       </Feed>
     );
