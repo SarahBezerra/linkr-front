@@ -2,8 +2,6 @@ import { useContext, useState } from "react";
 import { Reload } from "react-ionicons";
 import useInterval from "use-interval";
 
-import LoadingCircular from "../LoadingCircular";
-
 import useAuth from "../../hooks/useAuth";
 import PageContext from "../../contexts/pageContext";
 import api from "../../services/api";

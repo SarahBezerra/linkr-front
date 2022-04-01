@@ -107,7 +107,7 @@ const Loading = styled(Feed)`
 const Empty = styled(Loading)`
   background-color: black;
   color: white;
-  width: 100%;
+  width:100%;
 
   * {
     font-size: 30px;
